@@ -1,48 +1,53 @@
-# Project folder structure
+# project folder structure
 
-whiteboard/
+prephub/
 ├── client/                # frontend (vanilla js + bootstrap)
-│   ├── index.html         # entry point
+│   ├── index.html         # entry point (trang chủ)
 │   ├── src/
-│   │   ├── main.js        # khởi tạo app & event listeners
-│   │   ├── canvas.js      # core logic vẽ (rough.js, render loop)
-│   │   ├── state.js       # quản lí elements[], history, selectedId
-│   │   ├── math.js        # thuật toán hit testing, coordinates
-│   │   ├── api.js         # các hàm fetch gọi lên server
-│   │   ├── components/    # ui components (toolbar, sidebar, v.v)
-│   │   └── utils/         # helper functions (uuid, debounce, v.v)
+│   │   ├── main.js        # khởi tạo app, router đơn giản chuyển trang
+│   │   ├── api.js         # file dùng chung để gọi fetch/axios lên server php
+│   │   ├── exam.js        # logic thi toeic (thời gian, highlight, chuyển câu)
+│   │   ├── admin.js       # logic dashboard admin (form tạo đề, import json/excel)
+│   │   ├── auth.js        # logic login, register, lưu auth token
+│   │   └── components/    # ui components (sidebar, modal kết quả, part 1-7)
 │   ├── styles/
-│   │   └── main.css       # bootstrap & custom styles
-│   ├── package.json       # quản lí dependencies (rough.js, bootstrap)
-│   └── bun.lockb          # bunjs
+│   │   └── main.css       # bootstrap custom, styles cho highlight, đáp án
+│   ├── assets/
+│   │   ├── audios/        # file mp3 listening part 1-4
+│   │   └── images/        # ảnh part 1, part 3, 4, 7
+│   └── package.json       # cấu hình dependencies (nếu dùng npm/bunx)
 │
-├── server/                # backend (php thuần)
-│   ├── index.php          # entry point & router
-│   ├── db/
-│   │   └── mysql.php      # kết nối pdo mysql
-│   ├── controllers/       # xử lí logic api
+├── server/                # backend api (php thuần)
+│   ├── index.php          # entry point & api router (điều hướng request)
+│   ├── config/
+│   │   └── database.php   # kết nối pdo mysql
+│   ├── controllers/       # xử lí logic các api endpoint
 │   │   ├── auth-controller.php
-│   │   └── board-controller.php
-│   ├── models/            # làm việc trực tiếp với database
+│   │   ├── test-controller.php    # api lấy đề thi, danh sách câu hỏi
+│   │   └── score-controller.php   # api nộp bài, chấm điểm, thống kê
+│   ├── models/            # làm việc trực tiếp với database toeic
 │   │   ├── user.php
-│   │   └── board.php
-│   ├── middleware/        # kiểm tra auth, validate
+│   │   ├── test.php       # bảng tests
+│   │   ├── question.php   # module câu hỏi (đơn, nhóm, part)
+│   │   └── attempt.php    # bảng lịch sử làm bài và điểm số
+│   ├── middleware/        # kiểm tra token, phân quyền rbac
 │   │   └── auth.php
-│   └── utils/             # response & validator helpers
+│   └── utils/             # response json & helpers
 │       ├── response.php
 │       └── validator.php
 │
-├── docs/                  # tài liệu dự án (đã hoàn thành)
+├── docs/                  # tài liệu dự án
 │   ├── README.md          # mục lục tổng
-│   ├── research/          # kiến thức nền (system, frontend, backend, db)
-│   ├── guide/             # quy tắc (commit, pr, general, docs)
-│   └── code/              # template & prompt viết docs cho hàm
+│   ├── research/          # kiến thức nền (toeic target, toeic schema)
+│   ├── guide/             # quy tắc (commit, workflow)
+│   └── code/
 │
-├── task/                  # quản lí tiến độ (đã hoàn thành)
-│   ├── general.md         # checklist phase & xoay tua
-│   ├── api.md             # thiết kế bảng endpoint chi tiết
-│   ├── client.md          # task cho 3 fe dev
-│   ├── server.md          # task cho be dev
-│   └── db.md              # task cho db dev
+├── task/                  # quản lí tiến độ công việc
+│   ├── general.md         # khó khăn, khối lượng cv, deadline
+│   ├── p1.md              # task be+db hoàng
+│   ├── p2.md              # task exam ui huy
+│   ├── p3.md              # task admin khang
+│   ├── p4.md              # task scoring nhân
+│   └── p5.md              # task auth chương
 │
-└── .gitignore             # loại bỏ node_modules, config nhạy cảm
+└── .gitignore             # loại bỏ file rác, config nhạy cảm
