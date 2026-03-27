@@ -1,91 +1,36 @@
-# Task tổng hợp theo Phase
+## Tổng quát
 
-> cập nhật trạng thái: ✅ xong | 🔄 đang làm | ⬚ chưa bắt đầu
+| # | Khó khăn | Mô tả | Giải pháp đề xuất | Mức độ |
+|---|----------|------|------------------|--------|
+| 1 | Thiết kế cấu trúc đề thi | Nhiều dạng câu hỏi (đơn, nhóm, audio, hình ảnh, part TOEIC), dễ bị design sai DB | Thiết kế DB dạng module: Question, Passage, Media, Part; dùng quan hệ 1-n và group_id để gom câu hỏi | Hard |
+| 2 | Giao diện admin tạo đề | Nhập tay mất thời gian, import dễ lỗi | Cho phép import Excel/JSON có template chuẩn + validate dữ liệu trước khi lưu | Medium |
+| 3 | Hệ thống làm bài thi | Quản lý state (đáp án, thời gian, chuyển câu) phức tạp | Lưu state tạm ở frontend (localStorage) + sync định kỳ lên server | Hard |
+| 4 | Xử lý phần listening | Audio load chậm, khó kiểm soát tua lại | Dùng streaming audio + disable seek nếu cần + preload audio | Hard |
+| 5 | Chấm điểm và hiển thị kết quả | Logic TOEIC không đơn giản | Tách module scoring riêng, dùng bảng mapping raw score → TOEIC score | Medium |
+| 6 | Dashboard người dùng | Cần dữ liệu chi tiết để phân tích | Lưu mỗi attempt riêng + lưu từng câu đúng/sai để phân tích theo part | Medium |
+| 7 | Hệ thống bán đề | Thanh toán, mở khóa đề, chống bypass | Lưu trạng thái purchase trong DB + check quyền ở backend API | Hard |
+| 8 | Phân quyền người dùng | Guest/user/admin dễ bị truy cập sai | Dùng middleware auth + role-based access control (RBAC) | Medium |
+| 9 | Bảo mật đề thi | Nguy cơ lộ đề, API, audio | Không trả full đề qua 1 API, check token, ẩn đáp án phía client | Hard |
+|10 | Hiệu năng hệ thống | Load dữ liệu lớn dễ chậm | Pagination + lazy load + cache dữ liệu đề thi | Medium |
+|11 | UI/UX | User dễ bị rối khi làm bài | Thiết kế giống real TOEIC: sidebar câu hỏi, highlight câu đã làm | Medium |
+|12 | Kiểm thử hệ thống | Nhiều flow dễ bug | Viết test case cho từng flow + test edge cases (mất mạng, hết giờ) | Hard |
+|13 | Bản quyền nội dung | Có thể vi phạm nếu dùng đề thật | Tự tạo đề hoặc dùng nguồn open/permission rõ ràng | Medium |
+|14 | Phạm vi dự án | Dễ bị quá tải | Chia phase: MVP (thi + chấm điểm) → nâng cao (dashboard + payment) | Hard |
 
-## Phase 1: Setup & Khởi tạo
+## Khối lượng công việc mỗi tuần
+| Week | P1 (Backend + DB) | P2 (Exam UI) | P3 (Admin) | P4 (Scoring + Dashboard) | P5 (Auth + Integration + Payment + UI) |
+|------|------------------|-------------|-----------|--------------------------|--------------------------------------|
+| 1 | Thiết kế DB + setup project PHP | Setup layout Bootstrap + UI chọn đề | Tạo form nhập câu hỏi | Thiết kế bảng attempts/results | Xây login/register + layout chung (header, footer) |
+| 2 | Xây API lấy đề thi | Trang làm bài (chọn đáp án, timer) | Tạo test + gán câu hỏi | Logic submit + chấm điểm | Kết nối frontend với API (hiển thị đề thật) |
+| 3 | Tối ưu query + API | Sidebar + highlight câu | Import JSON/Excel | Trang kết quả chi tiết | Kết nối submit bài (frontend → backend) |
+| 4 | Refactor DB + hỗ trợ listening data | Tích hợp audio listening | Validate dữ liệu | Dashboard (lịch sử, điểm) | Xây fake payment + unlock đề + hiển thị trạng thái mua |
+| 5 | Fix bug backend | Fix UI/UX exam | Hoàn thiện admin UI | Improve dashboard | Test toàn hệ thống + fix bug integration + polish UI |
 
-| #   | Task                                     | Người phụ trách  | Trạng thái | Deadline  | Ghi chú                               |
-| --- | ---------------------------------------- | ---------------- | ---------- | --------- | ------------------------------------- |
-| 1   | Khởi tạo repo, setup cấu trúc thư mục    | Leader           | ✅          | 21/3/2026 | đã xong                               |
-| 2   | Viết quy tắc làm việc (commit, PR, docs) | Leader           | ✅          | 21/3/2026 | đã xong                               |
-| 3   | Research + lập kế hoạch, chia task       | Leader + Manager | ✅          | 21/3/2026 | đã xong                               |
-| 4   | Cả team đọc hiểu quy tắc + kiến thức nền | All              | ⬚          | 27/3/2026 | mỗi người đọc phần research liên quan |
-
-## Phase 2: Core Drawing
-
-| #   | Task                                        | Người phụ trách | Trạng thái | Deadline | Ghi chú                            |
-| --- | ------------------------------------------- | --------------- | ---------- | -------- | ---------------------------------- |
-| 1   | Setup canvas full màn hình, fix retina      | FE 1            | ⬚          | -        | `devicePixelRatio`                 |
-| 2   | Tích hợp Rough.js                           | FE 1            | ⬚          | -        | cài qua bun                        |
-| 3   | Bắt sự kiện chuột (mousedown/move/up/leave) | FE 2            | ⬚          | -        | Phải có double click là 1 dấu chấm |
-| 4   | Vẽ rectangle                                | FE 1            | ⬚          | -        |                                    |
-| 5   | Vẽ ellipse                                  | FE 1            | ⬚          | -        |                                    |
-| 6   | Vẽ line                                     | FE 1            | ⬚          | -        |                                    |
-| 7   | Vẽ arrow                                    | FE 1            | ⬚          | -        |                                    |
-| 8   | Quản lí mảng elements[] (state)             | FE 2            | ⬚          | -        | tạo appState object                |
-| 9   | Render loop (clearRect + vẽ lại tất cả)     | FE 1 + FE 2     | ⬚          | -        | hàm renderScene()                  |
-| 10  | Viết test                                   | FE 1 + FE 2     | ⬚          | 3/4/2026 | Mock, unit test, ...               |
-
-## Phase 3: Database & Models Backend
-
-| #   | Task                                           | Người phụ trách | Trạng thái | Deadline   | Ghi chú                                                      |
-| --- | ---------------------------------------------- | --------------- | ---------- | ---------- | ------------------------------------------------------------ |
-| 1   | Xác định cấu trúc element lưu DB               | DB + FE 1, FE 2 | ⬚          | 06/04/2026 | chốt các key: x, y, w, h, seed... (content là LONGTEXT JSON) |
-| 2   | Vẽ ERD chi tiết                                | DB              | ⬚          | 06/04/2026 | bảng users, boards (quan hệ 1-N)                             |
-| 3   | Viết schema SQL và chạy migration              | DB              | ⬚          | 08/04/2026 | CREATE TABLE + INDEX, test dữ liệu trên MySQL                |
-| 4   | Setup thư mục `server/`, config `database.php` | DB + BE         | ⬚          | 08/04/2026 | thiết lập kết nối PDO                                        |
-| 5   | Viết models `User.php` và `Board.php`          | DB + BE         | ⬚          | 10/04/2026 | CRUD methods (findByUsername, create, save...)               |
-| 6   | Viết docs ERD và schema                        | DB              | ⬚          | 10/04/2026 | lưu vào thư mục docs/code/db/                                |
-| 7   | Viết test                                      | BE + DB         | ⬚          | -          | Mock, unit test, ...                                         |
-
-## Phase 4: Tương tác nâng cao
-
-| #   | Task                      | Người phụ trách | Trạng thái | Deadline | Ghi chú                            |
-| --- | ------------------------- | --------------- | ---------- | -------- | ---------------------------------- |
-| 1   | Select tool (hit testing) | FE 1            | ⬚          | -        | thuật toán khác nhau mỗi loại hình |
-| 2   | Move tool (drag element)  | FE 2            | ⬚          | -        | cập nhật x, y rồi re-render        |
-| 3   | Text tool                 | FE 2            | ⬚          | -        | tạo textarea overlay               |
-| 4   | Đổi stroke color          | FE 3            | ⬚          | -        | color picker                       |
-| 5   | Đổi fill color            | FE 3            | ⬚          | -        |                                    |
-| 6   | Undo/Redo                 | FE 2            | ⬚          | -        | history stack + Ctrl+Z/Y           |
-| 7   | Delete element            | FE 2            | ⬚          | -        | soft delete (isDeleted = true)     |
-| 8   | Toolbar UI                | FE 3            | ⬚          | -        | clone UI excalidraw                |
-| 9   | Style panel UI            | FE 3            | ⬚          | -        |                                    |
-
-## Phase 5: Backend & Integration
-
-| #   | Task                          | Người phụ trách | Trạng thái | Deadline | Ghi chú                        |
-| --- | ----------------------------- | --------------- | ---------- | -------- | ------------------------------ |
-| 1   | Setup PHP router              | BE              | ⬚          | -        |                                |
-| 2   | API Register                  | BE              | ⬚          | -        | POST /api/auth/register        |
-| 3   | API Login                     | BE              | ⬚          | -        | POST /api/auth/login           |
-| 4   | API Logout                    | BE              | ⬚          | -        | POST /api/auth/logout          |
-| 5   | API Get boards                | BE              | ⬚          | -        | GET /api/boards                |
-| 6   | API Create board              | BE              | ⬚          | -        | POST /api/boards               |
-| 7   | API Get board detail          | BE              | ⬚          | -        | GET /api/boards/:id            |
-| 8   | API Update board              | BE              | ⬚          | -        | PUT /api/boards/:id            |
-| 9   | API Delete board              | BE              | ⬚          | -        | DELETE /api/boards/:id         |
-| 10  | Auth middleware               | BE              | ⬚          | -        | requireAuth()                  |
-| 11  | Viết fetch calls (FE gọi API) | FE 3 + BE       | ⬚          | -        | FE 3 phối hợp trực tiếp với BE |
-| 12  | Trang dashboard (list boards) | FE 3            | ⬚          | -        |                                |
-| 13  | Export PNG                    | FE 1            | ⬚          | -        | canvas.toDataURL()             |
-| 14  | Auto-save                     | FE 3 + BE       | ⬚          | -        | debounce save mỗi 5s           |
-| 15  | Viết test                     | BE + DB         | ⬚          | -        | Mock, unit test, ...           |
-
-## Phase 6: Test, edge case
-
-| #   | Task     | Người phụ trách | Trạng thái | Deadline | Ghi chú |
-| --- | -------- | --------------- | ---------- | -------- | ------- |
-| 1   | All test | All             | ⬚          | -        |         |
-
-## Xoay tua kiến thức (rotation)
-
-> mục đích: mỗi người phải biết ít nhất 1 phần ngoài chuyên môn chính
-
-| Người           | Chuyên môn chính             | Xoay tua sang         | Cách thực hiện                      |
-| --------------- | ---------------------------- | --------------------- | ----------------------------------- |
-| FE 1 (Canvas)   | Rough.js, math, rendering    | Review code FE 2      | review PR select/move, hiểu state   |
-| FE 2 (State)    | State, events, undo/redo     | Review code FE 1      | review PR drawing, hiểu hit testing |
-| FE 3 (UI + API) | UI, fetch calls              | Ngồi cùng BE          | viết fetch, hiểu API contract       |
-| BE              | PHP API, session, validation | Review code FE 3      | đảm bảo FE gửi đúng JSON format     |
-| DB              | Schema, ERD, query           | Ngồi cùng FE 1 + FE 2 | xác định cấu trúc element object    |
+## Deadline
+| Week | Deadline | Duration | Deliverables |
+|------|----------|----------|--------------|
+| 1 | 03/04/2026 (Friday) | 7 days | Hoàn thành DB schema, login/register, UI cơ bản, form nhập câu hỏi |
+| 2 | 10/04/2026 (Friday) | 7 days | Hoàn thành trang làm bài, API đề thi, tạo test, chấm điểm cơ bản |
+| 3 | 17/04/2026 (Friday) | 7 days | Hoàn thành import câu hỏi, sidebar exam, trang kết quả, integration submit |
+| 4 | 24/04/2026 (Friday) | 7 days | Hoàn thành dashboard, listening, validate dữ liệu, fake payment |
+| 5 | 01/05/2026 (Friday) | 7 days | Hoàn thành fix bug, tối ưu UI/UX, test toàn hệ thống |
