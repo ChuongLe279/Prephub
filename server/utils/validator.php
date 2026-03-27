@@ -1,0 +1,1 @@
+<!-- validate input để chống sql injection, ... -->

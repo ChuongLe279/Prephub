@@ -1,0 +1,1 @@
+<!-- model cho các object trong dashboard -->
