@@ -1,1 +1,0 @@
-// core logic vẽ (rough.js, render loop

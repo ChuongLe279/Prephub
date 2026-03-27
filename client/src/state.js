@@ -1,1 +1,0 @@
-// quản lí elements[], history, selectedId
