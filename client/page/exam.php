@@ -34,7 +34,7 @@
                         <ul class="nav part-tabs mb-4 border-bottom pb-3">
                             <li class="nav-item"><a class="nav-link" href="#">Part 1</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Part 2</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="#">Part 3</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Part 3</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Part 4</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Part 5</a></li>
                             <li class="nav-item"><a class="nav-link" href="#">Part 6</a></li>
