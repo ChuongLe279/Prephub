@@ -8,9 +8,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Document</title>
     <link rel="stylesheet" href="./componants/componantsStyle.css">
-</head>
+</head><!-- CSS để ở đây để ghi đè bootstrap -->
 <style>
+    .info-link {
+        color: black !important;
+        text-decoration: none;
+    }
 
+    .info-link:hover {
+        color: blue !important;
+    }
+
+    .footer-logo i {
+        font-size: 20px !important;
+    }
+
+    .social-link {
+        font-size: 25px;
+        color: #4c7ce3;
+        transition: 0.3s;
+    }
+
+    .social-link:hover {
+        color: #1842b4;
+    }
 </style>
 
 <body>
@@ -20,7 +41,7 @@
                         <use xlink:href="#bootstrap"></use>
                     </svg> </a>
                 <a class="navbar-brand fw-bold footer-logo" href="#">
-                    <i class="fas fa-graduation-cap me-2"></i>PREPHUB
+                    <i class="fas fa-graduation-cap me-2"> PREPHUB</i>
                 </a>
                 <div class="site-socials">
                     <a target="_blank" href="#"><span class="social-link fab fa-facebook-square"></span></a>
@@ -34,27 +55,27 @@
             <div class="col mb-3">
                 <h5>Về PREPHUB</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Giới thiệu</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Liên hệ</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Điều khoảng bảo mật</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Điều khoảng sử dụng</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Giới thiệu</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Liên hệ</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoảng bảo mật</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoảng sử dụng</a></li>
                 </ul>
             </div>
             <div class="col mb-3">
                 <h5>Tài nguyên</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Thư viện đề thi</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Blog</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Tổng hợp tài liệu</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Thư viện đề thi</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Blog</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Tổng hợp tài liệu</a></li>
                 </ul>
             </div>
             <div class="col mb-3">
                 <h5>Chính sách chung</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Hướng dẫn sử dụng</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Hướng dẫn thanh toán</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Điều khoảng và điều kiện giao dịch</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Phản hồi, khiếu nại</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Hướng dẫn sử dụng</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Hướng dẫn thanh toán</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoảng và điều kiện giao dịch</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Phản hồi, khiếu nại</a></li>
                 </ul>
             </div>
         </footer>

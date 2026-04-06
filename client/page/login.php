@@ -63,6 +63,7 @@ function isActiveForm($formName, $activeForm)
                 </div>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="reenter_password" placeholder="Re-enter Password" required>
                 <button type="submit" name="register">Register</button>
                 <p>Already have an account? <a href="#" onclick="showForm('login-form')">Login</a></p>
             </form>

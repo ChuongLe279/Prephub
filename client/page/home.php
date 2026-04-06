@@ -15,7 +15,7 @@
     color: white;
   }
 </style>
-<!--http://localhost/Web/PrepHub/IS207-UIT/client/html/home.php-->
+<!--http://localhost:81/Web/PrepHub/IS207-UIT/client/page/home.php-->
 
 <body>
 

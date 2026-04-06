@@ -47,7 +47,7 @@ input{
 button{
     width: 100%;
     padding: 12px;
-    background: rgb(166, 213, 228);
+    background: rgb(103, 183, 209);
     border-radius: 6px;
     border: none;
     cursor: pointer;
@@ -59,7 +59,7 @@ button{
 }
 
 button:hover{
-    background: rgb(103, 183, 209);
+    background: rgb(166, 213, 228);
 }
 
 p{
@@ -86,3 +86,4 @@ p a:hover{
     text-align: center;
     margin-bottom: 20px;
 }
+

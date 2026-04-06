@@ -19,13 +19,9 @@ body {
 }
 
 .footer-logo{
-    font-size: 36px;
+    font-size: 25px;
     display: inline-block;
     margin-bottom: 12px;
-}
-
-.footer-logo i {
-    font-size: 28px;
 }
 
 .site-socials{
@@ -36,10 +32,10 @@ body {
 
 .social-link {
     font-size: 30px;
-    color: #2563eb;
+    color: #4c7ce3;
     transition: 0.3s;
 }
 
 .social-link:hover {
-    color: #1d4ed8;
+    color: #1842b4;
 }
