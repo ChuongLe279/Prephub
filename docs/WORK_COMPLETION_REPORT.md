@@ -1,7 +1,7 @@
 # 📋 Báo Cáo Công Việc Hoàn Thành - Trang Nhập Câu Hỏi TOEIC
 
 **Ngày báo cáo:** April 8, 2026  
-**File chính:** `client/html/testFormat.php`  
+**File chính:** `client/page/questions.php`  
 **Trạng thái:** ✅ Hoàn thành và kiểm thử
 
 ---
@@ -226,8 +226,8 @@ Phát triển trang nhập câu hỏi TOEIC với đầy đủ chức năng CRUD
 ## 📁 File Structure
 
 ```
-client/html/
-├── testFormat.php          # Main TOEIC question entry form
+client/page/
+├── questions.php           # Main TOEIC question entry form
 ├── loginPage.html
 ├── registerPage.html
 └── index.html
@@ -241,7 +241,7 @@ client/js/
 
 client/styles/
 ├── main.css
-└── testFormat.css
+└── questions.css
 
 server/
 ├── index.php

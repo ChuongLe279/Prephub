@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Nhập Câu Hỏi TOEIC</title>
-    <link href="../styles/testFormat.css" rel="stylesheet">
+    <link href="../styles/questionsStyle.css" rel="stylesheet">
 </head>
 
 <body>
