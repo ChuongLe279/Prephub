@@ -59,8 +59,8 @@
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2"><a href="#" class="info-link">Giới thiệu</a></li>
                     <li class="nav-item mb-2"><a href="#" class="info-link">Liên hệ</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoảng bảo mật</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoảng sử dụng</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoản bảo mật</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoản sử dụng</a></li>
                 </ul>
             </div>
             <div class="col mb-3">
@@ -76,7 +76,7 @@
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2"><a href="#" class="info-link">Hướng dẫn sử dụng</a></li>
                     <li class="nav-item mb-2"><a href="#" class="info-link">Hướng dẫn thanh toán</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoảng và điều kiện giao dịch</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoản và điều kiện giao dịch</a></li>
                     <li class="nav-item mb-2"><a href="#" class="info-link">Phản hồi, khiếu nại</a></li>
                 </ul>
             </div>
