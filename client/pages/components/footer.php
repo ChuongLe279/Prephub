@@ -19,12 +19,14 @@
         color: blue !important;
     }
 
-    .footer-logo i {
-        font-size: 20px !important;
+    .site-socials {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
     }
 
     .social-link {
-        font-size: 25px;
+        font-size: 34px;
         color: #4c7ce3;
         transition: 0.3s;
     }
@@ -32,6 +34,7 @@
     .social-link:hover {
         color: #1842b4;
     }
+    
 </style>
 
 <body>
@@ -42,8 +45,9 @@
                     aria-label="Bootstrap"> <svg class="bi me-2" width="40" height="32" aria-hidden="true">
                         <use xlink:href="#bootstrap"></use>
                     </svg> </a>
-                <a class="navbar-brand fw-bold footer-logo" href="#">
-                    <i class="fas fa-graduation-cap me-2"> PREPHUB</i>
+                <a class="navbar-brand footer-logo fw-bold" href="./home.php">
+                    <i class="bx bx-education" style="font-size: 31px;"></i>
+                    <span>PREPHUB</span>
                 </a>
                 <div class="site-socials">
                     <a target="_blank" href="#"><span class="social-link fab fa-facebook-square"></span></a>
@@ -59,8 +63,8 @@
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2"><a href="#" class="info-link">Giới thiệu</a></li>
                     <li class="nav-item mb-2"><a href="#" class="info-link">Liên hệ</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoảng bảo mật</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoảng sử dụng</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoản bảo mật</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoản sử dụng</a></li>
                 </ul>
             </div>
             <div class="col mb-3">
@@ -76,7 +80,7 @@
                 <ul class="nav flex-column">
                     <li class="nav-item mb-2"><a href="#" class="info-link">Hướng dẫn sử dụng</a></li>
                     <li class="nav-item mb-2"><a href="#" class="info-link">Hướng dẫn thanh toán</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoảng và điều kiện giao dịch</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="info-link">Điều khoản và điều kiện giao dịch</a></li>
                     <li class="nav-item mb-2"><a href="#" class="info-link">Phản hồi, khiếu nại</a></li>
                 </ul>
             </div>

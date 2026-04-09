@@ -45,7 +45,7 @@ function isActiveForm($formName, $activeForm)
     <div class="container">
         <div class="form-box <?= isActiveForm('login', $activeForm) ?>" id="login-form">
             <form action="../../server/controllers/auth-controller.php" method="post">
-                <h2>Login</h2>
+                <h2>Đăng Nhập</h2>
                 <?= showError($errors['login']); ?>
                 <input type="email" name="email" placeholder="Email" required>
                 <div class="password-row">
@@ -53,13 +53,13 @@ function isActiveForm($formName, $activeForm)
                     <img src="../img/eye_close.png" class="eye" onclick="togglePassword(this)">
                 </div>
                 
-                <button type="submit" name="login">Login</button>
-                <p>Don't have an account ? <a href="#" onclick="showForm('register-form')">Sign Up</a></p>
+                <button type="submit" name="login">Đăng Nhập</button>
+                <p>Chưa có tài khoản? <a href="#" onclick="showForm('register-form')">Đăng ký</a></p>
             </form>
         </div>
         <div class="form-box <?= isActiveForm('register', $activeForm) ?>" id="register-form">
             <form action="../../server/controllers/auth-controller.php" method="post">
-                <h2>Register</h2>
+                <h2>Đăng ký</h2>
                 <?= showError($errors['register']); ?>
                 <div class="name-row">
                     <input type="name" name="first_name" placeholder="First name" required>
@@ -75,8 +75,8 @@ function isActiveForm($formName, $activeForm)
                     <img src="../img/eye_close.png" class="eye" onclick="togglePassword(this)">
                 </div> 
                 <p id="checkPasswordError"></p>
-                <button type="submit" name="register">Register</button>
-                <p>Already have an account? <a href="#" onclick="showForm('login-form')">Login</a></p>
+                <button type="submit" name="register">Đăng ký</button>
+                <p>Đã có tài khoản? <a href="#" onclick="showForm('login-form')">Đăng Nhập</a></p>
             </form>
         </div>
     </div>

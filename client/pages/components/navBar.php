@@ -17,10 +17,13 @@
 </style>
 
 <body>
+  <!-- INCLUDE HEAD LINK -->
+  <?php include './components/head.php'; ?>
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="./user.php">
-        <i class="fas fa-graduation-cap me-2"></i>PREPHUB
+      <a class="navbar-brand fw-bold d-flex align-items-center" href="./home.php">
+        <i class="bx bx-education me-1" style="font-size: 30px;"></i>
+        <span>PREPHUB</span>
       </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
