@@ -4,7 +4,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $path = str_replace('/IS207-UIT/server', '', $path);
 
-// Route theo resource
+// Route yêu cầu đến các tệp route tương ứng
 if (strpos($path, '/api/questions') === 0) {
     require 'routes/questions.php';
 } elseif (strpos($path, '/api/passages') === 0) {

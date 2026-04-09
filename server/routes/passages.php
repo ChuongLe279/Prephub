@@ -1,15 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../controllers/test-controller.php';
-$controller = new TestController($db_connection);
+require_once __DIR__ . '/../controllers/question-controller.php';
+$controller = new QuestionController($db_connection);
 
-// POST /api/passages - Create a new passage
+// POST /api/passages - Tạo một đoạn văn mới với phương tiện tùy chọn
 if ($path === '/api/passages' && $method === 'POST') {
     $response = $controller->createPassage();
     http_response_code($response['success'] ? 201 : 400);
     echo json_encode($response);
 }
-// GET /api/passages - Get passages filtered by test_id
+// GET /api/passages - Lấy các đoạn văn được lọc theo test_id
 elseif ($path === '/api/passages' && $method === 'GET') {
     $testId = $_GET['test_id'] ?? null;
     
@@ -22,7 +22,7 @@ elseif ($path === '/api/passages' && $method === 'GET') {
     http_response_code($response['success'] ? 200 : 400);
     echo json_encode($response);
 }
-// DELETE /api/passages/:id - Delete a passage
+// DELETE /api/passages/:id - Xóa một đoạn văn
 elseif (preg_match('/\/api\/passages\/(\d+)$/', $path, $matches) && $method === 'DELETE') {
     $response = $controller->deletePassage($matches[1]);
     http_response_code($response['success'] ? 200 : 404);

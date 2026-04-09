@@ -1,13 +1,13 @@
 /**
- * API Integration for TOEIC Question Management System
+ * Tích hợp API cho Hệ thống Quản lý Câu hỏi TOEIC
  */
 
 const API_BASE_URL = '/IS207-UIT/server/index.php';
 
 /**
- * Get all active tests for dropdown selection
+ * Lấy tất cả các bài kiểm tra hoạt động để lựa chọn trong danh sách thả xuống
  * 
- * @returns {Promise<Array>} Array of tests with id and title
+ * @returns {Promise<Array>} Mảng các bài kiểm tra với id và tiêu đề
  */
 async function getTests() {
     try {
@@ -33,10 +33,10 @@ async function getTests() {
 }
 
 /**
- * Get passages filtered by test_id
+ * Lấy các đoạn văn được lọc theo test_id
  * 
- * @param {number} testId - The test ID to filter by
- * @returns {Promise<Array>} Array of passages for the test
+ * @param {number} testId - ID bài kiểm tra để lọc
+ * @returns {Promise<Array>} Mảng các đoạn văn cho bài kiểm tra
  */
 async function getPassages(testId) {
     try {
@@ -66,9 +66,9 @@ async function getPassages(testId) {
 }
 
 /**
- * Create a new question with optional media files
+ * Tạo một câu hỏi mới với các tệp phương tiện tùy chọn
  * 
- * @param {FormData} formData - Form data containing question details and files
+ * @param {FormData} formData - Dữ liệu biểu mẫu chứa chi tiết câu hỏi và các tệp
  * @returns {Promise<Object>} {success: bool, question_id: int, message: string}
  */
 async function createQuestion(formData) {
@@ -92,9 +92,9 @@ async function createQuestion(formData) {
 }
 
 /**
- * Create a new passage with optional media
+ * Tạo một đoạn văn mới với phương tiện tùy chọn
  * 
- * @param {FormData} formData - Form data containing passage details and files
+ * @param {FormData} formData - Dữ liệu biểu mẫu chứa chi tiết đoạn văn và các tệp
  * @returns {Promise<Object>} {success: bool, passage_id: int, message: string}
  */
 async function createPassage(formData) {
@@ -118,9 +118,9 @@ async function createPassage(formData) {
 }
 
 /**
- * Delete a question
+ * Xóa một câu hỏi
  * 
- * @param {number} questionId - The question ID to delete
+ * @param {number} questionId - ID câu hỏi cần xóa
  * @returns {Promise<Object>} {success: bool, message: string}
  */
 async function deleteQuestion(questionId) {
@@ -147,9 +147,9 @@ async function deleteQuestion(questionId) {
 }
 
 /**
- * Delete a passage
+ * Xóa một đoạn văn
  * 
- * @param {number} passageId - The passage ID to delete
+ * @param {number} passageId - ID đoạn văn cần xóa
  * @returns {Promise<Object>} {success: bool, message: string}
  */
 async function deletePassage(passageId) {
@@ -176,10 +176,10 @@ async function deletePassage(passageId) {
 }
 
 /**
- * Get all questions for a test
+ * Lấy tất cả các câu hỏi cho một bài kiểm tra
  * 
- * @param {number} testId - The test ID to filter by
- * @returns {Promise<Array>} Array of questions for the test
+ * @param {number} testId - ID bài kiểm tra để lọc
+ * @returns {Promise<Array>} Mảng các câu hỏi cho bài kiểm tra
  */
 async function getQuestionsByTest(testId) {
     try {
@@ -209,10 +209,10 @@ async function getQuestionsByTest(testId) {
 }
 
 /**
- * Get a single question by ID
+ * Lấy một câu hỏi duy nhất theo ID
  * 
- * @param {number} questionId - The question ID
- * @returns {Promise<Object>} Question data
+ * @param {number} questionId - ID câu hỏi
+ * @returns {Promise<Object>} Dữ liệu câu hỏi
  */
 async function getQuestion(questionId) {
     try {

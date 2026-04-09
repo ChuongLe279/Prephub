@@ -2,7 +2,7 @@
 
 class FileHandler {
     
-    // Upload directories - use realpath to normalize
+    // Thư mục upload - sử dụng realpath để chuẩn hóa
     private static $uploadDir = null;
     private static $audioDir = 'audio';
     private static $imageDir = 'image';
@@ -10,7 +10,7 @@ class FileHandler {
     private static $excelDir = 'excel';
     
     /**
-     * Initialize upload directory on first use
+     * Khởi tạo thư mục upload khi sử dụng lần đầu
      */
     private static function initUploadDir() {
         if (self::$uploadDir === null) {
@@ -21,34 +21,34 @@ class FileHandler {
         }
     }
 
-    // File size limits
+    // Giới hạn kích thước file
     private static $audioMaxSize = 50 * 1024 * 1024;      // 50MB
     private static $imageMaxSize = 5 * 1024 * 1024;       // 5MB
     private static $jsonMaxSize = 10 * 1024 * 1024;       // 10MB
     private static $excelMaxSize = 10 * 1024 * 1024;      // 10MB
 
-    // Allowed MIME types
+    // Các loại MIME được phép
     private static $audioMimes = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'];
     private static $imageMimes = ['image/jpeg', 'image/png', 'image/gif'];
     private static $jsonMimes = ['application/json'];
     private static $excelMimes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
 
     /**
-     * Generic file upload handler
+     * Xử lý upload file chung
      * 
-     * @param array $file - $_FILES element
+     * @param array $file - phần tử $_FILES
      * @param string $type - 'audio', 'image', 'json', 'excel'
-     * @return string - relative path (e.g., /uploads/audio/uuid-123.mp3)
+     * @return string - đường dẫn tương đối (vd: /uploads/audio/uuid-123.mp3)
      * @throws Exception
      */
     public static function uploadFile($file, $type = 'audio') {
         try {
-            // Validate file exists and is valid
+            // Xác thực file tồn tại và hợp lệ
             if (!isset($file['tmp_name']) || empty($file['tmp_name'])) {
                 throw new Exception("Không nhận được file từ client.");
             }
 
-            // Validate by type
+            // Xác thực theo loại file
             switch (strtolower($type)) {
                 case 'audio':
                     self::validateAudio($file);
@@ -74,7 +74,7 @@ class FileHandler {
                     throw new Exception("Loại file không được hỗ trợ: {$type}");
             }
 
-            // Save file and get relative path
+            // Lưu file và lấy đường dẫn tương đối
             $relativePath = self::saveUploadedFile($file, $dir, $extension);
             return $relativePath;
 
@@ -84,18 +84,18 @@ class FileHandler {
     }
 
     /**
-     * Validate audio file
+     * Xác thực file âm thanh
      * 
-     * @param array $file - $_FILES element
+     * @param array $file - phần tử $_FILES
      * @throws Exception
      */
     public static function validateAudio($file) {
-        // Check file size
+        // Kiểm tra kích thước file
         if ($file['size'] > self::$audioMaxSize) {
             throw new Exception("File âm thanh quá lớn. Tối đa 50MB, được cấp {$file['size']} bytes");
         }
 
-        // Check MIME type
+        // Kiểm tra loại MIME
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($finfo, $file['tmp_name']);
         finfo_close($finfo);
@@ -104,7 +104,7 @@ class FileHandler {
             throw new Exception("Định dạng âm thanh không hợp lệ. Chỉ hỗ trợ: MP3, WAV, OGG. MIME nhận được: {$mimeType}");
         }
 
-        // Validate file extension
+        // Xác thực phần mở rộng file
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         if (!in_array($ext, ['mp3', 'wav', 'ogg', 'm4a'])) {
             throw new Exception("Phần mở rộng file không hợp lệ: {$ext}");
@@ -112,18 +112,18 @@ class FileHandler {
     }
 
     /**
-     * Validate image file
+     * Xác thực file hình ảnh
      * 
-     * @param array $file - $_FILES element
+     * @param array $file - phần tử $_FILES
      * @throws Exception
      */
     public static function validateImage($file) {
-        // Check file size
+        // Kiểm tra kích thước file
         if ($file['size'] > self::$imageMaxSize) {
             throw new Exception("File hình ảnh quá lớn. Tối đa 5MB, được cấp {$file['size']} bytes");
         }
 
-        // Check MIME type
+        // Kiểm tra loại MIME
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($finfo, $file['tmp_name']);
         finfo_close($finfo);
@@ -132,37 +132,37 @@ class FileHandler {
             throw new Exception("Định dạng hình ảnh không hợp lệ. Chỉ hỗ trợ: JPG, PNG, GIF. MIME nhận được: {$mimeType}");
         }
 
-        // Validate file extension
+        // Xác thực phần mở rộng file
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) {
             throw new Exception("Phần mở rộng file không hợp lệ: {$ext}");
         }
 
-        // Validate is valid image
+        // Xác thực là hình ảnh hợp lệ
         if (@getimagesize($file['tmp_name']) === false) {
             throw new Exception("File không phải là hình ảnh hợp lệ.");
         }
     }
 
     /**
-     * Validate JSON file
+     * Xác thực file JSON
      * 
-     * @param array $file - $_FILES element
+     * @param array $file - phần tử $_FILES
      * @throws Exception
      */
     public static function validateJsonFile($file) {
-        // Check file size
+        // Kiểm tra kích thước file
         if ($file['size'] > self::$jsonMaxSize) {
             throw new Exception("File JSON quá lớn. Tối đa 10MB, được cấp {$file['size']} bytes");
         }
 
-        // Check file extension
+        // Kiểm tra phần mở rộng file
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         if ($ext !== 'json') {
             throw new Exception("File phải có phần mở rộng .json");
         }
 
-        // Validate JSON format
+        // Xác thực định dạng JSON
         $content = file_get_contents($file['tmp_name']);
         if ($content === false) {
             throw new Exception("Không thể đọc nội dung file JSON.");
@@ -175,24 +175,24 @@ class FileHandler {
     }
 
     /**
-     * Validate Excel file
+     * Xác thực file Excel
      * 
-     * @param array $file - $_FILES element
+     * @param array $file - phần tử $_FILES
      * @throws Exception
      */
     public static function validateExcelFile($file) {
-        // Check file size
+        // Kiểm tra kích thước file
         if ($file['size'] > self::$excelMaxSize) {
             throw new Exception("File Excel quá lớn. Tối đa 10MB, được cấp {$file['size']} bytes");
         }
 
-        // Check file extension
+        // Kiểm tra phần mở rộng file
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         if ($ext !== 'xlsx') {
             throw new Exception("File phải có phần mở rộng .xlsx (Excel 2007+)");
         }
 
-        // Check MIME type
+        // Kiểm tra loại MIME
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($finfo, $file['tmp_name']);
         finfo_close($finfo);
@@ -203,44 +203,44 @@ class FileHandler {
     }
 
     /**
-     * Save uploaded file with UUID filename
+     * Lưu file đã tải lên với tên file UUID
      * 
-     * @param array $file - $_FILES element
-     * @param string $directory - target directory (e.g., /uploads/audio)
-     * @param string $extension - file extension
-     * @return string - relative path
+     * @param array $file - phần tử $_FILES
+     * @param string $directory - thư mục đích (vd: /uploads/audio)
+     * @param string $extension - phần mở rộng file
+     * @return string - đường dẫn tương đối
      * @throws Exception
      */
     public static function saveUploadedFile($file, $directory, $extension) {
-        // Initialize upload directory
+        // Khởi tạo thư mục upload
         self::initUploadDir();
         
-        // Create full directory path
+        // Tạo đường dẫn thư mục đầy đủ
         $fullDir = self::$uploadDir . '/' . $directory;
 
-        // Create directory if not exists
+        // Tạo thư mục nếu không tồn tại
         if (!is_dir($fullDir)) {
             if (!mkdir($fullDir, 0755, true)) {
                 throw new Exception("Không thể tạo thư mục upload: {$fullDir}");
             }
         }
 
-        // Generate UUID filename
+        // Tạo tên file UUID
         $uuid = self::generateUUID();
         $filename = "{$uuid}.{$extension}";
         $fullPath = $fullDir . '/' . $filename;
 
-        // Move uploaded file
+        // Di chuyển file đã tải lên
         if (!move_uploaded_file($file['tmp_name'], $fullPath)) {
             throw new Exception("Không thể di chuyển file tới: {$fullPath}");
         }
 
-        // Return relative path for storing in database (accessible via server/uploads/)
+        // Trả về đường dẫn tương đối để lưu trong database (truy cập qua server/uploads/)
         return "/IS207-UIT/server/uploads/{$directory}/{$filename}";
     }
 
     /**
-     * Generate UUID v4
+     * Tạo UUID v4
      * 
      * @return string
      */
@@ -256,7 +256,7 @@ class FileHandler {
     }
 
     /**
-     * Get audio file extension
+     * Lấy phần mở rộng file âm thanh
      * 
      * @param string $filename
      * @return string
@@ -267,7 +267,7 @@ class FileHandler {
     }
 
     /**
-     * Get image file extension
+     * Lấy phần mở rộng file hình ảnh
      * 
      * @param string $filename
      * @return string
@@ -278,9 +278,9 @@ class FileHandler {
     }
 
     /**
-     * Delete file from storage
+     * Xóa file khỏi lưu trữ
      * 
-     * @param string $relativePath - relative path (e.g., /uploads/audio/uuid-123.mp3)
+     * @param string $relativePath - đường dẫn tương đối (vd: /uploads/audio/uuid-123.mp3)
      * @return bool
      */
     public static function deleteFile($relativePath) {
@@ -291,18 +291,18 @@ class FileHandler {
                 return unlink($fullPath);
             }
             
-            return true; // File already deleted
+            return true; // File đã được xóa
         } catch (Exception $e) {
-            // Log error but don't throw
+            // Ghi lỗi nhưng không ném ngoại lệ
             error_log("Error deleting file: " . $e->getMessage());
             return false;
         }
     }
 
     /**
-     * Check if file exists
+     * Kiểm tra file có tồn tại không
      * 
-     * @param string $relativePath - relative path
+     * @param string $relativePath - đường dẫn tương đối
      * @return bool
      */
     public static function fileExists($relativePath) {
@@ -311,10 +311,10 @@ class FileHandler {
     }
 
     /**
-     * Get file size
+     * Lấy kích thước file
      * 
-     * @param string $relativePath - relative path
-     * @return int - size in bytes, 0 if not exists
+     * @param string $relativePath - đường dẫn tương đối
+     * @return int - kích thước tính bằng byte, 0 nếu không tồn tại
      */
     public static function getFileSize($relativePath) {
         $fullPath = self::$uploadDir . $relativePath;

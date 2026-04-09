@@ -1,10 +1,14 @@
 <IfModule mod_rewrite.c>
+    # Bật công cụ viết lại URL
     RewriteEngine On
     
-    # Exempt /uploads/ and /server/uploads/ from routing
+    # Cho phép các thư mục /uploads/ và /server/uploads/ truy cập trực tiếp (không viết lại)
     RewriteRule ^(uploads|server/uploads)/ - [L]
     
-    # Route all other requests to server/index.php
+    # Định tuyến tất cả các request khác đến server/index.php (API router)
+    # Các điều kiện:
+    # - %{REQUEST_FILENAME} !-f: Nếu không phải là file thực tế
+    # - %{REQUEST_FILENAME} !-d: Nếu không phải là thư mục thực tế
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ /IS207-UIT/server/index.php [QSA,L]
