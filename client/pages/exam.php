@@ -54,10 +54,8 @@
                         <li class="nav-item"><a class="nav-link" href="#">Part 6</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Part 7</a></li>
                     </ul>
-                    <!--NƠI HIỂN THỊ CÂU HỎI (KẾT NỐI DB) -->
-                    <div id="question-list-container">
-                        
-                    </div>
+
+                    <div id="question-list-container"></div>
                 </div>
 
             </div>
@@ -108,8 +106,8 @@
     </div>
     </div>
 
-    <script src="../js/data.js"></script>
     <script src="../js/exam.js"></script>
+    <script src="../js/data.js"></script>
 </body>
 
 </html>
