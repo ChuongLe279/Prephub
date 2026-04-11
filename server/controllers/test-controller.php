@@ -16,7 +16,7 @@ function getTestList() {
         $role = $_SESSION['role'] ?? 'user';
 
 
-        $stmt = $conn->prepare("SELECT id, title, is_premium, total_questions FROM tests WHERE is_active = 1 ORDER BY id DESC");
+        $stmt = $conn->prepare("SELECT id, uuid, title, is_premium, total_questions FROM tests WHERE is_active = 1 ORDER BY id DESC");
         $stmt->execute();
         $tests = $stmt->fetchAll();
 
@@ -49,7 +49,7 @@ function getTestList() {
             $is_unlocked = ($role === 'admin') || !$is_premium || isset($paid_map[$test_id]);
 
             $formatted_tests[] = [
-                'id' => $test_id,
+                'id' => $test['uuid'], // Trả về UUID làm định danh công khai
                 'title' => $test['title'],
                 'is_premium' => $is_premium,
                 'is_unlocked' => $is_unlocked
@@ -65,16 +65,19 @@ function getTestList() {
     }
 }
 
-function getTestCore($id) {
+function getTestCore($uuid) {
     global $conn;
     try {
-        $stmt = $conn->prepare("SELECT id, uuid, title, duration, is_premium FROM tests WHERE id = :id AND is_active = 1");
-        $stmt->execute(['id' => $id]);
+        // Tìm đề thi theo UUID (Công khai)
+        $stmt = $conn->prepare("SELECT id, uuid, title, duration, is_premium FROM tests WHERE uuid = :uuid AND is_active = 1");
+        $stmt->execute(['uuid' => $uuid]);
         $test = $stmt->fetch();
 
         if (!$test) {
             sendError("Không tìm thấy đề", 404);
         }
+
+        $internal_id = (int)$test['id']; // Lấy ID nội bộ để đi JOIN các bảng khác
 
         // check premium
         if ($test['is_premium']) {
@@ -84,7 +87,7 @@ function getTestCore($id) {
 
             if ($role !== 'admin') {
                 $stmt_pay = $conn->prepare("SELECT id FROM payments WHERE user_id = :uid AND test_id = :tid");
-                $stmt_pay->execute(['uid' => $user_id, 'tid' => $id]);
+                $stmt_pay->execute(['uid' => $user_id, 'tid' => $internal_id]);
                 if (!$stmt_pay->fetch()) {
                     sendError("Forbidden: Bạn cần mua hoặc mở khóa đề thi này để tiếp tục", 403);
                 }
@@ -113,7 +116,7 @@ function getTestCore($id) {
             WHERE q.test_id = :test_id
             ORDER BY q.part ASC, q.question_number ASC
         ");
-        $stmt_q->execute(['test_id' => $id]);
+        $stmt_q->execute(['test_id' => $internal_id]);
         $questions = $stmt_q->fetchAll();
 
 		// lấy hết tất cả đáp áp mỗi câu hỏi
@@ -124,7 +127,7 @@ function getTestCore($id) {
             WHERE q.test_id = :test_id
             ORDER BY o.label ASC
         ");
-        $stmt_o->execute(['test_id' => $id]);
+        $stmt_o->execute(['test_id' => $internal_id]);
         $options = $stmt_o->fetchAll();
 
         // đưa các đáp án vào hash map dựa trên question_id để dùng index
