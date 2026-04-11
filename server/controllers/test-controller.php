@@ -56,7 +56,10 @@ function getTestList() {
             ];
         }
 
-        sendJson(["tests" => $formatted_tests]);
+        sendJson([
+            "success" => true,
+            "data" => $formatted_tests
+        ]);
     } catch (PDOException $e) {
         sendError($e->getMessage(), 500);
     }
