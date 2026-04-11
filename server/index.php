@@ -1,13 +1,15 @@
 <?php
-// entry point & api router (điều hướng request)
+// file này gọi là head redirector hay gọi tắt là redirector, sau này nếu thấy commit có ghi
+// redirector thì chính là file này
 
-// Tắt hiển thị lỗi trực tiếp, ghi vào log thay vì hiển thị để tránh hỏng JSON
+// in ra lỗi PHP, dễ lộ thông tin nhạy cảm và trả về data không cần thiết
 ini_set('display_errors', 0);
+// ghi lỗi vào file log
 ini_set('log_errors', 1);
 
 header('Content-Type: application/json; charset=utf-8');
 
-// Thiết lập handler để bắt các lỗi nghiêm trọng và trả về JSON
+// handler trả về lỗi chung
 set_error_handler(function ($errno, $errstr, $errfile, $errline) {
 	if (!(error_reporting() & $errno))
 		return;
@@ -15,11 +17,7 @@ set_error_handler(function ($errno, $errstr, $errfile, $errline) {
 	echo json_encode([
 		'success' => false,
 		'message' => $errstr,
-		'error' => [
-			'type' => $errno,
-			'file' => $errfile,
-			'line' => $errline
-		]
+		'error' => ['file' => $errfile, 'line' => $errline]
 	]);
 	exit();
 });
@@ -28,8 +26,7 @@ set_exception_handler(function ($exception) {
 	http_response_code(500);
 	echo json_encode([
 		'success' => false,
-		'message' => $exception->getMessage(),
-		'error' => true
+		'message' => $exception->getMessage()
 	]);
 	exit();
 });
@@ -38,56 +35,25 @@ try {
 	require_once __DIR__ . '/config/database.php';
 	require_once __DIR__ . '/utils/response.php';
 
+	// đầu tiên ta vẫn lấy phần param mà ta cần thông qua .htaccess. 
+	// Ví dụ như : api/tests thì ta lấy phần param là "tests"
+	// nếu như cấu hình .htaccess bị lỗi hay có lý do nào đó mà không xử lí được
+	// ta qua phương án B
+	// check nếu phần param đó trống, ta sẽ lấy toàn bộ phần URL path,
+	// sau đó xoá phần server/api hoặc api/ và chỉ giữ lại phần sau thôi
 	$request = $_GET['request'] ?? '';
 	if (empty($request)) {
 		$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 		$request = str_replace(['/server/api/', '/api/'], '', $path);
 	}
 
-	$method = $_SERVER['REQUEST_METHOD'];
-	$parts = explode('/', trim($request, '/'));
-	$resource = $parts[0] ?? '';
-
-	// ĐIỀU HƯỚNG
-	if ($resource === 'tests') {
-		require_once __DIR__ . '/controllers/test-controller.php';
-
-		if (isset($parts[1]) && is_numeric($parts[1])) {
-			require_once __DIR__ . '/middleware/auth.php';
-			requireAuth();
-			getTestCore($parts[1]);
-		} else {
-			getTestList();
-		}
-	} elseif ($resource === 'auth') {
-		require_once __DIR__ . '/controllers/auth-controller.php';
-		$action = $parts[1] ?? '';
-
-		switch ($action) {
-			case 'login':
-				handleLogin();
-				break;
-			case 'register':
-				handleRegister();
-				break;
-			case 'logout':
-				handleLogout();
-				break;
-			default:
-				sendError("Không tìm thấy chức năng xác thực", 404);
-		}
-	} elseif ($resource === 'questions') {
-		require_once __DIR__ . '/routes/api.php';
-	} else {
-		http_response_code(404);
-		echo json_encode(['success' => false, 'message' => 'Route not found', 'request' => $request]);
-	}
+	// để api.php định tuyến các routes thay cho redirector
+	require_once __DIR__ . '/routes/api.php';
 
 } catch (Exception $e) {
 	http_response_code(500);
 	echo json_encode([
 		'success' => false,
-		'message' => $e->getMessage(),
-		'error' => true
+		'message' => $e->getMessage()
 	]);
 }
