@@ -10,10 +10,10 @@
 
 <body>
     <!-- Icon -->
-    <?php include ('../pages/components/head.php'); ?>
+    <?php include ('../pages/components/metadata.php'); ?>
     <!-- NavBar & Header -->
-    <?php include('./componants/navBar.php'); ?>
-    <?php include('./componants/header.php'); ?>
+    <?php include('./components/navBar.php'); ?>
+    <?php include('./components/header.php'); ?>
 
     <div class="container-wrapper">
         
@@ -243,7 +243,7 @@
                     message: error.message,
                     stack: error.stack,
                     type: error.name,
-                    url: '/IS207-UIT/server/index.php?path=/api/tests'
+                    url: '/server/index.php?path=/api/tests'
                 });
                 showMessage('Lỗi tải danh sách đề thi', 'error');
             }
