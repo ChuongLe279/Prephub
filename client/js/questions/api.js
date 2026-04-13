@@ -2,8 +2,45 @@
  * api.js - Các hàm giao tiếp của question với Backend thông qua fetch API
  */
 
+
+//  load tất cả các đề thi có sẵn từ server (hàm này khác với getTestList trong server là nó chỉ fetch qua
+// endpoint api/tests thôi, còn getTestList fetch full list đề từ database với query)
+//  dữ liệu tải về sẽ được dùng để đổ vào các thẻ <option> trong dropdown chọn đề thi
+// 	hàm này trả về data dạng như này:
+/* {
+  "success": true,
+  "data": [
+    {
+      "id": "ac15f725-3647-11f1-8a60-5e73694bac0c",
+      "title": "asdas",
+      "is_premium": false,
+      "is_active": 1,
+      "created_at": "2026-04-12 08:14:48",
+      "is_unlocked": true
+    },
+    {
+      "id": "9364db42-3646-11f1-8a60-5e73694bac0c",
+      "title": "asdasd",
+      "is_premium": false,
+      "is_active": 1,
+      "created_at": "2026-04-12 08:06:57",
+      "is_unlocked": true
+    },
+    {
+      "id": "583029e9-3642-11f1-8a60-5e73694bac0c",
+      "title": "asdasd",
+      "is_premium": false,
+      "is_active": 1,
+      "created_at": "2026-04-12 07:36:40",
+      "is_unlocked": true
+    }
+  ]
+}
+*/
 async function loadTestsData() {
 	try {
+		// gửi 1 GET request lên api/tests lấy đề
+		// truy cập localhost:3000/api/tests để hiểu (phải có data trong database rồi mới hiện ra)
 		const response = await fetch('/api/tests');
 		if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
 
@@ -30,11 +67,29 @@ async function loadTestsData() {
 	}
 }
 
+
+//  xử lý sự kiện gửi form để tạo đề
+//  sau khi tạo thành công, giao diện sẽ được reset và tự động chọn đề thi mới tạo để mình tiếp tục 
+//  thêm các câu hỏi
+//  tham số "e" là event là sự kiện submit của form
+// 	có thể test qua curl với lệnh sau:
+/*
+curl -X POST http://localhost:3000/api/tests \
+     -H "Content-Type: application/json" \
+     -d '{
+           "title": "Tên bài thi mới",
+           "description": "Mô tả bài thi",
+           "is_premium": 0,
+           "is_active": 1
+         }'
+
+ */
 async function handleCreateTestSubmit(e) {
 	e.preventDefault();
 	const form = e.target;
 	const formData = new FormData(form);
 
+	// chọn các option khi tạo đề thi + nhâp title
 	const data = {
 		title: formData.get('title'),
 		description: formData.get('description'),
@@ -42,6 +97,8 @@ async function handleCreateTestSubmit(e) {
 		is_active: formData.get('is_active') ? 1 : 0
 	};
 
+	// sau khi nhập xong thì gửi 1 POST request lên server để tạo đề thi qua api/tests
+	// nhìn lại file ./task/core/api.md để hiểu
 	try {
 		const response = await fetch('/api/tests', {
 			method: 'POST',
@@ -49,7 +106,8 @@ async function handleCreateTestSubmit(e) {
 			body: JSON.stringify(data)
 		});
 		const result = await response.json();
-
+	
+		// nêu thành công thì reset form, ẩn form tạo đề, hiện form khác
 		if (result.success) {
 			showMessage('Tạo bài thi thành công!', 'success');
 			form.reset();
@@ -84,6 +142,53 @@ async function handleCreateTestSubmit(e) {
 	}
 }
 
+
+// hàm này khác api/test/uuid ở chỗ nó là cho Admin, nó dùng để lấy danh sách câu hỏi để chỉnh sửa hoặc check
+// nó có mấy phần như correct_answer, explanation (phần này /api/test/uuid không có)
+// lấy data từ endpoint /api/questions?test_id=uuid
+// data trả về, ví dụ:
+/*
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "test_id": 1,
+      "passage_id": null,
+      "part": 1,
+      "question_number": 1,
+      "content": "ádasdadd",
+      "audio_url": null,
+      "image_url": "/server/uploads/image/16c147a1-e7a2-4632-8c25-83056dbf283f.jpg",
+      "correct_answer": "A",
+      "explanation": "null",
+      "options": [
+        {
+          "id": 1,
+          "label": "A",
+          "content": "aaa"
+        },
+        {
+          "id": 2,
+          "label": "B",
+          "content": "asa"
+        },
+        {
+          "id": 3,
+          "label": "C",
+          "content": "ádasdadad"
+        },
+        {
+          "id": 4,
+          "label": "D",
+          "content": "sadasdas"
+        }
+      ]
+    }
+  ],
+  "count": 1
+}
+ */
 async function loadSavedQuestionsToForm() {
 	const testSelect = document.getElementById('testSelect');
 	const partSelect = document.getElementById('partSelect');
@@ -170,6 +275,14 @@ async function loadSavedQuestionsToForm() {
 	}
 }
 
+/**
+ * Gửi yêu cầu API để lưu hoặc cập nhật một câu hỏi đơn lẻ.
+ * Nếu câu hỏi đã tồn tại, nó sẽ xóa bản ghi cũ trước khi tạo bản ghi mới để cập nhật.
+ * @param {HTMLElement} block - Phần tử DOM chứa dữ liệu câu hỏi đơn lẻ.
+ * @param {string} testId - ID của đề thi.
+ * @param {number|string} part - Phần thi TOEIC (1-7).
+ * @returns {Promise<Object>} Đối tượng kết quả {"success": boolean, "message": string}.
+ */
 async function submitSingleQuestionAPIWithResult(block, testId, part) {
 	try {
 		const opts = block.querySelectorAll('.options-container .option-item .option-content');
@@ -202,6 +315,14 @@ async function submitSingleQuestionAPIWithResult(block, testId, part) {
 	}
 }
 
+/**
+ * Gửi yêu cầu API để lưu một cụm câu hỏi kèm theo đoạn văn (Passage).
+ * Tự động xóa Passage cũ và các câu hỏi cũ thuộc Passage đó trước khi lưu mới.
+ * @param {HTMLElement} block - Phần tử DOM chứa dữ liệu cụm câu hỏi (group).
+ * @param {string} testId - ID của đề thi.
+ * @param {number|string} part - Phần thi TOEIC (1-7).
+ * @returns {Promise<Object>} Đối tượng kết quả bao gồm trạng thái thành công, số lượng câu được tạo và lỗi.
+ */
 async function submitGroupQuestionsAPI(block, testId, part) {
 	let created = 0;
 	let errorMessages = [];
@@ -273,6 +394,12 @@ async function submitGroupQuestionsAPI(block, testId, part) {
 	}
 }
 
+/**
+ * Hàm tổng hợp để thu thập và lưu tất cả các khối câu hỏi đang hiển thị trên giao diện.
+ * Duyệt qua từng khối (Single/Group) và gọi API lưu trữ tương ứng.
+ * @param {Event} [event] - Sự kiện click hoặc submit (có thể bỏ qua nếu gọi thủ công).
+ * @returns {Promise<void>} Hiển thị kết quả lưu trữ thông qua hàm showMessage().
+ */
 async function submitData(event) {
 	if (event) event.preventDefault();
 

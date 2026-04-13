@@ -7,7 +7,39 @@
  * @var PDO $conn
  */
 
-// lấy full list các đề thi
+// lấy full list các đề thi dùng query trong database
+// NOTE: nó sẽ trả về data qua endpoint /api/tests, được điều khiển thông qua router (mở folder route để xem)
+// 	hàm này trả về data dạng như này:
+/* {
+  "success": true,
+  "data": [
+    {
+      "id": "ac15f725-3647-11f1-8a60-5e73694bac0c",
+      "title": "asdas",
+      "is_premium": false,
+      "is_active": 1,
+      "created_at": "2026-04-12 08:14:48",
+      "is_unlocked": true
+    },
+    {
+      "id": "9364db42-3646-11f1-8a60-5e73694bac0c",
+      "title": "asdasd",
+      "is_premium": false,
+      "is_active": 1,
+      "created_at": "2026-04-12 08:06:57",
+      "is_unlocked": true
+    },
+    {
+      "id": "583029e9-3642-11f1-8a60-5e73694bac0c",
+      "title": "asdasd",
+      "is_premium": false,
+      "is_active": 1,
+      "created_at": "2026-04-12 07:36:40",
+      "is_unlocked": true
+    }
+  ]
+}
+*/
 function getTestList() {
     global $conn;
     try {
@@ -125,10 +157,12 @@ function createTest() {
 }
 
 
+// lấy data 1 đề cụ thể, query trực tiếp vào database để lấy đề ra
+// NOTE: nó sẽ trả về data qua endpoint /api/tests/uuid, được điều khiển thông qua router (mở folder route để xem)
 function getTestCore($uuid) {
     global $conn;
     try {
-        // Tìm đề thi theo UUID (Công khai)
+        // Tìm đề thi theo UUID
         $stmt = $conn->prepare("SELECT id, uuid, title, duration, is_premium FROM tests WHERE uuid = :uuid AND is_active = 1");
         $stmt->execute(['uuid' => $uuid]);
         $test = $stmt->fetch();
@@ -137,7 +171,9 @@ function getTestCore($uuid) {
             sendError("Không tìm thấy đề", 404);
         }
 
-        $internal_id = (int)$test['id']; // Lấy ID nội bộ để đi JOIN các bảng khác
+		// Lấy ID nội bộ để đi JOIN các bảng khác, vì theo thiết kế ta dùng ID để 
+		// JOIN, WHERE, nói chung để query và dùng UUID để show ra người dùng
+        $internal_id = (int)$test['id']; 
 
         // check premium
         if ($test['is_premium']) {
