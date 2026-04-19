@@ -16,7 +16,7 @@
   <main class="container mb-5">
 
     <section id="book-list-section">
-      <h2 class="fw-bold mb-4">Chọn bộ sách ôn tập</h2>
+      <h2 class="fw-bold mb-4">Chọn bộ đề ôn tập</h2>
       <div class="row row-cols-1 row-cols-lg-3 g-4" id="book-container"></div>
     </section>
 
