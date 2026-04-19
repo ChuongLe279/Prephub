@@ -20,13 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 // HÀM: GỌI DỮ LIỆU TỪ DB (API)
 // ==========================================
-async function fetchExamSet() {
-    try{
-        let response = await fetch('../server')
-    } catch (error){
-
-    }
-}
 async function fetchExamData() {
     try {
         // Gọi file PHP (đường dẫn đã khớp với hình ảnh cây thư mục của bạn)
