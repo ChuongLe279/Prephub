@@ -55,7 +55,7 @@
                 <div class="sidebar shadow-sm">
                     <div class="text-center mb-4">
                         <p class="mb-1 text-muted">Thời gian còn lại:</p>
-                        <h3 class="fw-bold mb-3" id="timer-display">00:00</h3>
+                        <h3 class="fw-bold mb-3" id="timer-display"></h3>
                         <button class="btn btn-primary fw-bold w-100 py-2 submit-btn">SUBMIT</button>
                     </div>
 

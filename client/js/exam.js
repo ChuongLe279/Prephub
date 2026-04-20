@@ -27,18 +27,19 @@ async function fetchExamData() {
         const questions_lists = await response.json();
         const questions = questions_lists.data.questions;
         const testDuration = Number(questions_lists.data.duration);
-        setupExamAudio(questions);
-        renderQuestions(questions);
-        renderPartNav(questions);
+
+        setupExamAudio(questions); //Fetch link audio
+        renderQuestions(questions); //In ra question và passage dựa trên test uuid
+        renderPartNav(questions); //In ra thanh navBar ở dưới thanh audio
 
         //Đổi title thành title của đề thi
         let title = document.getElementById("exam-title");
         title.innerHTML = questions_lists.data.title;  
         
-        //Render side bar dựa vào tổng số câu hỏi
-        renderSidebar(questions);
-        setupAnswerTracking();
-        startTimer(Number.isFinite(testDuration) && testDuration > 0 ? testDuration : 120 * 60);
+        
+        renderSidebar(questions); //Render side bar dựa vào tổng số câu hỏi
+        setupAnswerTracking(); //Để chọn các options a,b,c,d
+        startTimer(Number.isFinite(testDuration) && testDuration > 0 ? testDuration : 120 * 60); //Lấy test duration trong database và đếm ngược
 
     } catch (error) {
         console.error("Lỗi khi kết nối Database:", error);
@@ -104,7 +105,7 @@ function scrollToQuestionTarget(targetEl) {
 }
 
 
-//In nav link dựa trên số part
+//In nav link dựa trên số part (nav link sẽ được gán ở dưới thanh audio)
 function renderPartNav(questions) {
     const partTabsContainer = document.getElementById('part-tabs-container');
     if (!partTabsContainer || !Array.isArray(questions)) return;
@@ -147,7 +148,7 @@ function renderPartNav(questions) {
 }
 
 
-//In câu hỏi
+//In questions, passages, options
 function renderQuestions(questions) {
     const container = document.getElementById('question-list-container');
     if (!container || !questions) return;
@@ -222,7 +223,7 @@ function renderSidebar(questions) {
     // Sort các part
     const sortedParts = Object.keys(partsMap).sort((a, b) => Number(a) - Number(b));
 
-    //In ra số câu hỏi
+    //In ra bảng chứa tổng số câu hỏi ở bên phải
     sortedParts.forEach(part => {
         let questionBoxes = '';
         partsMap[part].sort((a, b) => a - b);
@@ -267,7 +268,7 @@ function setupAnswerTracking() {
         });
     });
 
-    // B. Click ô vuông cuộn tới câu hỏi
+    //Click ô vuông cuộn tới câu hỏi
     qBoxes.forEach(box => {
         box.addEventListener('click', function() {
             const qNum = this.innerText.trim();
