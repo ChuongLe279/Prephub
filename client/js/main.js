@@ -31,7 +31,7 @@ async function load_tests() {
                                         <span class="testitem-info">
                                             <span class="far fa-clock mr-1"></span>
                                         </span>
-                                        <span class="testitem-info">${test[j].data.duration / 60} minutes | ${tests[j].total_questions} questions</span>
+                                        <span class="testitem-info">${tests[j].duration / 60} minutes | ${tests[j].total_questions} questions</span>
                                     </div>
                                     <p class="card-text">${tests[j].description}</p>
                                     <a href="./exam.php?uuid=${tests[j].uuid}" class="btn btn-outline-primary mt-auto enter-test">Start test</a>
