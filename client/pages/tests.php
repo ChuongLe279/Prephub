@@ -15,7 +15,7 @@
     <div class="page">
         <div class="hero">
             <h1>Danh sách đề thi</h1>
-            <p>Luyện thi TOEIC với bộ đề đa dạng — từ mini test đến full test chuẩn quốc tế</p>
+            <p>Luyện thi TOEIC với bộ đề đa dạng</p>
         </div>
         <div class="content">
             <!-- Thanh filter được gắn ở trên -->
@@ -45,7 +45,7 @@
             <div class="section-label">Miễn phí</div>
             <!-- Lưới hiển thị đề thi -->
             <div class="test-grid">
-                <!-- Ô đề thi FREE-->
+                <!-- Ô đề thi FREE------------------------------------------------------>
                 <div class="test-card">
                     <!-- Title đề thi -->
                     <div class="card-top">
@@ -94,7 +94,7 @@
             <div class="section-label">Premium</div>
             <!-- Lưới hiển thị đề thi -->
             <div class="test-grid">
-                <!-- Ô đề thi PREMIUM-->
+                <!-- Ô đề thi PREMIUM------------------------------------------------------>
                 <div class="test-card premium">
                     <!-- Title đề thi -->
                     <div class="card-top">
