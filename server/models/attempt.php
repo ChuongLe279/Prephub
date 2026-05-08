@@ -1,160 +1,153 @@
 <?php
-// server/models/attempt.php
 
-class Attempt {
-    private $db;
-
-    public function __construct($db_connection) {
-        $this->db = $db_connection;
-    }
-
-    public function getReviewDetails($attempt_id) {
-        // Bước 1: Lấy danh sách 200 câu hỏi và lựa chọn của người dùng
-        $sqlQuestions = "
-            SELECT 
-                q.id AS question_id, 
-                q.part, 
-                q.content AS question_content, 
-                q.image_url, 
-                q.audio_url, 
-                q.correct_answer AS correct_option,
-                ua.selected_answer AS user_choice
-            FROM questions q
-            JOIN attempts a ON a.id = :attempt_id_1 AND q.test_id = a.test_id
-            LEFT JOIN attempt_answers ua ON q.id = ua.question_id AND ua.attempt_id = :attempt_id_2
-            ORDER BY q.part ASC, q.question_number ASC
-        ";
-
-        $stmtQ = $this->db->prepare($sqlQuestions);
-        $stmtQ->execute(['attempt_id_1' => $attempt_id, 'attempt_id_2' => $attempt_id]);
-        $questions = $stmtQ->fetchAll(PDO::FETCH_ASSOC);
-
-        // Lấy danh sách ID các câu hỏi để lấy đáp án
-        $questionIds = array_column($questions, 'question_id');
-
-        if (empty($questionIds)) {
-            return []; // Không có câu hỏi nào
-        }
-
-        // Bước 2: Lấy tất cả options (A, B, C, D) của các câu hỏi trên
-        // Tạo chuỗi '?, ?, ?...' tương ứng với số lượng ID
-        $placeholders = implode(',', array_fill(0, count($questionIds), '?'));
-        
-        $sqlOptions = "
-            SELECT question_id, label, content AS option_content 
-            FROM options 
-            WHERE question_id IN ($placeholders)
-            ORDER BY question_id ASC, label ASC
-        ";
-        
-        $stmtO = $this->db->prepare($sqlOptions);
-        $stmtO->execute($questionIds);
-        $optionsRaw = $stmtO->fetchAll(PDO::FETCH_ASSOC);
-
-        // Gom nhóm options theo từng question_id cho dễ xử lý
-        $groupedOptions = [];
-        foreach ($optionsRaw as $opt) {
-            $qId = $opt['question_id'];
-            if (!isset($groupedOptions[$qId])) {
-                $groupedOptions[$qId] = [];
-            }
-            // Chỉ lấy label và nội dung
-            $groupedOptions[$qId][$opt['label']] = $opt['option_content'];
-        }
-
-        // Bước 3: Gắn options vào từng câu hỏi
-        foreach ($questions as &$q) {
-            $qId = $q['question_id'];
-            $q['options'] = isset($groupedOptions[$qId]) ? $groupedOptions[$qId] : [];
-        }
-
-        return $questions;
-    }
-    public function submitAndGrade($user_id, $test_uuid, $user_answers) {
-        try {
-            // Bước 1: Lấy ID thật của đề thi
-            $stmt = $this->db->prepare("SELECT id FROM tests WHERE uuid = ?");
-            $stmt->execute([$test_uuid]);
-            $test = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (!$test) return false;
-            $test_id = $test['id'];
-
-            // Bước 2: Lấy đáp án chuẩn 
-            $stmt = $this->db->prepare("SELECT id as question_id, question_number, correct_answer, part FROM questions WHERE test_id = ?");
-            $stmt->execute([$test_id]);
-            $correct_answers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $listening_correct = 0;
-            $reading_correct = 0;
-            
-            // Mảng lưu chi tiết từng câu để chuẩn bị insert
-            $details_data = [];
-
-            // Bước 3: Vòng lặp chấm điểm
-            foreach ($correct_answers as $row) {
-                $qId = $row['question_id'];
-                $qNum = $row['question_number'];
-                $correctOption = $row['correct_answer'];
-                $part = (int)$row['part'];
-
-                // Kiểm tra xem user có chọn câu này không
-                $user_choice = isset($user_answers[$qNum]) ? $user_answers[$qNum] : null;
-                $is_correct = ($user_choice === $correctOption) ? 1 : 0;
-
-                // Cộng điểm nếu đúng
-                if ($is_correct) {
-                    if ($part >= 1 && $part <= 4) {
-                        $listening_correct++;
-                    } else if ($part >= 5 && $part <= 7) {
-                        $reading_correct++;
-                    }
-                }
-
-                // Đưa vào danh sách chi tiết
-                $details_data[] = [
-                    'question_id' => $qId,
-                    'selected_answer' => $user_choice,
-                    'is_correct' => $is_correct
-                ];
-            }
-
-            // Bước 4: Quy đổi điểm chuẩn
-            $listening_score = $listening_correct * 5;
-            $reading_score = $reading_correct * 5;
-            $total_score = $listening_score + $reading_score;
-
-            // Bước 5: LƯU TỔNG ĐIỂM VÀO BẢNG ATTEMPTS
-            $insert_sql = "INSERT INTO attempts (uuid, user_id, test_id, listening_correct, reading_correct, listening_score, reading_score, total_score, time_spent, created_at) 
-                           VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, 0, NOW())";
-            $stmt = $this->db->prepare($insert_sql);
-            $stmt->execute([$user_id, $test_id, $listening_correct, $reading_correct, $listening_score, $reading_score, $total_score]);
-            
-            // Lấy ID của bài thi vừa lưu xong
-            $attempt_id = $this->db->lastInsertId();
-
-            // ==========================================
-            // BƯỚC 6 (MỚI): LƯU CHI TIẾT VÀO BẢNG ATTEMPT_ANSWERS
-            // Để trang Review biết câu nào đúng, câu nào sai
-            // ==========================================
-            if (!empty($details_data)) {
-                $insert_detail_sql = "INSERT INTO attempt_answers (attempt_id, question_id, selected_answer, is_correct) VALUES (?, ?, ?, ?)";
-                $detail_stmt = $this->db->prepare($insert_detail_sql);
-                
-                foreach ($details_data as $detail) {
-                    $detail_stmt->execute([
-                        $attempt_id,
-                        $detail['question_id'],
-                        $detail['selected_answer'],
-                        $detail['is_correct']
-                    ]);
-                }
-            }
-
-            return $attempt_id; 
-
-        } catch (PDOException $e) {
-            throw new Exception("Lỗi SQL: " . $e->getMessage());
-        }
-    }
+/**
+ * Nhận số câu đúng -> Áp dụng bảng quy đổi TOEIC chuẩn -> Trả về điểm số (max 495)
+ * TOEIC listening + reading = 495 + 495 = 990
+ */
+function calculateToeicScore($correct)
+{
+	// Đúng 100 câu: Được 495 điểm
+	if ($correct >= 96)
+		return 495;
+	// Đúng 91-95 câu: Được 490 - (95 - số câu đúng) * 5 điểm
+	if ($correct >= 91)
+		return 490 - (95 - $correct) * 5;
+	// Đúng 6-90 câu: Được số câu đúng * 5 điểm
+	if ($correct >= 6)
+		return $correct * 5;
+	// Tối thiểu 5 điểm nếu đúng từ 1-5 câu
+	// Đúng 1-5 câu: Vẫn được tặng 5 điểm an ủi
+	return ($correct > 0) ? 5 : 0;
 }
-?>
+
+/**
+ * Tìm bài làm theo ID/UUID -> Lấy danh sách câu hỏi và đáp án user đã chọn -> 
+ * Lấy danh sách Options tương ứng -> Group Options vào từng câu hỏi -> Trả về mảng dữ liệu đầy đủ để Review
+ */
+function getReviewDetails($conn, $attempt_id)
+{
+	// Lấy danh sách câu hỏi và đáp án của user
+	$sqlQuestions = "
+        SELECT 
+            q.id AS question_id, 
+            q.part, 
+            q.content AS question_content, 
+            q.image_url, 
+            q.audio_url, 
+            q.correct_answer AS correct_option,
+            ua.selected_answer AS user_choice
+        FROM questions q
+        JOIN attempts a ON (a.id = :id OR a.uuid = :uuid) AND q.test_id = a.test_id
+        LEFT JOIN attempt_answers ua ON q.id = ua.question_id AND ua.attempt_id = a.id
+        ORDER BY q.part ASC, q.question_number ASC
+    ";
+
+	$stmtQ = $conn->prepare($sqlQuestions);
+	// Hỗ trợ cả ID số và UUID
+	$stmtQ->execute(['id' => is_numeric($attempt_id) ? $attempt_id : 0, 'uuid' => $attempt_id]);
+	$questions = $stmtQ->fetchAll(PDO::FETCH_ASSOC);
+
+	if (empty($questions))
+		return [];
+
+	$questionIds = array_column($questions, 'question_id');
+	$placeholders = implode(',', array_fill(0, count($questionIds), '?'));
+
+	$sqlOptions = "SELECT question_id, label, content FROM options WHERE question_id IN ($placeholders) ORDER BY label ASC";
+	$stmtO = $conn->prepare($sqlOptions);
+	$stmtO->execute($questionIds);
+	$optionsRaw = $stmtO->fetchAll(PDO::FETCH_ASSOC);
+
+	$groupedOptions = [];
+	// Gom tất cả lựa chọn (A, B, C, D) vào một mảng theo ID câu hỏi để tra cứu đáp án theo ID câu hỏi cho nhanh
+	foreach ($optionsRaw as $opt) {
+		$groupedOptions[$opt['question_id']][$opt['label']] = $opt['content'];
+	}
+
+	// gán ngược các đáp án đó vào từng câu hỏi để trả về cho Frontend
+	foreach ($questions as &$q) {
+		$q['options'] = $groupedOptions[$q['question_id']] ?? [];
+	}
+
+	return $questions;
+}
+
+/**
+ * Tìm đề thi theo UUID -> Lấy danh sách đáp án đúng từ DB -> So khớp với đáp án User gửi lên theo ID câu hỏi -> 
+ * Tính tổng số câu đúng từng phần -> Quy đổi điểm TOEIC -> Lưu tổng quan vào bảng attempts -> 
+ * Lưu chi tiết từng câu vào bảng attempt_answers -> Hoàn tất
+ */
+function submitAndGrade($conn, $user_id, $test_uuid, $user_answers, $time_spent)
+{
+	try {
+		// 1. Tìm ID đề thi
+		$stmt = $conn->prepare("SELECT id FROM tests WHERE uuid = ?");
+		$stmt->execute([$test_uuid]);
+		$test = $stmt->fetch(PDO::FETCH_ASSOC);
+		if (!$test)
+			return false;
+		$test_id = $test['id'];
+
+		// 2. Lấy đáp án chuẩn
+		$stmt = $conn->prepare("SELECT id, correct_answer, part FROM questions WHERE test_id = ?");
+		$stmt->execute([$test_id]);
+		$correct_answers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		$l_correct = 0;
+		$r_correct = 0;
+		$details_data = [];
+
+		// 3. Chấm điểm dựa trên Question ID (Không dùng số thứ tự câu)
+		foreach ($correct_answers as $row) {
+			$qId = $row['id'];
+			$correct = $row['correct_answer'];
+			$part = (int) $row['part'];
+
+			$user_choice = $user_answers[$qId] ?? null;
+			$is_correct = ($user_choice === $correct) ? 1 : 0;
+
+			if ($is_correct) {
+				if ($part <= 4)
+					$l_correct++;
+				else
+					$r_correct++;
+			}
+
+			$details_data[] = [
+				'question_id' => $qId,
+				'selected_answer' => $user_choice,
+				'is_correct' => $is_correct
+			];
+		}
+
+		// 4. Quy đổi điểm
+		$l_score = calculateToeicScore($l_correct);
+		$r_score = calculateToeicScore($r_correct);
+		$total_score = $l_score + $r_score;
+
+		// 5. Lưu vào attempts
+		$conn->beginTransaction();
+
+		$attempt_uuid = bin2hex(random_bytes(16));
+		$stmt = $conn->prepare("
+            INSERT INTO attempts (uuid, user_id, test_id, listening_correct, reading_correct, listening_score, reading_score, total_score, time_spent) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+		$stmt->execute([$attempt_uuid, $user_id, $test_id, $l_correct, $r_correct, $l_score, $r_score, $total_score, $time_spent]);
+		$attempt_id = $conn->lastInsertId();
+
+		// 6. Lưu chi tiết
+		$stmtDetail = $conn->prepare("INSERT INTO attempt_answers (attempt_id, question_id, selected_answer, is_correct) VALUES (?, ?, ?, ?)");
+		foreach ($details_data as $d) {
+			$stmtDetail->execute([$attempt_id, $d['question_id'], $d['selected_answer'], $d['is_correct']]);
+		}
+
+		$conn->commit();
+		return $attempt_id;
+
+	} catch (Exception $e) {
+		if ($conn->inTransaction())
+			$conn->rollBack();
+		throw $e;
+	}
+}
