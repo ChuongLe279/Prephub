@@ -1,3 +1,18 @@
+<?php
+session_start();
+//Kiểm tra xem user có đăng nhập hay chưa
+//Tránh việc lên URL gõ exam.php là ra trang này
+require_once '../../server/middleware/auth.php'; 
+requireAuth();
+
+//Không cho người dùng vào exam mà không có uuid
+if (!isset($_GET['uuid'])) {
+    header("Location: tests.php");
+    exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -67,7 +82,6 @@
     </div>
 
     <script src="../js/exam.js"></script>
-    <script src="../js/data.js"></script>
 </body>
 
 </html>

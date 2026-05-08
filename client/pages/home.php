@@ -1,3 +1,12 @@
+<?php
+session_start();
+//Kiếm ra xem đã đăng nhập chưa
+//Nếu đăng nhập rồi thì chuyển tới user.php
+if (isset($_SESSION['user_id'])) {
+    header('Location: user.php');
+    exit;
+}
+?>
 <!doctype html>
 <html lang="vi">
 

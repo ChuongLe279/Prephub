@@ -2,12 +2,8 @@
 session_start();
 //Kiểm tra xem user có đăng nhập hay chưa
 //Tránh việc lên URL gõ user.php là ra trang này
-//Cái này khác với hàm requireAuth() trong file auth.php của Hoàng
-if (!isset($_SESSION['email'])) {
-    header("Location: home.php");
-    exit();
-}
-
+require_once '../../server/middleware/auth.php'; 
+requireAuth();
 // Lấy username để hiển thị ở greeting box
 $firstName = $_SESSION['first_name'] ?? '';
 $lastName = $_SESSION['last_name'] ?? '';
@@ -31,7 +27,7 @@ $fullName = trim($lastName . ' ' . $firstName);
         <div class="greeting-hero">
             <div class="greet-left">
                 <div class="greet-time">Chào buổi sáng ☀️</div>
-                <div class="greet-name">Xin chào, <?= $fullName ?>!</div>
+                <div class="greet-name">Xin chào, <?= htmlspecialchars($fullName) ?>!</div>
                 <div class="greet-sub">Tiếp tục luyện thi để đạt mục tiêu<br>TOEIC của bạn. Bạn đang làm rất tốt!</div>
                 <div class="greet-cta">
                     <a href="tests.php" class="cta-btn cta-primary" style="text-decoration: none;">
