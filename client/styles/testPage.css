@@ -315,3 +315,25 @@
     background: #e07a10;
     color: #fff;
 }
+/*Hiển thị danh sách đề thi*/
+@media (max-width: 1200px) {
+    .grid-free,
+    .grid-premium {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .grid-free,
+    .grid-premium {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .grid-free,
+    .grid-premium {
+        grid-template-columns: 1fr;
+    }
+}
+

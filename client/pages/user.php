@@ -1,5 +1,13 @@
 <?php
 session_start();
+//Kiểm tra xem user có đăng nhập hay chưa
+//Tránh việc lên URL gõ user.php là ra trang này
+//Cái này khác với hàm requireAuth() trong file auth.php của Hoàng
+if (!isset($_SESSION['email'])) {
+    header("Location: home.php");
+    exit();
+}
+
 // Lấy username để hiển thị ở greeting box
 $firstName = $_SESSION['first_name'] ?? '';
 $lastName = $_SESSION['last_name'] ?? '';
@@ -23,10 +31,12 @@ $fullName = trim($lastName . ' ' . $firstName);
         <div class="greeting-hero">
             <div class="greet-left">
                 <div class="greet-time">Chào buổi sáng ☀️</div>
-                <div class="greet-name">Xin chào, Nguyễn Văn An!</div>
+                <div class="greet-name">Xin chào, <?= $fullName ?>!</div>
                 <div class="greet-sub">Tiếp tục luyện thi để đạt mục tiêu<br>TOEIC của bạn. Bạn đang làm rất tốt!</div>
                 <div class="greet-cta">
-                    <button class="cta-btn cta-primary"><i class="fas fa-play" style="font-size:11px;margin-right:6px"></i>Làm bài ngay</button>
+                    <a href="tests.php" class="cta-btn cta-primary" style="text-decoration: none;">
+                        <i class="fas fa-play" style="font-size:11px;margin-right:6px"></i>Làm bài ngay
+                    </a>
                 </div>
             </div>
             <div class="greet-right">
@@ -60,47 +70,20 @@ $fullName = trim($lastName . ' ' . $firstName);
             <div class="goal-score">580 <span>/ 750</span></div>
         </div>
 
-        <!-- TEST LIST -->
+        <!-- Danh sách đề thi -->
         <div>
             <div class="section-head" style="margin-bottom:12px">
                 <div class="section-title">Danh sách đề thi</div>
-                <a class="see-all" href="#">Xem tất cả →</a>
+                <a class="see-all" href="tests.php">Xem tất cả →</a>
             </div>
+            <!-- Ô hiển thị 3 đề thi cho người dùng thử -->
+            <!-- Sau khi có logic nộp bài, trang user.php chỉ hiện thị đề thi chưa làm -->
             <div class="test-grid">
-                <div class="test-card">
-                    <div class="test-card-top">
-                        <div class="test-type-badge badge-full"><i class="fas fa-file-alt" style="font-size:9px"></i>Full Test</div>
-                        <div class="test-name">TOEIC Mock Test January 2024</div>
-                        <div class="test-meta">200 câu hỏi · 120 phút</div>
-                    </div>
-                    <div class="test-card-bot">
-                        <div class="test-arrow"><i class="fas fa-arrow-right"></i></div>
-                    </div>
-                </div>
-                <div class="test-card">
-                    <div class="test-card-top">
-                        <div class="test-type-badge badge-listen"><i class="fas fa-headphones" style="font-size:9px"></i>Listening</div>
-                        <div class="test-name">TOEIC Listening Practice #12</div>
-                        <div class="test-meta">100 câu hỏi · 45 phút</div>
-                    </div>
-                    <div class="test-card-bot">
-                        <div class="test-arrow"><i class="fas fa-arrow-right"></i></div>
-                    </div>
-                </div>
-                <div class="test-card">
-                    <div class="test-card-top">
-                        <div class="test-type-badge badge-read"><i class="fas fa-book-open" style="font-size:9px"></i>Reading</div>
-                        <div class="test-name">TOEIC Reading Comprehension #8</div>
-                        <div class="test-meta">100 câu hỏi · 75 phút</div>
-                    </div>
-                    <div class="test-card-bot">
-                        <div class="test-arrow"><i class="fas fa-arrow-right"></i></div>
-                    </div>
-                </div>
+
             </div>
         </div>
 
-        <!-- BOTTOM ROW -->
+        <!-- Lịch sử làm bài -->
         <div class="bottom-row">
             <div class="panel">
                 <div class="panel-head">
@@ -143,6 +126,7 @@ $fullName = trim($lastName . ' ' . $firstName);
                 </div>
             </div>
 
+            <!-- Phần mẹo luyện thi để trang trí -->
             <div class="panel">
                 <div class="panel-head">
                     <span class="panel-title">Mẹo luyện thi</span>
@@ -185,7 +169,7 @@ $fullName = trim($lastName . ' ' . $firstName);
     <!-- INCLUDE FOOTER FILE -->
     <?php include './components/footer.php'; ?>
 
-    <!--<script src="../js/main.js"></script>-->
+    <script src="../js/user.js"></script>
 </body>
 
 </html>

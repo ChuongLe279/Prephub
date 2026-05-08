@@ -44,117 +44,23 @@
             </div>
             <div class="section-label">Miễn phí</div>
             <!-- Lưới hiển thị đề thi -->
-            <div class="test-grid">
+            <div class="test-grid grid-free">
                 <!-- Ô đề thi FREE------------------------------------------------------>
-                <div class="test-card">
-                    <!-- Title đề thi -->
-                    <div class="card-top">
-                        <h3 class="card-title">TOEIC Grammar Mini Test</h3>
-                        <span class="badge-free">Miễn phí</span>
-                    </div>
-                    <!-- Hiển thị thời gian và số câu -->
-                    <div class="card-meta">
-                        <span class="meta-item">
-                            <i class="fa-regular fa-clock"></i>
-                            30 phút
-                        </span>
-
-                        <span class="meta-item">
-                            <i class="fa-regular fa-rectangle-list"></i>
-                            50 câu
-                        </span>
-                    </div>
-                    <!-- Hiển thị test description -->
-                    <p class="card-desc">
-                        Bài kiểm tra ngữ pháp tập trung vào các điểm thường gặp trong đề thi TOEIC.
-                    </p>
-                    <div class="card-tags">
-                        <span class="tag">Grammar</span>
-                        <span class="tag">Mini Test</span>
-                    </div>
-                    <!-- Card footer -->
-                    <div class="card-footer">
-                        <div class="card-stats">
-                            <span class="stat-item">
-                                <i class="fa-regular fa-user"></i>
-                                4,821 lượt
-                            </span>
-                            <!-- Đường kẻ chia ra giữa tổng số lượt làm bài và điểm trung bình -->
-                            <span class="stat-divider"></span>
-
-                            <span class="stat-item score">
-                                <i class="fa-regular fa-star"></i>
-                                TB 72đ
-                            </span>
-                        </div>
-                        <button class="btn-start">Làm bài</button>
-                    </div>
-                </div>
+                
             </div>
             <div class="section-label">Premium</div>
             <!-- Lưới hiển thị đề thi -->
-            <div class="test-grid">
+            <div class="test-grid grid-premium">
                 <!-- Ô đề thi PREMIUM------------------------------------------------------>
-                <div class="test-card premium">
-                    <!-- Title đề thi -->
-                    <div class="card-top">
-                        <div class="card-title">TOEIC Full Test 2024 — Bộ 1</div>
-                        <span class="badge badge-premium">✦ Premium</span>
-                    </div>
-                    <!-- Hiển thị thời gian và số câu -->
-                    <div class="card-meta">
-                        <span class="meta-item">
-                            <i class="fa-regular fa-clock"></i>
-                            120 phút
-                        </span>
-
-                        <span class="meta-item">
-                            <i class="fa-regular fa-rectangle-list"></i>
-                            200 câu
-                        </span>
-                    </div>
-                    <!-- Hiển thị test description -->
-                    <div class="card-desc">
-                        Đề thi mô phỏng chuẩn TOEIC 2024 gồm cả Listening và Reading, kèm giải thích chi tiết.
-                    </div>
-
-                    <div class="card-tags">
-                        <span class="tag">Full Test</span>
-                        <span class="tag">2024</span>
-                        <span class="tag">Giải thích</span>
-                    </div>
-                    <!-- Card footer -->
-                    <div class="card-footer">
-                        <div class="card-stats">
-                            <div class="stat-item">
-                                <i class="fa-regular fa-user"></i>
-                                <span class="stat-count">6,540 lượt</span>
-                            </div>
-                            <!-- Đường kẻ chia ra giữa tổng số lượt làm bài và điểm trung bình -->
-                            <div class="stat-divider"></div>
-
-                            <div class="stat-item">
-                                <i class="fa-regular fa-star"></i>
-                                <span class="stat-score">TB 665đ</span>
-                            </div>
-                        </div>
-
-                        <button class="btn-start gold">Làm bài ✦</button>
-                    </div>
-                </div>
 
             </div>
         </div>
     </div>
 
-    <script>
-        document.querySelectorAll('.filter-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-            });
-        });
-    </script>
+    <!-- INCLUDE FOOTER FILE -->
+    <?php include './components/footer.php'; ?>
+
+    <script src="../js/tests.js"></script>
 </body>
 
 </html>

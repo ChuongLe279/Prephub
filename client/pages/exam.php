@@ -11,7 +11,7 @@
 
     <header class="top-header text-center shadow-sm">
         <span class="fw-bold fs-5 me-3" id="exam-title"></span>
-        <a href="user.php" class="btn btn-outline-secondary btn-sm">Thoát</a>
+        <a href="tests.php" class="btn btn-outline-secondary btn-sm">Thoát</a>
     </header>
 
     <div class="container-fluid py-4 px-lg-5">
