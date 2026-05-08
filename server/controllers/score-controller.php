@@ -1,7 +1,7 @@
 <?php
 // Xử lý logic API nộp bài, chấm điểm, thống kê
 require_once __DIR__ . '/../db/config.php';
-require_once __DIR__ . '/../models/Attempt.php';
+require_once __DIR__ . '/../models/attempt.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
