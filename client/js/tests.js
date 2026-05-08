@@ -22,9 +22,9 @@ async function load_tests() {
         const test_list = await response.json();
         const tests = test_list.data;
         //Chỉ hiện thi các đề thi active và LÀ FREE
-        const freeTests = tests.filter(test => Number(test.is_active) === 1 && test.is_unlocked === true);
+        const freeTests = tests.filter(test => Number(test.is_active) === 1 && test.is_premium  === false);
         //Chỉ hiện thi các đề thi active và LÀ PREMIUM
-        const premiumTests = tests.filter(test => Number(test.is_active) === 1 && test.is_unlocked === false);
+        const premiumTests = tests.filter(test => Number(test.is_active) === 1 && test.is_premium  === true);
         //Số tests tối đa hiển thị trên một dòng
         const MAX_COLS = 4;
 
