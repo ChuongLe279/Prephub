@@ -1,12 +1,8 @@
 const urlParams = new URLSearchParams(window.location.search);
-const ATTEMPT_ID = urlParams.get('attempt_id') || 1; 
-const API_URL = `/api/score/details?attempt_id=${ATTEMPT_ID}`;
+const ATTEMPT_ID = urlParams.get('attempt_id');
+const API_URL = `/api/score?attempt_id=${ATTEMPT_ID}`;
 
-const TOEIC_CONVERSION = {
-    listening: { 0: 5, 5: 25, 10: 55, 20: 110, 50: 245, 80: 395, 90: 450, 100: 495 },
-    reading: { 0: 5, 5: 20, 10: 50, 20: 105, 50: 235, 80: 380, 90: 440, 100: 495 }
-};
-
+// Định nghĩa các Part của TOEIC để hiển thị trên Sidebar và Review
 const TOEIC_PARTS = [
     { name: "Part 1: Ảnh", range: [1, 6] },
     { name: "Part 2: Câu hỏi ngắn", range: [7, 31] },
@@ -17,29 +13,18 @@ const TOEIC_PARTS = [
     { name: "Part 7: Đọc hiểu", range: [147, 200] }
 ];
 
-function calculateFinalScore(correctCount, section) {
-    const table = TOEIC_CONVERSION[section];
-    const keys = Object.keys(table).map(Number).sort((a, b) => a - b);
-    let lower = keys[0], upper = keys[keys.length - 1];
-
-    for (let i = 0; i < keys.length; i++) {
-        if (keys[i] <= correctCount) lower = keys[i];
-        if (keys[i] >= correctCount) { upper = keys[i]; break; }
-    }
-    if (lower === upper) return table[lower];
-    
-    const ratio = (correctCount - lower) / (upper - lower);
-    const score = table[lower] + ratio * (table[upper] - table[lower]);
-    return Math.round(score / 5) * 5;
-}
-
 $(document).ready(async function() {
+    if (!ATTEMPT_ID) {
+        alert("Không tìm thấy ID bài làm!");
+        return;
+    }
+
     try {
         const response = await fetch(API_URL);
         const json = await response.json();
 
-        if (json.status === 'success' && json.data) {
-            processAndRender(json.data);
+        if (json.status === 'success' && json.summary) {
+            renderResults(json.summary, json.data);
         } else {
             $('#wrong-questions-list').html('<div class="p-5 text-center text-muted">Không tìm thấy dữ liệu bài làm trong hệ thống.</div>');
         }
@@ -49,28 +34,24 @@ $(document).ready(async function() {
     }
 });
 
-function processAndRender(questions) {
-    let lcCorrect = 0, rcCorrect = 0, totalCorrect = 0;
+/**
+ * Hiển thị kết quả tổng quát và chi tiết
+ */
+function renderResults(summary, questions) {
+    $('#total-points').text(summary.total_score);
+    $('#listening-points').text(`${summary.listening_score}/495`);
+    $('#reading-points').text(`${summary.reading_score}/495`);
+
+    const totalCorrect = parseInt(summary.listening_correct) + parseInt(summary.reading_correct);
+    const accuracy = ((totalCorrect / 200) * 100).toFixed(1);
+    $('#accuracy-rate').text(`${accuracy}%`);
 
     questions.forEach(q => {
         q.user_choice = q.user_choice ? q.user_choice.toUpperCase() : '';
         q.correct_option = q.correct_option ? q.correct_option.toUpperCase() : '';
+        // Một câu được coi là đúng nếu user chọn trùng với đáp án và không để trống
         q.status = (q.user_choice === q.correct_option) && (q.user_choice !== '');
-
-        if (q.status) {
-            totalCorrect++;
-            if (q.question_id <= 100) lcCorrect++;
-            else rcCorrect++;
-        }
     });
-
-    const lcScore = calculateFinalScore(lcCorrect, 'listening');
-    const rcScore = calculateFinalScore(rcCorrect, 'reading');
-    
-    $('#total-points').text(lcScore + rcScore);
-    $('#listening-points').text(`${lcScore}/495`);
-    $('#reading-points').text(`${rcScore}/495`);
-    $('#accuracy-rate').text(`${((totalCorrect / 200) * 100).toFixed(1)}%`);
 
     renderReviewList(questions);
     renderAnswerGrid(questions);
@@ -82,10 +63,10 @@ function renderReviewList(questions) {
         const part = TOEIC_PARTS.find(p => item.question_id >= p.range[0] && item.question_id <= p.range[1]) || { name: `Part ${item.part}` };
         
         let mediaHtml = '';
-        if (item.image_url) mediaHtml += `<img src="${DOMAIN}${item.image_url}" class="img-fluid rounded mt-2 mb-2" style="max-height:300px; display:block;">`;
-        if (item.audio_url) mediaHtml += `<audio controls src="${DOMAIN}${item.audio_url}" class="w-100 mt-2 mb-2"></audio>`;
+        if (item.image_url) mediaHtml += `<img src="${item.image_url}" class="img-fluid rounded mt-2 mb-2" style="max-height:300px; display:block;">`;
+        if (item.audio_url) mediaHtml += `<audio controls src="${item.audio_url}" class="w-100 mt-2 mb-2"></audio>`;
         
-        const contentHtml = item.question_content || (mediaHtml ? '' : '<i>Nội dung câu hỏi đang được tải từ hệ thống...</i>');
+        const contentHtml = item.question_content || (mediaHtml ? '' : '<i>Nội dung câu hỏi không khả dụng.</i>');
 
         html += `
             <div class="p-4 border-bottom question-item" id="question-target-${item.question_id}">
@@ -143,7 +124,7 @@ function renderAnswerGrid(questions) {
 function scrollToQuestion(qNo) {
     const target = $(`#question-target-${qNo}`);
     if (target.length) {
-        const scrollPos = target.offset().top - 40; 
+        const scrollPos = target.offset().top - 120; 
         $('html, body').animate({ scrollTop: scrollPos }, 500);
         $('.question-item').removeClass('bg-warning-light');
         target.addClass('bg-warning-light');
@@ -159,12 +140,7 @@ $('.btn-group button').on('click', function() {
         $('.question-item').each(function() {
             $(this).find('.badge.bg-danger').length === 0 ? $(this).hide() : $(this).show();
         });
-        if ($('.question-item:visible').length === 0 && !$('#no-wrong-msg').length) {
-            $('#wrong-questions-list').append('<div id="no-wrong-msg" class="p-5 text-center text-success fw-bold">Tuyệt vời! Bạn không sai câu nào.</div>');
-        }
     } else {
         $('.question-item').show();
-        $('#no-wrong-msg').remove();
     }
-    $('html, body').animate({ scrollTop: 0 }, 300);
 });

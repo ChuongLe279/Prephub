@@ -6,18 +6,14 @@
  */
 function calculateToeicScore($correct)
 {
-	// Đúng 100 câu: Được 495 điểm
+	// Đúng 96-100 câu: Max 495 điểm
 	if ($correct >= 96)
 		return 495;
-	// Đúng 91-95 câu: Được 490 - (95 - số câu đúng) * 5 điểm
+	// Đúng 91-95 câu: Giảm dần mỗi câu 5 điểm
 	if ($correct >= 91)
 		return 490 - (95 - $correct) * 5;
-	// Đúng 6-90 câu: Được số câu đúng * 5 điểm
-	if ($correct >= 6)
-		return $correct * 5;
-	// Tối thiểu 5 điểm nếu đúng từ 1-5 câu
-	// Đúng 1-5 câu: Vẫn được tặng 5 điểm an ủi
-	return ($correct > 0) ? 5 : 0;
+	// Dưới 90 câu: Mỗi câu đúng được 5 điểm (Logic đơn giản cho đề thi thử)
+	return $correct * 5;
 }
 
 /**
