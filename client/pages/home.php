@@ -1,3 +1,12 @@
+<?php
+session_start();
+//Kiếm ra xem đã đăng nhập chưa
+//Nếu đăng nhập rồi thì chuyển tới user.php
+if (isset($_SESSION['user_id'])) {
+    header('Location: user.php');
+    exit;
+}
+?>
 <!doctype html>
 <html lang="vi">
 
@@ -12,6 +21,7 @@
     color: white;
   }
 </style>
+
 <body>
 
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
@@ -28,7 +38,6 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a id="nav-home" class="nav-link" href="home.php">Trang chủ</a></li>
-          <li class="nav-item"><a id="nav-list" class="nav-link" href="home.php#book-list-section" onclick="handleNavClick(event)">Danh sách đề thi</a></li>
           <li class="nav-item"><a id="nav-premium" class="nav-link" href="premium.php">Premium</a></li>
           <li class="nav-item">
             <a class="nav-link btn btn-outline-light ms-lg-3 px-4" href="login.php">
@@ -48,13 +57,11 @@
       <div class="row row-cols-1 row-cols-lg-3 g-4" id="book-container"></div>
     </section>
 
-    
+
   </main>
 
   <!-- INCLUDE FOOTER FILE -->
   <?php include './components/footer.php'; ?>
-
-  <script src="../js/main.js"></script>
 </body>
 
 </html>
