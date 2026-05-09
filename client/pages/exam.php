@@ -1,3 +1,18 @@
+<?php
+session_start();
+//Kiểm tra xem user có đăng nhập hay chưa
+//Tránh việc lên URL gõ exam.php là ra trang này
+require_once '../../server/middleware/auth.php'; 
+requireAuth();
+
+//Không cho người dùng vào exam mà không có uuid
+if (!isset($_GET['uuid'])) {
+    header("Location: tests.php");
+    exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -11,7 +26,7 @@
 
     <header class="top-header text-center shadow-sm">
         <span class="fw-bold fs-5 me-3" id="exam-title"></span>
-        <a href="user.php" class="btn btn-outline-secondary btn-sm" onclick="clearExamData()">Thoát</a>    
+        <a href="tests.php" class="btn btn-outline-secondary btn-sm" onclick="clearExamData()">Thoát</a>
     </header>
 
     <div class="container-fluid py-4 px-lg-5">
