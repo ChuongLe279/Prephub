@@ -568,18 +568,6 @@ body {
   padding: 0 0 90px;
 }
 
-.test-badge {
-  display: inline-block;
-  background-color: var(--primary);
-  color: white;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 8px 20px;
-  border-radius: 6px;
-  margin-bottom: 24px;
-  letter-spacing: 0.5px;
-}
-
 .section-header {
   display: flex;
   justify-content: space-between;
