@@ -1,3 +1,22 @@
+<?php
+session_start();
+// XỬ LÝ NHẬP SAI TÀI KHOẢN HOẶC MẬT KHẨU
+$errors = [
+	'login' => $_SESSION['login_error'] ?? '',
+	'register' => $_SESSION['register_error'] ?? '',
+	'success' => $_SESSION['register_success'] ?? '',
+];
+$activeAuthForm = $_SESSION['active_form'] ?? 'login';
+session_unset(); //Session vẫn còn hoạt động nhưng bỏ hết các biến
+
+function showError($error) {
+	return !empty($error) ? "<p class='error-message' style='color: #ef4444; font-size: 0.85rem; margin-bottom: 12px; font-weight: 500;'>$error</p>" : '';
+}
+
+function showSuccess($msg) {
+	return !empty($msg) ? "<p class='success-message' style='color: #10b981; font-size: 0.85rem; margin-bottom: 12px; font-weight: 500;'>$msg</p>" : '';
+}
+?>
 <!doctype html>
 <html lang="vi">
 
@@ -99,18 +118,48 @@
 		const loginForm = document.getElementById('loginForm');
 		const loginBtn = document.getElementById('loginBtn');
 		const userAvatar = document.getElementById('userAvatar');
-		const loginModalEl = document.getElementById('loginModal');
+		// auth modal logic
+		const authWrapper = document.getElementById('authWrapper');
+		const toSignup = document.getElementById('toSignup');
+		const toSignin = document.getElementById('toSignin');
+		const loginModal = loginModalEl ? new bootstrap.Modal(loginModalEl) : null;
 
-		if (loginModalEl) {
-			const loginModal = new bootstrap.Modal(loginModalEl);
-
-			loginForm.addEventListener('submit', e => {
+		if (toSignup && toSignin && authWrapper) {
+			toSignup.addEventListener('click', (e) => {
 				e.preventDefault();
-				loginModal.hide();
-				if (loginBtn) loginBtn.classList.add('d-none');
-				if (userAvatar) userAvatar.classList.remove('d-none');
+				authWrapper.classList.add('signup-active');
+			});
+			toSignin.addEventListener('click', (e) => {
+				e.preventDefault();
+				authWrapper.classList.remove('signup-active');
 			});
 		}
+
+		// Check if we need to show the modal (on error)
+		<?php if (!empty($errors['login']) || !empty($errors['register']) || !empty($errors['success'])): ?>
+			if (loginModal) {
+				<?php if ($activeAuthForm === 'register'): ?>
+					authWrapper.classList.add('signup-active');
+				<?php endif; ?>
+				loginModal.show();
+			}
+		<?php endif; ?>
+
+		// eye toggle
+		document.querySelectorAll('.eye-toggle').forEach(btn => {
+			btn.addEventListener('click', function() {
+				const input = this.previousElementSibling;
+				const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+				input.setAttribute('type', type);
+				const icon = this.querySelector('i');
+				if (type === 'text') {
+					icon.classList.replace('bx-hide', 'bx-show');
+				} else {
+					icon.classList.replace('bx-show', 'bx-hide');
+				}
+			});
+		});
+		});
 	</script>
 </body>
 

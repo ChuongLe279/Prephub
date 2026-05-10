@@ -49,7 +49,7 @@ function handleRegister() {
     $data = getAuthInput();
 
     if (empty($data['email']) || empty($data['password'])) {
-        authResponse(false, "Vui lòng nhập đầy đủ thông tin", "/client/pages/login.php", "register_error");
+        authResponse(false, "Vui lòng nhập đầy đủ thông tin", "/client/pages/home.php", "register_error");
         return;
     }
 
@@ -67,7 +67,7 @@ function handleRegister() {
         $stmt->execute(['email' => $data['email']]);
 
         if ($stmt->fetch()) {
-            authResponse(false, "Email này đã được đăng ký!", "/client/pages/login.php", "register_error");
+            authResponse(false, "Email này đã được đăng ký!", "/client/pages/home.php", "register_error");
         } else {
             $insert = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, email, password) VALUES (:uuid, :first_name, :last_name, :email, :password)");
             $insert->execute([
@@ -78,7 +78,7 @@ function handleRegister() {
                 'password'   => $password_hash
             ]);
             $_SESSION['active_form'] = 'login';
-            authResponse(true, "Đăng ký thành công!", "/client/pages/login.php");
+            authResponse(true, "Đăng ký thành công!", "/client/pages/home.php");
         }
     } catch (PDOException $e) {
         sendError("Lỗi database: " . $e->getMessage(), 500);
@@ -104,7 +104,7 @@ function handleLogin() {
             
             authResponse(true, "Đăng nhập thành công", "/client/pages/user.php");
         } else {
-            authResponse(false, "Email hoặc mật khẩu không chính xác", "/client/pages/login.php", "login_error");
+            authResponse(false, "Email hoặc mật khẩu không chính xác", "/client/pages/home.php", "login_error");
         }
     } catch (PDOException $e) {
         sendError("Lỗi database: " . $e->getMessage(), 500);
