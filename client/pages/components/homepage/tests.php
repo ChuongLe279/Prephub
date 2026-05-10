@@ -1,8 +1,8 @@
 <!-- Tests Section -->
 <section class="test-section container" id="tests">
-	<span class="test-badge">Đề thi mới</span>
+	<span class="section-badge">Đề thi mới</span>
 	<div class="section-header">
-		<h2>Cập nhật đề thi mới<br>nhất 2026.</h2>
+		<h2 class="section-title mt-3">Cập nhật đề thi mới<br>nhất 2026.</h2>
 		<a href="tests.php" class="view-more-link">Xem thêm<i class='bx bx-chevron-right'></i></a>
 	</div>
 	<div class="row row-cols-1 row-cols-md-4 g-3" id="testContainer">
