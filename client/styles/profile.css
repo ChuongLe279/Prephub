@@ -706,3 +706,91 @@ a {
 		border-radius: 9px;
 	}
 }
+/* CONNECTED ACCOUNT */
+.connected-card {
+	padding: 18px 20px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 18px;
+}
+
+.connected-left {
+	display: flex;
+	align-items: flex-start;
+	gap: 13px;
+}
+
+.connected-icon {
+	width: 42px;
+	height: 42px;
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	margin-top: 2px;
+}
+
+.google-icon {
+	background: #f8fafc;
+	color: #4285f4;
+	border: 1px solid #e5eaf0;
+}
+
+.google-icon i {
+	font-size: 18px;
+	line-height: 1;
+}
+
+.connected-text {
+	padding-top: 1px;
+}
+
+.connected-card h2 {
+	font-size: 15px;
+	font-weight: 700;
+	color: #1e2d3d;
+	margin-bottom: 6px;
+	line-height: 1.2;
+}
+
+.connected-card p {
+	font-size: 12.5px;
+	color: #7a8fa6;
+	line-height: 1.4;
+}
+
+.connect-google-btn {
+	height: 38px;
+	padding: 0 18px;
+	border-radius: 999px;
+	background: white;
+	color: #3498db;
+	border: 1px solid #cfe3f5;
+	font-size: 12.5px;
+	font-weight: 600;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+	transition: all 0.15s;
+}
+
+.connect-google-btn:hover {
+	background: #e8f4fd;
+	border-color: #3498db;
+	color: #2980b9;
+}
+
+@media (max-width: 760px) {
+	.connected-card {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.connect-google-btn {
+		width: 100%;
+	}
+}
