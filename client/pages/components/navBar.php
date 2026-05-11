@@ -30,7 +30,7 @@
 					<span>user@email.com</span>
 				</div>
 				<!--Drop down menu-->
-				<a href="#"><i class="fas fa-user"></i> Hồ sơ</a>
+				<a href="profile.php"><i class="fas fa-user"></i> Hồ sơ</a>
 				<a href="#"><i class="fas fa-bell"></i> Thông báo</a>
 				<a href="#"><i class="fas fa-keyboard"></i> Phím tắt</a>
 				<a href="#"><i class="fas fa-gift"></i> Có gì mới</a>

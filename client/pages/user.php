@@ -53,18 +53,7 @@ $fullName = trim($lastName . ' ' . $firstName);
             </div>
         </div>
 
-        <!-- GOAL BANNER -->
-        <div class="goal-banner">
-            <div class="goal-icon"><i class="fas fa-bullseye"></i></div>
-            <div class="goal-text">
-                <div class="goal-title">Mục tiêu TOEIC của bạn</div>
-                <div class="goal-sub">Bạn cần thêm 170 điểm để đạt mục tiêu</div>
-            </div>
-            <div class="goal-bar-wrap">
-                <div class="goal-bar-fill"></div>
-            </div>
-            <div class="goal-score">580 <span>/ 750</span></div>
-        </div>
+       
 
         <!-- Danh sách đề thi -->
         <div>
