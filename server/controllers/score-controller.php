@@ -55,7 +55,13 @@ try {
 			exit;
 		}
 
-		$stmt = $conn->prepare("SELECT * FROM attempts WHERE id = ? OR uuid = ?");
+		// 1. Lấy thông tin tổng quát của lần làm bài này (điểm số, số câu đúng) kèm UUID đề thi để làm lại
+		$stmt = $conn->prepare("
+            SELECT a.*, t.uuid as test_uuid 
+            FROM attempts a 
+            JOIN tests t ON a.test_id = t.id 
+            WHERE a.id = ? OR a.uuid = ?
+        ");
 		$stmt->execute([is_numeric($attempt_id) ? $attempt_id : 0, $attempt_id]);
 		$attempt = $stmt->fetch(PDO::FETCH_ASSOC);
 

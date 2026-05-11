@@ -41,6 +41,11 @@ function renderResults(summary, questions) {
     $('#total-points').text(summary.total_score);
     $('#listening-points').text(`${summary.listening_score}/495`);
     $('#reading-points').text(`${summary.reading_score}/495`);
+    
+    // Gắn link làm lại bài
+    if (summary.test_uuid) {
+        $('#btn-retake').attr('href', `exam.php?uuid=${summary.test_uuid}`);
+    }
 
     const totalCorrect = parseInt(summary.listening_correct) + parseInt(summary.reading_correct);
     const accuracy = ((totalCorrect / 200) * 100).toFixed(1);

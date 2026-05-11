@@ -82,7 +82,7 @@
                         
                         <div class="row g-2 mt-auto">
                             <div class="col-6">
-                                <a href="test.php" class="btn btn-outline-primary btn-sm w-100">Làm lại bài</a>
+                                <a href="#" id="btn-retake" class="btn btn-outline-primary btn-sm w-100">Làm lại bài</a>
                             </div>
                             <div class="col-6">
                                 <a href="dashboard.php" class="btn btn-primary btn-sm w-100">Về Dashboard</a>
