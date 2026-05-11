@@ -1,15 +1,18 @@
 <?php
 session_start();
 
-require_once '../../server/middleware/auth.php';
-requireAuth();
+//require_once '../../server/middleware/auth.php';
+//requireAuth();
 
 $firstName = $_SESSION['first_name'] ?? 'Người';
 $lastName = $_SESSION['last_name'] ?? 'dùng';
 $email = $_SESSION['email'] ?? 'user@email.com';
 
 $fullName = trim($lastName . ' ' . $firstName);
-$initials = mb_strtoupper(mb_substr($firstName, 0, 1) . mb_substr($lastName, 0, 1), 'UTF-8');
+$getInitial = function ($value) {
+    return preg_match('/./u', trim($value), $match) ? $match[0] : '';
+};
+$initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
 ?>
 
 <!DOCTYPE html>
@@ -238,7 +241,23 @@ $initials = mb_strtoupper(mb_substr($firstName, 0, 1) . mb_substr($lastName, 0, 
                         </button>
                     </div>
                 </div>
+                <!-- CONNECTED ACCOUNT -->
+                <div class="profile-card connected-card">
+                    <div class="connected-left">
+                        <div class="connected-icon google-icon">
+                            <i class="fab fa-google"></i>
+                        </div>
 
+                        <div class="connected-text">
+                            <h2>Tài khoản kết nối</h2>
+                            <p>Chưa liên kết với Google</p>
+                        </div>
+                    </div>
+
+                    <a href="#" class="connect-google-btn">
+                        Kết nối
+                    </a>
+                </div>
                 <!-- DANGER ZONE -->
                 <div class="profile-card danger-card">
                     <div class="danger-left">
