@@ -1,67 +1,172 @@
 <?php
 session_start();
-//Kiếm ra xem đã đăng nhập chưa
-//Nếu đăng nhập rồi thì chuyển tới user.php
-if (isset($_SESSION['user_id'])) {
-    header('Location: user.php');
-    exit;
+// XỬ LÝ NHẬP SAI TÀI KHOẢN HOẶC MẬT KHẨU
+$errors = [
+	'login' => $_SESSION['login_error'] ?? '',
+	'register' => $_SESSION['register_error'] ?? '',
+	'success' => $_SESSION['register_success'] ?? '',
+];
+$activeAuthForm = $_SESSION['active_form'] ?? 'login';
+session_unset(); //Session vẫn còn hoạt động nhưng bỏ hết các biến
+
+function showError($error)
+{
+	return !empty($error) ? "<p class='error-message' style='color: #ef4444; font-size: 0.85rem; margin-bottom: 12px; font-weight: 500;'>$error</p>" : '';
+}
+
+function showSuccess($msg)
+{
+	return !empty($msg) ? "<p class='success-message' style='color: #10b981; font-size: 0.85rem; margin-bottom: 12px; font-weight: 500;'>$msg</p>" : '';
 }
 ?>
 <!doctype html>
 <html lang="vi">
 
 <head>
-  <?php include './components/metadata.php'; ?>
-  <title>PREHUB - Luyện Thi TOEIC</title>
-  <link rel="stylesheet" href="../styles/style.css">
+	<?php include './components/metadata.php'; ?>
+	<title>Prephub - Luyện thi TOEIC online</title>
 </head>
-<style>
-  .nav-link.btn.btn-outline-light.ms-lg-3.px-4:hover:hover {
-    background-color: #14b8a6;
-    color: white;
-  }
-</style>
 
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-    <div class="container">
-      <a class="navbar-brand footer-logo fw-bold" href="./home.php">
-        <i class="bx bx-education" style="font-size: 31px;"></i>
-        <span>PREPHUB</span>
-      </a>
+	<?php include './components/homepage/navbar.php'; ?>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+	<?php include './components/homepage/hero.php'; ?>
 
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a id="nav-home" class="nav-link" href="home.php">Trang chủ</a></li>
-          <li class="nav-item"><a id="nav-premium" class="nav-link" href="premium.php">Premium</a></li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-outline-light ms-lg-3 px-4" href="login.php">
-              Đăng nhập <i class="fas fa-sign-in-alt ms-2"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- INCLUDE HEADER FILE -->
-  <?php include './components/header.php'; ?>
-  <main class="container mb-5">
+	<?php include './components/homepage/about.php'; ?>
 
-    <section id="book-list-section">
-      <h2 class="fw-bold mb-4">Banner quảng cáo</h2>
-      <div class="row row-cols-1 row-cols-lg-3 g-4" id="book-container"></div>
-    </section>
+	<?php include './components/homepage/tests.php'; ?>
 
+	<?php include './components/homepage/pricing.php'; ?>
 
-  </main>
+	<?php include './components/homepage/feedback.php'; ?>
 
-  <!-- INCLUDE FOOTER FILE -->
-  <?php include './components/footer.php'; ?>
+	<?php include './components/homepage/banner.php'; ?>
+
+	<?php include './components/homepage/footer.php'; ?>
+
+	<?php include './components/homepage/loginModal.php'; ?>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			// navbar scroll effect
+			const navbar = document.getElementById('mainNavbar');
+			window.addEventListener('scroll', () => {
+				if (window.scrollY > 50) {
+					navbar.classList.add('scrolled');
+				} else {
+					navbar.classList.remove('scrolled');
+				}
+			});
+
+			// dynamic nav indicator
+			const navIndicator = document.getElementById('navIndicator');
+			const navLinks = document.querySelectorAll('.nav-link');
+			const navCenter = document.querySelector('.nav-center');
+
+			if (navIndicator && navCenter) {
+				function moveIndicator(element) {
+					const rect = element.getBoundingClientRect();
+					const parentRect = navCenter.getBoundingClientRect();
+					navIndicator.style.width = `${rect.width - 32}px`;
+					navIndicator.style.left = `${rect.left - parentRect.left + 16}px`;
+				}
+
+				function resetIndicator() {
+					const activeLink = document.querySelector('.nav-link.active');
+					if (activeLink) {
+						moveIndicator(activeLink);
+					} else {
+						navIndicator.style.width = '0';
+					}
+				}
+
+				navLinks.forEach(link => {
+					link.addEventListener('mouseenter', (e) => moveIndicator(e.target));
+				});
+
+				navCenter.addEventListener('mouseleave', resetIndicator);
+				window.addEventListener('load', resetIndicator);
+				window.addEventListener('resize', resetIndicator);
+				resetIndicator();
+			}
+
+			// pricing toggle
+			const priceToggle = document.getElementById('priceToggle');
+			const monthlyBtn = document.getElementById('monthlyBtn');
+			const yearlyBtn = document.getElementById('yearlyBtn');
+			let isYearly = false;
+
+			if (priceToggle && monthlyBtn && yearlyBtn) {
+				function updatePrices(yearly) {
+					isYearly = yearly;
+					priceToggle.classList.toggle('yearly', yearly);
+					monthlyBtn.classList.toggle('active', !yearly);
+					monthlyBtn.classList.toggle('inactive', yearly);
+					yearlyBtn.classList.toggle('active', yearly);
+					yearlyBtn.classList.toggle('inactive', !yearly);
+
+					document.querySelectorAll('.plan-price').forEach(el => {
+						const fullPrice = yearly ? el.dataset.yearly : el.dataset.monthly;
+						const parts = fullPrice.split('/');
+						if (parts.length === 2) {
+							el.innerHTML = `${parts[0]}<span class="price-suffix">/${parts[1]}</span>`;
+						} else {
+							el.textContent = fullPrice;
+						}
+					});
+				}
+				priceToggle.addEventListener('click', () => updatePrices(!isYearly));
+				monthlyBtn.addEventListener('click', () => updatePrices(false));
+				yearlyBtn.addEventListener('click', () => updatePrices(true));
+			}
+
+			// auth modal logic
+			const authWrapper = document.getElementById('authWrapper');
+			const toSignup = document.getElementById('toSignup');
+			const toSignin = document.getElementById('toSignin');
+			const loginModalEl = document.getElementById('loginModal');
+
+			if (loginModalEl) {
+				const loginModal = new bootstrap.Modal(loginModalEl);
+				if (toSignup && toSignin && authWrapper) {
+					toSignup.addEventListener('click', (e) => {
+						e.preventDefault();
+						authWrapper.classList.add('signup-active');
+					});
+					toSignin.addEventListener('click', (e) => {
+						e.preventDefault();
+						authWrapper.classList.remove('signup-active');
+					});
+				}
+
+				// Check if we need to show the modal (on error)
+				<?php if (!empty($errors['login']) || !empty($errors['register']) || !empty($errors['success'])): ?>
+					<?php if ($activeAuthForm === 'register'): ?>
+						authWrapper.classList.add('signup-active');
+					<?php endif; ?>
+					loginModal.show();
+				<?php endif; ?>
+			}
+
+			// eye toggle
+			document.querySelectorAll('.eye-toggle').forEach(btn => {
+				btn.addEventListener('click', function() {
+					const input = this.previousElementSibling;
+					const iconImg = this.querySelector('img');
+					const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+					input.setAttribute('type', type);
+
+					if (type === 'text') {
+						iconImg.src = '../img/eye_open.png';
+					} else {
+						iconImg.src = '../img/eye_close.png';
+					}
+				});
+			});
+		});
+	</script>
 </body>
 
 </html>
