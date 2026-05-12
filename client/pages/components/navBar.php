@@ -9,7 +9,7 @@
 
 <body>
 	<nav class="ph-nav">
-		<a class="ph-brand" href="#">
+		<a class="ph-brand" href="user.php">
 			<i class="fas fa-graduation-cap"></i>
 			<!--LOGO-->
 			PREPHUB
@@ -35,7 +35,7 @@
 				<a href="#"><i class="fas fa-keyboard"></i> Phím tắt</a>
 				<a href="#"><i class="fas fa-gift"></i> Có gì mới</a>
 				<a href="#"><i class="fas fa-circle-question"></i> Hỗ trợ</a>
-				<a href="#" class="logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+				<a href="../../server/controllers/log-out.php" class="logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
 			</div>
 		</div>
 	</nav>

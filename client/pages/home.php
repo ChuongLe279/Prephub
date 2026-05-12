@@ -9,11 +9,13 @@ $errors = [
 $activeAuthForm = $_SESSION['active_form'] ?? 'login';
 session_unset(); //Session vẫn còn hoạt động nhưng bỏ hết các biến
 
-function showError($error) {
+function showError($error)
+{
 	return !empty($error) ? "<p class='error-message' style='color: #ef4444; font-size: 0.85rem; margin-bottom: 12px; font-weight: 500;'>$error</p>" : '';
 }
 
-function showSuccess($msg) {
+function showSuccess($msg)
+{
 	return !empty($msg) ? "<p class='success-message' style='color: #10b981; font-size: 0.85rem; margin-bottom: 12px; font-weight: 500;'>$msg</p>" : '';
 }
 ?>
@@ -155,7 +157,6 @@ function showSuccess($msg) {
 					const iconImg = this.querySelector('img');
 					const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
 					input.setAttribute('type', type);
-					
 					if (type === 'text') {
 						iconImg.src = '../img/eye_open.png';
 					} else {

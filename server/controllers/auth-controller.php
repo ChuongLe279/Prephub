@@ -112,8 +112,4 @@ function handleLogin() {
 }
 
 // Xử lý đăng xuất
-function handleLogout() {
-    session_unset();
-    session_destroy();
-    authResponse(true, "Đã đăng xuất", "/client/pages/home.php");
-}
+// Hàm xử lý đăng xuất t dời r. StackOverflow bảo là làm nó thành file riêng để tránh việc thực thi nhầm (accidentally executed)
