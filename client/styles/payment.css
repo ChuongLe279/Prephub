@@ -166,7 +166,6 @@ body {
 
 .pay-btn:hover {
     opacity: 0.9;
-    transform: translateY(-2px);
 }
 
 .summary-note {

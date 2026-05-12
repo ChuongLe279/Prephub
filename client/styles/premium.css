@@ -111,7 +111,6 @@
 }
 .btn-pro:hover {
     opacity: 0.9;
-    transform: translateY(-2px);
 }
 .feature-list {
     list-style: none;

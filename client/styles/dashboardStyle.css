@@ -16,7 +16,6 @@ body {
 
 /* Hiệu ứng bay lên khi di chuột giống các trang web hiện đại */
 .card:hover {
-    transform: translateY(-8px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
