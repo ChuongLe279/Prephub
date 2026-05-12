@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="../styles/results.css">
 </head>
 <body class="bg-light">
+<?php include './components/navBar.php'; ?>
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-4 mt-5">
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3">
             <div class="card text-center border-0 shadow-sm p-3 h-100">
@@ -82,7 +83,7 @@
                         
                         <div class="row g-2 mt-auto">
                             <div class="col-6">
-                                <a href="test.php" class="btn btn-outline-primary btn-sm w-100">Làm lại bài</a>
+                                <a href="#" id="btn-retake" class="btn btn-outline-primary btn-sm w-100">Làm lại bài</a>
                             </div>
                             <div class="col-6">
                                 <a href="dashboard.php" class="btn btn-primary btn-sm w-100">Về Dashboard</a>
