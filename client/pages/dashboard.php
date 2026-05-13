@@ -1,5 +1,6 @@
 <?php
-
+require_once '../../server/middleware/auth.php';
+homeRedirect();
 ?>
 <!DOCTYPE html>
 <html lang="vi">

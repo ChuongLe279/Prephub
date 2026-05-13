@@ -1,7 +1,7 @@
 <?php
-session_start();
-
-
+//Tránh việc người dùng gõ địa chỉ vào URL nhưng chưa đăng nhập
+require_once '../../server/middleware/auth.php';
+homeRedirect();
 
 $firstName = $_SESSION['first_name'] ?? 'Người';
 $lastName = $_SESSION['last_name'] ?? 'dùng';
@@ -12,6 +12,17 @@ $getInitial = function ($value) {
     return preg_match('/./u', trim($value), $match) ? $match[0] : '';
 };
 $initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
+//Thong báo nếu đã đổi tên thành công
+$changeNameResult = $_SESSION['changeNameResult'] ?? null;
+unset($_SESSION['changeNameResult']);
+//Thong báo nếu đã đổi mật khẩu thành công
+$changePassResult = $_SESSION['changePassResult'] ?? null;
+$changePassType = $_SESSION['changePassType'] ?? 'success';
+$isChangePassError = $changePassType === 'error' || $changePassResult === "Hãy kiểm tra xem bạn đã nhập đúng mật khẩu hay chưa.";
+unset($_SESSION['changePassResult']);
+unset($_SESSION['changePassType']);
+$deletePasswordResult = $_SESSION['password_confirmation_result'] ?? null;
+unset($_SESSION['password_confirmation_result']);
 ?>
 
 <!DOCTYPE html>
@@ -32,8 +43,25 @@ $initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
     <?php include './components/navBar.php'; ?>
 
     <div class="page">
+        <!-- Thông báo nếu chuyển tên đã thành công hay chưa -->
+        <?php if ($changeNameResult): ?>
+            <div class="success-message">
+                <?= htmlspecialchars($changeNameResult) ?>
+            </div>
+        <?php endif; ?>
+        <!-- Thông báo nếu đổi mật khẩu đã thành công hay chưa -->
+        <?php if ($changePassResult): ?>
+            <div class="success-message <?= $isChangePassError ? 'error-message' : '' ?>">
+                <?= htmlspecialchars($changePassResult) ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($deletePasswordResult): ?>
+            <div class="success-message error-message">
+                <?= htmlspecialchars($deletePasswordResult) ?>
+            </div>
+        <?php endif; ?>
 
-        <!-- PROFILE HERO -->
+        <!-- Tiêu đề của trang -->
         <div class="profile-hero">
             <div class="hero-left">
                 <div class="hero-eyebrow">Tài khoản cá nhân</div>
@@ -64,17 +92,14 @@ $initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
                     <div class="hero-stat-label">Điểm cao nhất</div>
                 </div>
 
-                <div class="hero-stat">
-                    <div class="hero-stat-val">73%</div>
-                    <div class="hero-stat-label">Độ chính xác</div>
-                </div>
+                
             </div>
         </div>
 
-        <!-- PROFILE CONTENT -->
+        <!-- Phần ND -->
         <div class="profile-layout">
 
-            <!-- LEFT COLUMN -->
+            <!-- Cột trái -->
             <aside class="left-col">
 
                 <div class="profile-card user-card">
@@ -139,11 +164,12 @@ $initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
 
             </aside>
 
-            <!-- RIGHT COLUMN -->
+            <!-- Cột phải -->
             <section class="right-col">
 
-                <!-- ACCOUNT INFO -->
-                <div class="profile-card section-card">
+                <!-- INFO ng dùng -->
+
+                <form class="profile-card section-card" method="POST" action="../../server/controllers/profile-controller.php">
                     <div class="section-head">
                         <div class="section-title-wrap">
                             <div class="section-icon">
@@ -160,40 +186,31 @@ $initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="i-fname">Tên</label>
-                            <input id="i-fname" type="text" value="<?= htmlspecialchars($firstName) ?>">
+                            <input id="i-fname" name="first_name" type="text" value="<?= htmlspecialchars($firstName) ?>">
                         </div>
 
                         <div class="form-group">
                             <label for="i-lname">Họ</label>
-                            <input id="i-lname" type="text" value="<?= htmlspecialchars($lastName) ?>">
+                            <input id="i-lname" name="last_name" type="text" value="<?= htmlspecialchars($lastName) ?>">
                         </div>
 
                         <div class="form-group full">
                             <label for="i-email">Email</label>
-                            <input id="i-email" type="email" value="<?= htmlspecialchars($email) ?>">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="i-phone">Số điện thoại</label>
-                            <input id="i-phone" type="text" placeholder="+84 90 000 0000">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="i-dob">Ngày sinh</label>
-                            <input id="i-dob" type="text" placeholder="01/01/2000">
+                            <input id="i-email" type="email" value="<?= htmlspecialchars($email) ?>" readonly>
                         </div>
                     </div>
-
+                    <input type="hidden" name="changeName" value="changeUsername"> 
+                    <!-- nút cập nhật tên -->
                     <div class="card-actions">
-                        <button class="save-btn" type="button">
+                        <button class="save-btn" type="submit">
                             <i class="fas fa-floppy-disk"></i>
-                            Cập nhật thông tin
+                            Cập nhật tên
                         </button>
                     </div>
-                </div>
+                </form>
 
                 <!-- PASSWORD -->
-                <div class="profile-card section-card">
+                <form class="profile-card section-card" method="POST" action="../../server/controllers/profile-controller.php">
                     <div class="section-head">
                         <div class="section-title-wrap">
                             <div class="section-icon">
@@ -211,36 +228,43 @@ $initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
                         <div class="form-group full">
                             <label for="current-password">Mật khẩu hiện tại</label>
                             <div class="password-box">
-                                <input id="current-password" type="password" placeholder="Nhập mật khẩu hiện tại">
-                                <i class="far fa-eye"></i>
+                                <input id="current-password" name="current_password" type="password" placeholder="Nhập mật khẩu hiện tại">
+                                <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu" onclick="togglePassword(this)">
+                                    <img src="../img/eye_close.png" alt="" class="eye-icon">
+                                </button>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="new-password">Mật khẩu mới</label>
                             <div class="password-box">
-                                <input id="new-password" type="password" placeholder="Nhập mật khẩu mới">
-                                <i class="far fa-eye"></i>
+                                <input id="new-password" name="new_password" type="password" placeholder="Nhập mật khẩu mới">
+                                <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu" onclick="togglePassword(this)">
+                                    <img src="../img/eye_close.png" alt="" class="eye-icon">
+                                </button>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="confirm-password">Xác nhận mật khẩu</label>
                             <div class="password-box">
-                                <input id="confirm-password" type="password" placeholder="Nhập lại mật khẩu">
-                                <i class="far fa-eye"></i>
+                                <input id="confirm-password" name="confirm_password" type="password" placeholder="Nhập lại mật khẩu">
+                                <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu" onclick="togglePassword(this)">
+                                    <img src="../img/eye_close.png" alt="" class="eye-icon">
+                                </button>
                             </div>
                         </div>
                     </div>
-
+                    <input type="hidden" name="changePassword" value="changePassword">
+                    <!--Nút đặt lại mật khaauir-->
                     <div class="card-actions">
-                        <button class="save-btn" type="button">
+                        <button class="save-btn" type="submit">
                             <i class="fas fa-shield-halved"></i>
                             Cập nhật mật khẩu
                         </button>
                     </div>
-                </div>
-                <!-- CONNECTED ACCOUNT -->
+                </form>
+                <!-- CONNECT gg -->
                 <div class="profile-card connected-card">
                     <div class="connected-left">
                         <div class="connected-icon google-icon">
@@ -257,7 +281,7 @@ $initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
                         Kết nối
                     </a>
                 </div>
-                <!-- DANGER ZONE -->
+                <!-- NÚT xóa tài khoản -->
                 <div class="profile-card danger-card">
                     <div class="danger-left">
                         <div class="danger-icon">
@@ -270,8 +294,9 @@ $initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
                         </div>
                     </div>
 
-                    <button class="danger-btn" type="button">
+                    <button class="danger-btn" id="open-delete-popup" type="button">
                         <i class="fas fa-trash-can"></i>
+                        <!-- NÚT xóa tài khoản 1 -->
                         Xóa tài khoản
                     </button>
                 </div>
@@ -280,6 +305,41 @@ $initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
 
         </div>
 
+    </div>
+
+    <div class="delete-popup-overlay" id="delete-popup">
+        <div class="delete-popup" role="dialog" aria-modal="true" aria-labelledby="delete-popup-title">
+            <button class="delete-popup-close" id="close-delete-popup" type="button" aria-label="Đóng">
+                <i class="fas fa-xmark"></i>
+            </button>
+
+            <div class="delete-popup-icon">
+                <i class="fas fa-triangle-exclamation"></i>
+            </div>
+            <!--Cửa sổ pop up nếu bấm nút xóa tài khoản-->
+            <h2 id="delete-popup-title">Bạn có chắc chắn chưa?</h2>
+            <p>Tài khoản và dữ liệu luyện thi của bạn sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.</p>
+
+            <form method="POST" action="../../server/controllers/profile-controller.php">
+                <div class="delete-password-field">
+                    <label for="delete-account-password">Nhập mật khẩu để xác nhận</label>
+                    <div class="password-box">
+                <!--Nút nhập lại mật khẩu để xác nhận là có cho xóa hay không-->
+                        <input id="delete-account-password" name="password_confirmation_delete" type="password" placeholder="Nhập lại mật khẩu">
+                        <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu" onclick="togglePassword(this)">
+                            <img src="../img/eye_close.png" alt="" class="eye-icon">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="delete-popup-actions">
+                    <button class="delete-cancel-btn" id="cancel-delete-popup" type="button">Hủy</button>
+                    <!-- NÚT xóa tài khoản 2 -->
+                    <input type="hidden" name="deleteAccount" value="deleteAccount">
+                    <button class="delete-confirm-btn" type="submit">Xóa tài khoản</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <?php include './components/footer.php'; ?>

@@ -1,11 +1,9 @@
 <?php
-session_start();
 //Kiểm tra xem user có đăng nhập hay chưa
 //Tránh việc lên URL gõ exam.php là ra trang này
-if (!isset($_SESSION[''])){
-    header("Location: ");
-    exit();
-}
+
+require_once '../../server/middleware/auth.php';
+homeRedirect();
 
 //Không cho người dùng vào exam mà không có uuid
 if (!isset($_GET['uuid'])) {

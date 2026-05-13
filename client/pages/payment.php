@@ -1,4 +1,6 @@
 <?php
+require_once '../../server/middleware/auth.php';
+homeRedirect();
 $plans = require_once '../../server/config/premiumPlan.php'; //Hiển thị các plan options
 $selected_plan = $_GET['plan'] ?? 'pro'; //Nếu plan bỏ trống thì mặc định chọn pro 
 
