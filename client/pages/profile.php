@@ -1,8 +1,10 @@
 <?php
 //Tránh việc người dùng gõ địa chỉ vào URL nhưng chưa đăng nhập
 require_once '../../server/middleware/auth.php';
+require_once '../../server/controllers/profile-controller.php';
 homeRedirect();
 
+//Hiển thị tên và gmail
 $firstName = $_SESSION['first_name'] ?? 'Người';
 $lastName = $_SESSION['last_name'] ?? 'dùng';
 $email = $_SESSION['email'] ?? 'user@email.com';
@@ -12,17 +14,27 @@ $getInitial = function ($value) {
     return preg_match('/./u', trim($value), $match) ? $match[0] : '';
 };
 $initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
+
 //Thong báo nếu đã đổi tên thành công
 $changeNameResult = $_SESSION['changeNameResult'] ?? null;
 unset($_SESSION['changeNameResult']);
+
 //Thong báo nếu đã đổi mật khẩu thành công
 $changePassResult = $_SESSION['changePassResult'] ?? null;
 $changePassType = $_SESSION['changePassType'] ?? 'success';
 $isChangePassError = $changePassType === 'error' || $changePassResult === "Hãy kiểm tra xem bạn đã nhập đúng mật khẩu hay chưa.";
 unset($_SESSION['changePassResult']);
 unset($_SESSION['changePassType']);
+
+//Thông báo xem là đã nhập đúng mật khẩu để xóa tài khoản hay chưa
 $deletePasswordResult = $_SESSION['password_confirmation_result'] ?? null;
 unset($_SESSION['password_confirmation_result']);
+
+//Điểm cao nhất, điểm tb và tổng số bài đã làm
+$maxScore = getMaxScore();
+$avgScore = getAvgScore();
+$total_number_of_tests = getNumTestDone();
+
 ?>
 
 <!DOCTYPE html>
@@ -83,12 +95,14 @@ unset($_SESSION['password_confirmation_result']);
 
             <div class="hero-right">
                 <div class="hero-stat">
-                    <div class="hero-stat-val">24</div>
+                     <!-- Hiển thị tổng số bài đã làm -->
+                    <div class="hero-stat-val"><?= $total_number_of_tests ?></div>
                     <div class="hero-stat-label">Bài đã làm</div>
                 </div>
 
                 <div class="hero-stat">
-                    <div class="hero-stat-val">580</div>
+                     <!-- Hiển thị điểm cao nhất -->
+                    <div class="hero-stat-val"><?= $maxScore ?></div>
                     <div class="hero-stat-label">Điểm cao nhất</div>
                 </div>
 
@@ -129,7 +143,8 @@ unset($_SESSION['password_confirmation_result']);
                                 <i class="fas fa-file-alt"></i>
                             </div>
                             <div>
-                                <div class="quick-val">24</div>
+                                 <!-- Hiển thị tổng số bài đã làm -->
+                                <div class="quick-val"><?= $total_number_of_tests ?></div>
                                 <div class="quick-label">Bài đã làm</div>
                             </div>
                         </div>
@@ -139,7 +154,8 @@ unset($_SESSION['password_confirmation_result']);
                                 <i class="fas fa-chart-line"></i>
                             </div>
                             <div>
-                                <div class="quick-val">580</div>
+                                 <!-- Hiển thị điểm tb -->
+                                <div class="quick-val"><?= $avgScore ?></div>
                                 <div class="quick-label">Điểm TB</div>
                             </div>
                         </div>

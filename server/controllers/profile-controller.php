@@ -12,27 +12,57 @@ require_once __DIR__ . '/../utils/response.php';
 function getMaxScore(){
     global $conn;
     try{
+        $sql = "SELECT MAX(total_score) 
+                FROM attempts
+                WHERE user_id = :id";
 
+        $stmt = $conn->prepare($sql);
+        $id = $_SESSION['user_id'];
+        $stmt->execute([
+            ':id'      => $id
+        ]);
+        return $stmt->fetchColumn();
     }catch (PDOException $e) {
         sendError("Lỗi database: " . $e->getMessage(), 500);
+        return false;
     }
 }
 //Hiển thị số bài đã làm
 function getNumTestDone(){
     global $conn;
     try{
+        $sql = "SELECT COUNT(*) 
+                FROM attempts
+                WHERE user_id = :id";
 
+        $stmt = $conn->prepare($sql);
+        $id = $_SESSION['user_id'];
+        $stmt->execute([
+            ':id'      => $id
+        ]);
+        return $stmt->fetchColumn();
     }catch (PDOException $e) {
         sendError("Lỗi database: " . $e->getMessage(), 500);
+        return false;
     }
 }
 //Hiển thị điểm số trung bình
 function getAvgScore(){
     global $conn;
     try{
-
+        $sql = "SELECT ROUND(AVG(total_score)) 
+                FROM attempts
+                WHERE user_id = :id";
+        
+        $stmt = $conn->prepare($sql);
+        $id = $_SESSION['user_id'];
+        $stmt->execute([
+            ':id'      => $id
+        ]);
+        return $stmt->fetchColumn();
     }catch (PDOException $e) {
         sendError("Lỗi database: " . $e->getMessage(), 500);
+        return false;
     }
 }
 
