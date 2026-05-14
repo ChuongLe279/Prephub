@@ -201,13 +201,13 @@ $total_number_of_tests = getNumTestDone();
 
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="i-fname">Tên</label>
-                            <input id="i-fname" name="first_name" type="text" value="<?= htmlspecialchars($firstName) ?>">
+                            <label for="i-lname">Họ</label>
+                            <input id="i-lname" name="last_name" type="text" value="<?= htmlspecialchars($lastName) ?>">
                         </div>
 
                         <div class="form-group">
-                            <label for="i-lname">Họ</label>
-                            <input id="i-lname" name="last_name" type="text" value="<?= htmlspecialchars($lastName) ?>">
+                            <label for="i-fname">Tên</label>
+                            <input id="i-fname" name="first_name" type="text" value="<?= htmlspecialchars($firstName) ?>">
                         </div>
 
                         <div class="form-group full">

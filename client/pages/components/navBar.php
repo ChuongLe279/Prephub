@@ -9,14 +9,14 @@
 
 <body>
 	<nav class="ph-nav">
-		<a class="ph-brand" href="user.php">
+		<a class="ph-brand" href="home.php">
 			<i class="fas fa-graduation-cap"></i>
 			<!--LOGO-->
 			PREPHUB
 		</a>
 		<ul class="ph-nav-links">
 			<!--Nav link-->
-			<li><a href="user.php">Trang chủ</a></li>
+			<li><a href="home.php">Trang chủ</a></li>
 			<li><a href="tests.php">Danh sách đề thi</a></li>
 			<li><a href="dashboard.php">Dashboard</a></li>
 			<div class="ph-divider"></div>
