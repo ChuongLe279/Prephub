@@ -9,14 +9,14 @@
 
 <body>
 	<nav class="ph-nav">
-		<a class="ph-brand" href="user.php">
+		<a class="ph-brand" href="home.php">
 			<i class="fas fa-graduation-cap"></i>
 			<!--LOGO-->
 			PREPHUB
 		</a>
 		<ul class="ph-nav-links">
 			<!--Nav link-->
-			<li><a href="user.php">Trang chủ</a></li>
+			<li><a href="home.php">Trang chủ</a></li>
 			<li><a href="tests.php">Danh sách đề thi</a></li>
 			<li><a href="dashboard.php">Dashboard</a></li>
 			<div class="ph-divider"></div>
@@ -30,7 +30,7 @@
 					<span>user@email.com</span>
 				</div>
 				<!--Drop down menu-->
-				<a href="#"><i class="fas fa-user"></i> Hồ sơ</a>
+				<a href="profile.php"><i class="fas fa-user"></i> Hồ sơ</a>
 				<a href="#"><i class="fas fa-bell"></i> Thông báo</a>
 				<a href="#"><i class="fas fa-keyboard"></i> Phím tắt</a>
 				<a href="#"><i class="fas fa-gift"></i> Có gì mới</a>

@@ -1,4 +1,6 @@
 <?php
+require_once '../../server/middleware/auth.php';
+homeRedirect();
 // Khai báo tất cả biến ở trên đây cho dễ sửa 
 $plans = require_once '../../server/config/premiumPlan.php'; //Hiển thị các plan options
 //Plan miễn phí

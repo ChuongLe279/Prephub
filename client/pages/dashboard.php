@@ -1,86 +1,219 @@
+<?php
+require_once '../../server/middleware/auth.php';
+homeRedirect();
+?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <?php include './components/metadata.php'; ?>
-    <title>TOEIC Dashboard </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="..\styles\dashboardStyle.css">
+    <title>TOEIC Dashboard</title>
+
+    <link rel="stylesheet" href="../styles/dashboard.css">
 </head>
-<body class="bg-light">
 
-<div class="container py-5">
-    <h2 class="mb-4">Kết quả luyện tập cá nhân</h2>
-    
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Điểm cao nhất</h5>
-                    <h2 id="max-score">0</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Số bài đã làm</h5>
-                    <h2 id="total-tests">0</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-info mb-3">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Thời gian trung bình</h5>
-                    <h2 id="avg-time">0m</h2>
-                </div>
-            </div>
-        </div>
-    </div>
+<body>
+    <!-- GIỮ NAVBAR -->
+    <?php include './components/navBar.php'; ?>
 
-    <div class="row mb-4">
-    <div class="col-12">
-        <div class="card shadow-sm border-0 chart-card">
-            <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                <strong class="text-secondary"><i class="fas fa-chart-line me-2"></i>BIỂU ĐỒ TIẾN ĐỘ ĐIỂM SỐ</strong>
-                <small class="text-muted">Dữ liệu tính theo từng lần thi</small>
+    <div class="page">
+
+        <!-- DASHBOARD HERO -->
+        <section class="dashboard-hero">
+            <div class="hero-left">
+                <div class="hero-eyebrow">Dashboard cá nhân</div>
+                <h1>Kết quả luyện tập TOEIC</h1>
+                <p>Theo dõi điểm số, số bài đã làm và tiến độ luyện tập của bạn theo từng lần thi.</p>
+
+                <div class="hero-actions">
+                    <a href="tests.php" class="hero-btn primary-btn">
+                        <i class="fas fa-play"></i>
+                        Làm bài mới
+                    </a>
+
+                    <a href="attempts.php" class="hero-btn secondary-btn">
+                        <i class="fas fa-clock-rotate-left"></i>
+                        Xem lịch sử
+                    </a>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="chart-wrapper" style="position: relative; height:600px; width:200%">
+
+            <div class="hero-right">
+                <div class="hero-stat">
+                    <div class="hero-stat-val" id="hero-max-score">0</div>
+                    <div class="hero-stat-label">Điểm cao nhất</div>
+                </div>
+
+                <div class="hero-stat">
+                    <div class="hero-stat-val" id="hero-total-tests">0</div>
+                    <div class="hero-stat-label">Bài đã làm</div>
+                </div>
+
+                <div class="hero-stat">
+                    <div class="hero-stat-val" id="hero-avg-time">0m</div>
+                    <div class="hero-stat-label">Thời gian TB</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STAT CARDS -->
+        <section class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-trophy"></i>
+                </div>
+
+                <div class="stat-content">
+                    <div class="stat-label">Điểm cao nhất</div>
+                    <div class="stat-value" id="max-score">0</div>
+                    <div class="stat-sub">Tổng điểm tốt nhất bạn đạt được</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-file-circle-check"></i>
+                </div>
+
+                <div class="stat-content">
+                    <div class="stat-label">Số bài đã làm</div>
+                    <div class="stat-value" id="total-tests">0</div>
+                    <div class="stat-sub">Tổng số đề đã hoàn thành</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-stopwatch"></i>
+                </div>
+
+                <div class="stat-content">
+                    <div class="stat-label">Thời gian trung bình</div>
+                    <div class="stat-value" id="avg-time">0m</div>
+                    <div class="stat-sub">Thời gian làm bài trung bình</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN DASHBOARD -->
+        <section class="dashboard-layout">
+
+            <!-- CHART -->
+            <div class="dashboard-card chart-card">
+                <div class="card-head">
+                    <div class="card-title-wrap">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+
+                        <div>
+                            <h2>Biểu đồ tiến độ điểm số</h2>
+                            <p>Dữ liệu được tính theo từng lần thi gần đây.</p>
+                        </div>
+                    </div>
+
+                    <span class="soft-badge">
+                        <i class="fas fa-arrow-trend-up"></i>
+                        Score progress
+                    </span>
+                </div>
+
+                <div class="chart-wrapper">
                     <canvas id="scoreChart"></canvas>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-white"><strong>Lịch sử làm bài gần đây</strong></div>
-        <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Ngày thi</th>
-                        <th>Đề thi</th>
-                        <th>Điểm Listening</th>
-                        <th>Điểm Reading</th>
-                        <th>Tổng điểm</th>
-                        <th>Thời gian</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody id="history-body">
+            <!-- SIDE PANEL -->
+            <aside class="dashboard-side">
+                <div class="dashboard-card goal-card">
+                    <div class="goal-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+
+                    <h3>Mục tiêu hiện tại</h3>
+                    <p>Cố gắng duy trì luyện tập đều đặn để cải thiện điểm số từng tuần.</p>
+
+                    <div class="goal-row">
+                        <span>Tiến độ</span>
+                        <strong>77%</strong>
+                    </div>
+
+                    <div class="goal-bar">
+                        <div class="goal-fill"></div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card tip-card">
+                    <div class="tip-head">
+                        <i class="fas fa-lightbulb"></i>
+                        Gợi ý luyện tập
+                    </div>
+
+                    <div class="tip-item">
+                        <span>01</span>
+                        <p>Làm lại các đề có điểm Reading thấp để cải thiện tốc độ đọc.</p>
+                    </div>
+
+                    <div class="tip-item">
+                        <span>02</span>
+                        <p>Ôn lại Part 3 và Part 4 nếu điểm Listening chưa ổn định.</p>
+                    </div>
+
+                    <div class="tip-item">
+                        <span>03</span>
+                        <p>Đặt mục tiêu tăng 20–30 điểm sau mỗi 3 bài luyện tập.</p>
+                    </div>
+                </div>
+            </aside>
+
+        </section>
+
+        <!-- HISTORY TABLE -->
+        <section class="dashboard-card history-card">
+            <div class="card-head">
+                <div class="card-title-wrap">
+                    <div class="card-icon">
+                        <i class="fas fa-clock-rotate-left"></i>
+                    </div>
+
+                    <div>
+                        <h2>Lịch sử làm bài gần đây</h2>
+                        <p>Xem lại kết quả các bài thi bạn đã hoàn thành.</p>
+                    </div>
+                </div>
+
+                <a href="attempts.php" class="view-all">
+                    Xem tất cả
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="table-wrap">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Ngày thi</th>
+                            <th>Đề thi</th>
+                            <th>Listening</th>
+                            <th>Reading</th>
+                            <th>Tổng điểm</th>
+                            <th>Thời gian</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="history-body">
                     </tbody>
-            </table>
-        </div>
+                </table>
+            </div>
+        </section>
+
     </div>
-</div>
-<div class="card-header bg-white d-flex justify-content-between align-items-center">
-    <strong>Lịch sử làm bài gần đây</strong>
-    <a href="attempts.php" class="btn btn-sm btn-link text-decoration-none">Xem tất cả >></a>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="../js/dashboard.js"></script>
+    <!-- INCLUDE FOOTER FILE -->
+    <?php include './components/footer.php'; ?>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/dashboard.js"></script>
 </body>
+
 </html>

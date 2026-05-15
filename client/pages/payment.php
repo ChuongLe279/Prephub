@@ -1,7 +1,8 @@
 <?php
-session_start();
-$plans = require_once '../../server/config/premiumPlan.php'; 
-$selected_plan_id = $_GET['plan'] ?? 'pro'; 
+require_once '../../server/middleware/auth.php';
+homeRedirect();
+$plans = require_once '../../server/config/premiumPlan.php'; //Hiển thị các plan options
+$selected_plan = $_GET['plan'] ?? 'pro'; //Nếu plan bỏ trống thì mặc định chọn pro 
 
 if (!array_key_exists($selected_plan_id, $plans)) {
     header('Location: premium.php');
