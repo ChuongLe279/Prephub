@@ -27,7 +27,12 @@ $fullName = trim($lastName . ' ' . $firstName);
         <div class="greeting-hero">
             <div class="greet-left">
                 <div class="greet-time">Chào buổi sáng ☀️</div>
-                <div class="greet-name">Xin chào, <?= htmlspecialchars($fullName) ?>!</div>
+                <div class="greet-name">
+                    Xin chào, <?= htmlspecialchars($fullName) ?>!
+                    <?php if (isset($_SESSION['is_premium']) && $_SESSION['is_premium']): ?>
+                        <span class="premium-badge"><i class="fas fa-crown"></i> Premium</span>
+                    <?php endif; ?>
+                </div>
                 <div class="greet-sub">Tiếp tục luyện thi để đạt mục tiêu<br>TOEIC của bạn. Bạn đang làm rất tốt!</div>
                 <div class="greet-cta">
                     <a href="tests.php" class="cta-btn cta-primary" style="text-decoration: none;">
