@@ -6,6 +6,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- favicon -->
+<link rel="icon" type="image/svg+xml" href="../img/logo.svg">
+<link rel="shortcut icon" href="../img/logo.svg">
+
 <!-- bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
