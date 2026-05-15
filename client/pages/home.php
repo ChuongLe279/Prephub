@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+// nếu đã đăng nhập, bắt buộc redirect sang trang user
+if (isset($_SESSION['user_id'])) {
+	header('Location: user.php');
+	exit();
+}
+
 // XỬ LÝ NHẬP SAI TÀI KHOẢN HOẶC MẬT KHẨU
 $errors = [
 	'login' => $_SESSION['login_error'] ?? '',
