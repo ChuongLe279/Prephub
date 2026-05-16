@@ -36,7 +36,7 @@ function showSuccess($msg)
 
 <body>
 
-	<?php include './components/homepage/navbar.php'; ?>
+	<?php $navbarMode = 'dark'; include './components/homepage/navbar.php'; ?>
 
 	<?php include './components/homepage/hero.php'; ?>
 
@@ -57,48 +57,6 @@ function showSuccess($msg)
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
-			// navbar scroll effect
-			const navbar = document.getElementById('mainNavbar');
-			window.addEventListener('scroll', () => {
-				if (window.scrollY > 50) {
-					navbar.classList.add('scrolled');
-				} else {
-					navbar.classList.remove('scrolled');
-				}
-			});
-
-			// dynamic nav indicator
-			const navIndicator = document.getElementById('navIndicator');
-			const navLinks = document.querySelectorAll('.nav-link');
-			const navCenter = document.querySelector('.nav-center');
-
-			if (navIndicator && navCenter) {
-				function moveIndicator(element) {
-					const rect = element.getBoundingClientRect();
-					const parentRect = navCenter.getBoundingClientRect();
-					navIndicator.style.width = `${rect.width - 32}px`;
-					navIndicator.style.left = `${rect.left - parentRect.left + 16}px`;
-				}
-
-				function resetIndicator() {
-					const activeLink = document.querySelector('.nav-link.active');
-					if (activeLink) {
-						moveIndicator(activeLink);
-					} else {
-						navIndicator.style.width = '0';
-					}
-				}
-
-				navLinks.forEach(link => {
-					link.addEventListener('mouseenter', (e) => moveIndicator(e.target));
-				});
-
-				navCenter.addEventListener('mouseleave', resetIndicator);
-				window.addEventListener('load', resetIndicator);
-				window.addEventListener('resize', resetIndicator);
-				resetIndicator();
-			}
-
 			// pricing toggle
 			const priceToggle = document.getElementById('priceToggle');
 			const monthlyBtn = document.getElementById('monthlyBtn');

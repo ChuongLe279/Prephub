@@ -1,4 +1,18 @@
 .navbar {
+  --nav-text: white;
+  --nav-indicator: white;
+  --nav-logo: white;
+  --btn-bg: #fafafa;
+  --btn-text: #05102b;
+  --scrolled-bg: rgba(250, 250, 250, 0.98);
+  --scrolled-text: #05102b;
+  --scrolled-indicator: #05102b;
+  --scrolled-logo: #05102b;
+  --scrolled-btn-bg: #05102b;
+  --scrolled-btn-text: white;
+  --scrolled-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+  --scrolled-blur: blur(12px);
+
   background-color: transparent !important;
   transition: all 0.3s ease;
   padding: 24px 0;
@@ -8,11 +22,27 @@
   z-index: 1000;
 }
 
+.navbar[data-navbar-bg="light"] {
+  --nav-text: #05102b;
+  --nav-indicator: #05102b;
+  --nav-logo: #05102b;
+  --btn-bg: #05102b;
+  --btn-text: white;
+  --scrolled-bg: #05102b;
+  --scrolled-text: white;
+  --scrolled-indicator: white;
+  --scrolled-logo: white;
+  --scrolled-btn-bg: white;
+  --scrolled-btn-text: #05102b;
+  --scrolled-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+  --scrolled-blur: none;
+}
+
 .navbar.scrolled {
-  background-color: rgba(250, 250, 250, 0.98) !important;
-  backdrop-filter: blur(12px);
+  background-color: var(--scrolled-bg) !important;
+  backdrop-filter: var(--scrolled-blur);
   padding: 12px 0;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--scrolled-shadow);
 }
 
 .navbar .container-fluid {
@@ -57,12 +87,12 @@
 }
 
 .navbar-brand svg path {
-  fill: white;
+  fill: var(--nav-logo);
   transition: fill 0.3s ease;
 }
 
 .navbar.scrolled .navbar-brand svg path {
-  fill: var(--primary);
+  fill: var(--scrolled-logo);
 }
 
 .logo-container {
@@ -74,31 +104,31 @@
 .brand-text {
   font-weight: 700;
   font-size: clamp(1.4rem, 2vw, 1.8rem);
-  color: white;
+  color: var(--nav-text);
   letter-spacing: -0.4px;
   transition: color 0.3s ease;
 }
 
 .navbar.scrolled .brand-text {
-  color: var(--primary);
+  color: var(--scrolled-text);
 }
 
 .brand-subtext {
   font-weight: 300;
   font-size: 0.75rem;
-  color: white;
+  color: var(--nav-text);
   opacity: 0.8;
   transition: all 0.3s ease;
   margin-top: 4px;
 }
 
 .navbar.scrolled .brand-subtext {
-  color: var(--primary);
+  color: var(--scrolled-text);
   opacity: 0.7;
 }
 
 .nav-link {
-  color: white !important;
+  color: var(--nav-text) !important;
   opacity: 0.65;
   font-weight: 500;
   font-size: 0.95rem;
@@ -113,7 +143,7 @@
 }
 
 .navbar.scrolled .nav-link {
-  color: var(--primary) !important;
+  color: var(--scrolled-text) !important;
   opacity: 0.65;
 }
 
@@ -126,7 +156,7 @@
   position: absolute;
   bottom: 0;
   height: 2px;
-  background-color: white;
+  background-color: var(--nav-indicator);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 2px;
   pointer-events: none;
@@ -134,12 +164,12 @@
 }
 
 .navbar.scrolled .nav-indicator {
-  background-color: var(--primary);
+  background-color: var(--scrolled-indicator);
 }
 
 .btn-login {
-  background-color: var(--white) !important;
-  color: var(--primary) !important;
+  background-color: var(--btn-bg) !important;
+  color: var(--btn-text) !important;
   border-radius: 8px !important;
   padding: 10px 24px !important;
   font-weight: 600 !important;
@@ -151,8 +181,8 @@
 }
 
 .navbar.scrolled .btn-login {
-  background-color: var(--primary) !important;
-  color: white !important;
+  background-color: var(--scrolled-btn-bg) !important;
+  color: var(--scrolled-btn-text) !important;
 }
 
 .btn-login:hover {
@@ -164,6 +194,6 @@
   height: 38px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--primary);
+  border: none;
   cursor: pointer;
 }
