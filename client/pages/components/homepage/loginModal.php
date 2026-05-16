@@ -151,10 +151,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <button type="button" class="btn-close-auth" data-bs-dismiss="modal">
-                        <i class='bx bx-x'></i>
-                    </button>
                 </div>
             </div>
         </div>

@@ -342,31 +342,6 @@
   opacity: 0.7;
 }
 
-.btn-close-auth {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: white;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 20;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-size: 1.5rem;
-  color: #64748b;
-  transition: all 0.2s;
-}
-
-.btn-close-auth:hover {
-  background: #f1f5f9;
-  color: #0f172a;
-}
-
 .testimonial-stack {
   display: flex;
   flex-direction: column;
