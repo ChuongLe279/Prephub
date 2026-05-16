@@ -67,7 +67,7 @@ function anchorId($index)
 
 <body>
 
-	<?php include './components/homepage/navbar.php'; ?>
+	<?php $navbarMode = 'light'; $scrollThreshold = 20; include './components/homepage/navbar.php'; ?>
 
 	<main class="tos-page">
 		<div class="tos-container">
@@ -550,51 +550,6 @@ function anchorId($index)
 	<?php include './components/homepage/footer.php'; ?>
 
 	<script>
-		// --- NAVBAR SCROLL EFFECT ---
-		const navbar = document.getElementById('mainNavbar');
-		if (navbar) {
-			window.addEventListener('scroll', function () {
-				if (window.scrollY > 20) {
-					navbar.classList.add('scrolled');
-				} else {
-					navbar.classList.remove('scrolled');
-				}
-			});
-			if (window.scrollY > 20) navbar.classList.add('scrolled');
-		}
-
-		// --- NAV INDICATOR LOGIC ---
-		const navIndicator = document.getElementById('navIndicator');
-		const navLinks = document.querySelectorAll('.nav-link');
-		const navCenter = document.querySelector('.nav-center');
-
-		if (navIndicator && navCenter) {
-			function moveIndicator(element) {
-				const rect = element.getBoundingClientRect();
-				const parentRect = navCenter.getBoundingClientRect();
-				navIndicator.style.width = `${rect.width - 32}px`;
-				navIndicator.style.left = `${rect.left - parentRect.left + 16}px`;
-			}
-
-			function resetIndicator() {
-				const activeLink = document.querySelector('.nav-link.active');
-				if (activeLink) {
-					moveIndicator(activeLink);
-				} else {
-					navIndicator.style.width = '0';
-				}
-			}
-
-			navLinks.forEach(link => {
-				link.addEventListener('mouseenter', (e) => moveIndicator(e.target));
-			});
-
-			navCenter.addEventListener('mouseleave', resetIndicator);
-			window.addEventListener('load', resetIndicator);
-			window.addEventListener('resize', resetIndicator);
-			resetIndicator();
-		}
-
 		// --- TOC COLLAPSE LOGIC ---
 		function toggleToc() {
 			const body = document.getElementById('toc-body');
