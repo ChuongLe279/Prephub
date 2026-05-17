@@ -239,7 +239,7 @@ $greet = $hour < 12 ? 'Chào buổi sáng ☀️' : ($hour < 18 ? 'Chào buổi 
                                 <td style="padding:16px 24px; font-size:14px; font-weight:700;">${total}</td>
                                 <td style="padding:16px 24px; font-size:14px;">${item.time_taken||0} phút</td>
                                 <td style="padding:16px 24px;">
-                                    <a href="results.php?attempt_id=${item.attempt_id}" style="font-size:13px; font-weight:600; color:#1d9e75; text-decoration:none;">Xem →</a>
+                                    <a href="results.php?attempt_id=${item.attempt_id}" style="font-size:13px; font-weight:600; color:#1d9e75; text-decoration:none; display:inline-flex; align-items:center; gap:2px;">Xem <i class='bx bx-chevron-right' style='font-size:16px;'></i></a>
                                 </td>
                             </tr>`;
                         });
