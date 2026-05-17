@@ -21,13 +21,13 @@
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card text-center border-0 shadow-sm p-3 h-100 border-start border-success border-4">
+            <div class="card text-center border-0 shadow-sm p-3 h-100" style="border-left: 4px solid #1d9e75 !important;">
                 <small class="text-muted fw-bold">LISTENING</small>
                 <h3 class="text-success fw-bold mb-0" id="listening-points">0/495</h3>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="card text-center border-0 shadow-sm p-3 h-100 border-start border-info border-4">
+            <div class="card text-center border-0 shadow-sm p-3 h-100" style="border-left: 4px solid #0284c7 !important;">
                 <small class="text-muted fw-bold">READING</small>
                 <h3 class="text-info fw-bold mb-0" id="reading-points">0/495</h3>
             </div>
@@ -70,7 +70,7 @@
                             <small class="text-muted">1 - 200</small>
                         </h6>
                         
-                        <div id="answer-grid" class="flex-grow-1"></div>
+                        <div id="answer-grid" style="flex-grow: 1;"></div>
                         
                         <hr class="my-3">
                         
