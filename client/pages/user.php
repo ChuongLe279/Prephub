@@ -1,59 +1,67 @@
 <?php
 session_start();
-//Kiểm tra xem user có đăng nhập hay chưa
-//Tránh việc lên URL gõ user.php là ra trang này
 require_once '../../server/middleware/auth.php';
+require_once '../../server/controllers/profile-controller.php';
 homeRedirect();
 
-
-// Lấy username để hiển thị ở greeting box
 $firstName = $_SESSION['first_name'] ?? '';
-$lastName = $_SESSION['last_name'] ?? '';
-$fullName = trim($lastName . ' ' . $firstName);
+$lastName  = $_SESSION['last_name'] ?? '';
+$fullName  = trim($lastName . ' ' . $firstName) ?: 'Người dùng';
+$isPremium   = $_SESSION['is_premium'] ?? false;
+$premiumName = $_SESSION['premium_name'] ?? null;
+$userId      = (int)$_SESSION['user_id'];
+
+$maxScore = getMaxScore();
+$avgScore = getAvgScore();
+$totalTests = getNumTestDone();
+
+$hour = (int)date('H');
+$greet = $hour < 12 ? 'Chào buổi sáng ☀️' : ($hour < 18 ? 'Chào buổi chiều 🌤️' : 'Chào buổi tối 🌙');
 ?>
 <!doctype html>
 <html lang="vi">
-
 <head>
     <?php include './components/metadata.php'; ?>
-    <title>PREHUB - Luyện Thi TOEIC</title>
+    <title>Hồ sơ · Prephub</title>
     <link rel="stylesheet" href="../styles/user.css">
 </head>
-
 <body>
-    <!-- INCLUDE NAVBAR FILE -->
-    <?php include './components/navbar.php'; ?>
-    <!-- GREETING HERO (FULL WIDTH) -->
+    <?php $navbarMode = 'dark'; include './components/navbar.php'; ?>
+
+    <!-- greeting hero -->
     <div class="greeting-hero">
         <div class="greeting-hero-inner">
             <div class="greet-left">
-                <div class="greet-time">Chào buổi sáng ☀️</div>
+                <div class="greet-time"><?= $greet ?></div>
                 <div class="greet-name">
                     Xin chào, <?= htmlspecialchars($fullName) ?>!
-                    <?php if (isset($_SESSION['is_premium']) && $_SESSION['is_premium']): ?>
-                        <span class="premium-badge"><i class="fas fa-crown"></i> Premium</span>
+                    <?php if ($isPremium): ?>
+                        <span class="premium-badge"><i class="fas fa-crown"></i> <?= htmlspecialchars($premiumName ?? 'Premium') ?></span>
                     <?php endif; ?>
                 </div>
                 <div class="greet-sub">Tiếp tục luyện thi để đạt mục tiêu<br>TOEIC của bạn. Bạn đang làm rất tốt!</div>
                 <div class="greet-cta">
-                    <a href="tests.php" class="cta-btn cta-primary" style="text-decoration: none;">
-                        <i class="fas fa-play" style="font-size:11px;margin-right:6px"></i>Làm bài ngay
+                    <a href="tests.php" class="cta-btn cta-primary" style="text-decoration:none;">
+                        <i class="fas fa-play" style="font-size:11px;margin-right:6px;"></i>Làm bài ngay
+                    </a>
+                    <a href="profile.php" class="cta-btn" style="text-decoration:none; background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.2);">
+                        <i class="fas fa-cog" style="font-size:11px;margin-right:6px;"></i>Cài đặt
                     </a>
                 </div>
             </div>
             <div class="greet-right">
                 <div class="greet-stats">
                     <div class="gstat">
-                        <div class="gstat-val">24</div>
+                        <div class="gstat-val"><?= $totalTests ?></div>
                         <div class="gstat-label">Bài đã làm</div>
                     </div>
                     <div class="gstat">
-                        <div class="gstat-val">580</div>
+                        <div class="gstat-val"><?= $maxScore ?: '—' ?></div>
                         <div class="gstat-label">Điểm cao nhất</div>
                     </div>
                     <div class="gstat">
-                        <div class="gstat-val">73%</div>
-                        <div class="gstat-label">Độ chính xác</div>
+                        <div class="gstat-val"><?= $avgScore ?: '—' ?></div>
+                        <div class="gstat-label">Điểm trung bình</div>
                     </div>
                 </div>
             </div>
@@ -62,222 +70,104 @@ $fullName = trim($lastName . ' ' . $firstName);
 
     <div class="page">
 
-        <!-- Danh sách đề thi -->
-        <div>
-            <div class="section-head" style="margin-bottom:12px">
-                <div class="section-title">Danh sách đề thi</div>
-                <a class="see-all" href="tests.php">Xem tất cả →</a>
-            </div>
-            <!-- Ô hiển thị 3 đề thi cho người dùng thử -->
-            <!-- Sau khi có logic nộp bài, trang user.php chỉ hiện thị đề thi chưa làm -->
-            <div class="test-grid">
-
-            </div>
-        </div>
-
-        <!-- Lịch sử làm bài -->
-        <div class="bottom-row">
-            <div class="panel">
-                <div class="panel-head">
-                    <span class="panel-title">Bài làm gần đây</span>
-                    <a class="see-all" href="#">Xem tất cả →</a>
-                </div>
-                <div class="recent-list">
-                    <div class="recent-item">
-                        <div class="recent-icon"><i class="fas fa-file-alt"></i></div>
-                        <div>
-                            <div class="recent-name">TOEIC Mock Test Jan 2024</div>
-                            <div class="recent-date">23/04/2024 · 33:58</div>
-                        </div>
-                        <span class="score-pill s-hi">650</span>
-                    </div>
-                    <div class="recent-item">
-                        <div class="recent-icon"><i class="fas fa-pen"></i></div>
-                        <div>
-                            <div class="recent-name">Grammar Sprint #8</div>
-                            <div class="recent-date">29/03/2024 · 20:10</div>
-                        </div>
-                        <span class="score-pill s-mid">61%</span>
-                    </div>
-                    <div class="recent-item">
-                        <div class="recent-icon"><i class="fas fa-book-open"></i></div>
-                        <div>
-                            <div class="recent-name">Reading Mock #3</div>
-                            <div class="recent-date">28/03/2024 · 36:17</div>
-                        </div>
-                        <span class="score-pill s-lo">44%</span>
-                    </div>
-                    <div class="recent-item">
-                        <div class="recent-icon"><i class="fas fa-headphones"></i></div>
-                        <div>
-                            <div class="recent-name">Listening Sprint #5</div>
-                            <div class="recent-date">26/03/2024 · 49:24</div>
-                        </div>
-                        <span class="score-pill s-hi">82%</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Phần mẹo luyện thi để trang trí -->
-            <div class="panel">
-                <div class="panel-head">
-                    <span class="panel-title">Mẹo luyện thi</span>
-                </div>
-                <div class="tips-list">
-                    <div class="tip-item">
-                        <div class="tip-num">1</div>
-                        <div>
-                            <div class="tip-text">Luyện nghe mỗi ngày 15 phút</div>
-                            <div class="tip-sub">Cải thiện Part 3 & 4 hiệu quả nhất</div>
-                        </div>
-                    </div>
-                    <div class="tip-item">
-                        <div class="tip-num">2</div>
-                        <div>
-                            <div class="tip-text">Đọc báo tiếng Anh hàng ngày</div>
-                            <div class="tip-sub">Tăng tốc độ đọc cho Part 6 & 7</div>
-                        </div>
-                    </div>
-                    <div class="tip-item">
-                        <div class="tip-num">3</div>
-                        <div>
-                            <div class="tip-text">Ôn tập ngữ pháp Part 5 theo chủ đề</div>
-                            <div class="tip-sub">Từ vựng + ngữ pháp = điểm cao hơn</div>
-                        </div>
-                    </div>
-                    <div class="tip-item">
-                        <div class="tip-num">4</div>
-                        <div>
-                            <div class="tip-text">Làm full test mỗi 2 tuần một lần</div>
-                            <div class="tip-sub">Track tiến độ và làm quen áp lực thời gian</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- STAT CARDS FROM DASHBOARD -->
-        <section class="stat-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px;">
-            <div class="stat-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; display: flex; align-items: center; gap: 20px;">
-                <div class="stat-icon" style="width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #e0f2fe; color: #0284c7; font-size: 24px;">
+        <!-- stat cards -->
+        <section class="stat-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+            <div class="stat-card" style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:24px; display:flex; align-items:center; gap:20px;">
+                <div style="width:56px; height:56px; border-radius:12px; background:#e0f2fe; color:#0284c7; font-size:24px; display:flex; align-items:center; justify-content:center;">
                     <i class="fas fa-trophy"></i>
                 </div>
-                <div class="stat-content">
-                    <div class="stat-label" style="font-size: 13px; color: #64748b; font-weight: 600; text-transform: uppercase;">Điểm cao nhất</div>
-                    <div class="stat-value" id="max-score" style="font-size: 28px; font-weight: 700; color: #05102b;">0</div>
-                    <div class="stat-sub" style="font-size: 12px; color: #94a3b8;">Tổng điểm tốt nhất</div>
+                <div>
+                    <div style="font-size:13px; color:#64748b; font-weight:600; text-transform:uppercase;">Điểm cao nhất</div>
+                    <div id="max-score" style="font-size:28px; font-weight:700; color:#05102b;"><?= $maxScore ?: '0' ?></div>
+                    <div style="font-size:12px; color:#94a3b8;">Tổng điểm tốt nhất</div>
                 </div>
             </div>
-
-            <div class="stat-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; display: flex; align-items: center; gap: 20px;">
-                <div class="stat-icon" style="width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #e1f5ee; color: #1d9e75; font-size: 24px;">
+            <div class="stat-card" style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:24px; display:flex; align-items:center; gap:20px;">
+                <div style="width:56px; height:56px; border-radius:12px; background:#e1f5ee; color:#1d9e75; font-size:24px; display:flex; align-items:center; justify-content:center;">
                     <i class="fas fa-file-circle-check"></i>
                 </div>
-                <div class="stat-content">
-                    <div class="stat-label" style="font-size: 13px; color: #64748b; font-weight: 600; text-transform: uppercase;">Số bài đã làm</div>
-                    <div class="stat-value" id="total-tests" style="font-size: 28px; font-weight: 700; color: #05102b;">0</div>
-                    <div class="stat-sub" style="font-size: 12px; color: #94a3b8;">Tổng số đề hoàn thành</div>
+                <div>
+                    <div style="font-size:13px; color:#64748b; font-weight:600; text-transform:uppercase;">Số bài đã làm</div>
+                    <div id="total-tests" style="font-size:28px; font-weight:700; color:#05102b;"><?= $totalTests ?: '0' ?></div>
+                    <div style="font-size:12px; color:#94a3b8;">Tổng số đề hoàn thành</div>
                 </div>
             </div>
-
-            <div class="stat-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; display: flex; align-items: center; gap: 20px;">
-                <div class="stat-icon" style="width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #ffedd5; color: #c2410c; font-size: 24px;">
-                    <i class="fas fa-stopwatch"></i>
+            <div class="stat-card" style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:24px; display:flex; align-items:center; gap:20px;">
+                <div style="width:56px; height:56px; border-radius:12px; background:#ffedd5; color:#c2410c; font-size:24px; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-chart-line"></i>
                 </div>
-                <div class="stat-content">
-                    <div class="stat-label" style="font-size: 13px; color: #64748b; font-weight: 600; text-transform: uppercase;">Thời gian trung bình</div>
-                    <div class="stat-value" id="avg-time" style="font-size: 28px; font-weight: 700; color: #05102b;">0m</div>
-                    <div class="stat-sub" style="font-size: 12px; color: #94a3b8;">Thời gian làm bài TB</div>
+                <div>
+                    <div style="font-size:13px; color:#64748b; font-weight:600; text-transform:uppercase;">Điểm trung bình</div>
+                    <div id="avg-score" style="font-size:28px; font-weight:700; color:#05102b;"><?= $avgScore ?: '0' ?></div>
+                    <div style="font-size:12px; color:#94a3b8;">Trên tất cả các bài thi</div>
                 </div>
             </div>
         </section>
 
-        <!-- MAIN DASHBOARD (CHART & TIPS) -->
-        <section class="dashboard-layout" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin-bottom: 32px;">
-            <!-- CHART -->
-            <div class="dashboard-card chart-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px;">
-                <div class="card-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <div class="card-title-wrap" style="display: flex; gap: 16px; align-items: center;">
-                        <div class="card-icon" style="width: 48px; height: 48px; border-radius: 12px; background: #f1f5f9; color: #05102b; display: flex; align-items: center; justify-content: center; font-size: 20px;">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div>
-                            <h2 style="font-size: 18px; font-weight: 700; color: #05102b; margin: 0 0 4px 0;">Tiến độ điểm số</h2>
-                            <p style="font-size: 13px; color: #64748b; margin: 0;">Dữ liệu các lần thi gần đây.</p>
-                        </div>
+        <!-- chart + tips -->
+        <section style="display:grid; grid-template-columns:1.5fr 1fr; gap:24px;">
+            <div style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:24px;">
+                <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px;">
+                    <div style="width:48px; height:48px; border-radius:12px; background:#f1f5f9; color:#05102b; display:flex; align-items:center; justify-content:center; font-size:20px;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h2 style="font-size:18px; font-weight:700; color:#05102b; margin:0 0 4px;">Tiến độ điểm số</h2>
+                        <p style="font-size:13px; color:#64748b; margin:0;">Dữ liệu các lần thi gần đây</p>
                     </div>
                 </div>
-                <div class="chart-wrapper" style="height: 300px; width: 100%;">
-                    <canvas id="scoreChart"></canvas>
+                <div style="height:280px;"><canvas id="scoreChart"></canvas></div>
+            </div>
+            <div style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:24px;">
+                <div style="font-size:15px; font-weight:700; color:#05102b; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-lightbulb" style="color:#f39c12;"></i> Gợi ý luyện tập
+                </div>
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <div style="display:flex; gap:12px;">
+                        <span style="font-size:12px; font-weight:700; color:#1d9e75; background:#e1f5ee; padding:4px 8px; border-radius:6px; height:fit-content;">01</span>
+                        <p style="font-size:13px; color:#64748b; margin:0; line-height:1.5;">Làm lại các đề có điểm Reading thấp để cải thiện tốc độ đọc.</p>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <span style="font-size:12px; font-weight:700; color:#1d9e75; background:#e1f5ee; padding:4px 8px; border-radius:6px; height:fit-content;">02</span>
+                        <p style="font-size:13px; color:#64748b; margin:0; line-height:1.5;">Ôn lại Part 3 và Part 4 nếu điểm Listening chưa ổn định.</p>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <span style="font-size:12px; font-weight:700; color:#1d9e75; background:#e1f5ee; padding:4px 8px; border-radius:6px; height:fit-content;">03</span>
+                        <p style="font-size:13px; color:#64748b; margin:0; line-height:1.5;">Làm full test mỗi 2 tuần để theo dõi tiến độ tổng thể.</p>
+                    </div>
                 </div>
             </div>
-
-            <!-- SIDE PANEL -->
-            <aside class="dashboard-side" style="display: flex; flex-direction: column; gap: 24px;">
-                <div class="dashboard-card goal-card" style="background: #05102b; color: white; border-radius: 16px; padding: 24px; position: relative; overflow: hidden;">
-                    <div style="position: relative; z-index: 1;">
-                        <div class="goal-icon" style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.1); color: #1d9e75; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 16px;">
-                            <i class="fas fa-bullseye"></i>
-                        </div>
-                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Mục tiêu hiện tại</h3>
-                        <p style="font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 24px; line-height: 1.5;">Duy trì luyện tập đều đặn để cải thiện điểm số từng tuần.</p>
-                        <div class="goal-row" style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; font-weight: 600;">
-                            <span>Tiến độ</span>
-                            <strong style="color: #1d9e75;">77%</strong>
-                        </div>
-                        <div class="goal-bar" style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
-                            <div class="goal-fill" style="width: 77%; height: 100%; background: #1d9e75; border-radius: 3px;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dashboard-card tip-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px;">
-                    <div class="tip-head" style="font-size: 15px; font-weight: 700; color: #05102b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-lightbulb" style="color: #f39c12;"></i> Gợi ý luyện tập
-                    </div>
-                    <div class="tip-item" style="display: flex; gap: 12px; margin-bottom: 16px;">
-                        <span style="font-size: 12px; font-weight: 700; color: #1d9e75; background: #e1f5ee; padding: 4px 8px; border-radius: 6px; height: fit-content;">01</span>
-                        <p style="font-size: 13px; color: #64748b; margin: 0; line-height: 1.5;">Làm lại các đề có điểm Reading thấp để cải thiện tốc độ đọc.</p>
-                    </div>
-                    <div class="tip-item" style="display: flex; gap: 12px;">
-                        <span style="font-size: 12px; font-weight: 700; color: #1d9e75; background: #e1f5ee; padding: 4px 8px; border-radius: 6px; height: fit-content;">02</span>
-                        <p style="font-size: 13px; color: #64748b; margin: 0; line-height: 1.5;">Ôn lại Part 3 và Part 4 nếu điểm Listening chưa ổn định.</p>
-                    </div>
-                </div>
-            </aside>
         </section>
 
-        <!-- HISTORY TABLE -->
-        <section class="dashboard-card history-card" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden;">
-            <div class="card-head" style="padding: 24px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
-                <div class="card-title-wrap" style="display: flex; gap: 16px; align-items: center;">
-                    <div class="card-icon" style="width: 40px; height: 40px; border-radius: 10px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+        <!-- history table -->
+        <section style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; overflow:hidden;">
+            <div style="padding:24px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center; background:#f8fafc;">
+                <div style="display:flex; gap:16px; align-items:center;">
+                    <div style="width:40px; height:40px; border-radius:10px; background:#e0f2fe; color:#0284c7; display:flex; align-items:center; justify-content:center; font-size:16px;">
                         <i class="fas fa-clock-rotate-left"></i>
                     </div>
                     <div>
-                        <h2 style="font-size: 16px; font-weight: 700; color: #05102b; margin: 0 0 4px 0;">Lịch sử làm bài</h2>
-                        <p style="font-size: 12px; color: #64748b; margin: 0;">Kết quả các bài thi gần đây</p>
+                        <h2 style="font-size:16px; font-weight:700; color:#05102b; margin:0 0 4px;">Lịch sử làm bài</h2>
+                        <p style="font-size:12px; color:#64748b; margin:0;">Kết quả các bài thi gần đây</p>
                     </div>
                 </div>
-                <a href="attempts.php" class="view-all" style="font-size: 13px; font-weight: 600; color: #1d9e75; text-decoration: none; display: flex; align-items: center; gap: 6px;">
-                    Xem tất cả <i class="fas fa-arrow-right"></i>
-                </a>
+                <a href="attempts.php" style="font-size:13px; font-weight:600; color:#1d9e75; text-decoration:none;">Xem tất cả →</a>
             </div>
-            <div class="table-wrap" style="overflow-x: auto;">
-                <table class="history-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+            <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse; text-align:left;">
                     <thead>
-                        <tr style="background: #fff; border-bottom: 2px solid #f1f5f9;">
-                            <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Ngày thi</th>
-                            <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Đề thi</th>
-                            <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Listening</th>
-                            <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Reading</th>
-                            <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Tổng điểm</th>
-                            <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Thời gian</th>
-                            <th style="padding: 16px 24px; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Hành động</th>
+                        <tr style="background:#fff; border-bottom:2px solid #f1f5f9;">
+                            <th style="padding:16px 24px; font-size:12px; font-weight:600; color:#64748b; text-transform:uppercase;">Ngày thi</th>
+                            <th style="padding:16px 24px; font-size:12px; font-weight:600; color:#64748b; text-transform:uppercase;">Đề thi</th>
+                            <th style="padding:16px 24px; font-size:12px; font-weight:600; color:#64748b; text-transform:uppercase;">Listening</th>
+                            <th style="padding:16px 24px; font-size:12px; font-weight:600; color:#64748b; text-transform:uppercase;">Reading</th>
+                            <th style="padding:16px 24px; font-size:12px; font-weight:600; color:#64748b; text-transform:uppercase;">Tổng điểm</th>
+                            <th style="padding:16px 24px; font-size:12px; font-weight:600; color:#64748b; text-transform:uppercase;">Thời gian</th>
+                            <th style="padding:16px 24px; font-size:12px; font-weight:600; color:#64748b; text-transform:uppercase;">Chi tiết</th>
                         </tr>
                     </thead>
                     <tbody id="history-body">
-                        <!-- Populated by JS -->
+                        <tr><td colspan="7" style="text-align:center; padding:40px; color:#94a3b8;">Đang tải dữ liệu...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -285,15 +175,81 @@ $fullName = trim($lastName . ' ' . $firstName);
 
     </div>
 
-    <!-- INCLUDE FOOTER FILE -->
     <?php include './components/footer.php'; ?>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../js/user.js"></script>
-    <script src="../js/dashboard.js"></script>
+    <script>
+        const USER_ID = <?= $userId ?>;
+        const API_URL = `/api/dashboard/stats?user_id=${USER_ID}`;
 
+        $(document).ready(async function() {
+            try {
+                const res  = await fetch(API_URL);
+                const json = await res.json();
+
+                if (json.status === 'success' && json.data) {
+                    const ov = json.data.overview;
+                    if (ov) {
+                        if (ov.maxScore)  $('#max-score').text(ov.maxScore);
+                        if (ov.totalTests) $('#total-tests').text(ov.totalTests);
+                        if (ov.avgScore)  $('#avg-score').text(ov.avgScore);
+                    }
+
+                    if (json.data.chartData && json.data.chartData.length > 0) {
+                        const ctx = document.getElementById('scoreChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: json.data.chartData.map(d => d.date),
+                                datasets: [{
+                                    label: 'Tổng điểm',
+                                    data: json.data.chartData.map(d => d.total_score),
+                                    borderColor: '#1d9e75',
+                                    backgroundColor: 'rgba(29,158,117,.08)',
+                                    borderWidth: 2.5,
+                                    tension: 0.35,
+                                    fill: true,
+                                    pointBackgroundColor: '#1d9e75',
+                                    pointRadius: 4,
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: { y: { beginAtZero: true, max: 990 } },
+                                plugins: { tooltip: { mode: 'index', intersect: false } }
+                            }
+                        });
+                    }
+
+                    const history = json.data.history || [];
+                    if (history.length === 0) {
+                        $('#history-body').html('<tr><td colspan="7" style="text-align:center; padding:40px; color:#94a3b8;">Bạn chưa có lịch sử làm bài nào.</td></tr>');
+                    } else {
+                        let html = '';
+                        history.forEach(item => {
+                            const date  = new Date(item.created_at).toLocaleDateString('vi-VN');
+                            const total = (item.listening_score||0) + (item.reading_score||0);
+                            html += `<tr style="border-bottom:1px solid #f1f5f9;">
+                                <td style="padding:16px 24px; font-size:14px;">${date}</td>
+                                <td style="padding:16px 24px; font-size:14px; font-weight:600;">${item.test_name || 'Đề ngẫu nhiên'}</td>
+                                <td style="padding:16px 24px; font-size:14px; color:#1d9e75;">${item.listening_score||0}</td>
+                                <td style="padding:16px 24px; font-size:14px; color:#0284c7;">${item.reading_score||0}</td>
+                                <td style="padding:16px 24px; font-size:14px; font-weight:700;">${total}</td>
+                                <td style="padding:16px 24px; font-size:14px;">${item.time_taken||0} phút</td>
+                                <td style="padding:16px 24px;">
+                                    <a href="results.php?attempt_id=${item.attempt_id}" style="font-size:13px; font-weight:600; color:#1d9e75; text-decoration:none;">Xem →</a>
+                                </td>
+                            </tr>`;
+                        });
+                        $('#history-body').html(html);
+                    }
+                }
+            } catch(e) {
+                $('#history-body').html('<tr><td colspan="7" style="text-align:center; padding:40px; color:#e74c3c;">Không thể tải dữ liệu.</td></tr>');
+            }
+        });
+    </script>
 </body>
-
 </html>
