@@ -89,3 +89,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 });
 </script>
+
+<?php
+// include login modal once per page — needed by the "Đăng nhập" button in userDropdown
+if (!defined('LOGIN_MODAL_INCLUDED')) {
+	define('LOGIN_MODAL_INCLUDED', true);
+	include __DIR__ . '/homepage/loginModal.php';
+}
+?>
+

@@ -10,8 +10,14 @@
                             <div class="auth-header">
                                 <h1>Chào mừng</h1>
                                 <p>Đăng nhập để tiếp tục lộ trình học TOEIC của bạn</p>
-                                <?= showSuccess($errors['success']); ?>
-                                <?= showError($errors['login']); ?>
+                                <?php 
+                                if (function_exists('showSuccess')) {
+                                    echo showSuccess($errors['success'] ?? ''); 
+                                }
+                                if (function_exists('showError')) {
+                                    echo showError($errors['login'] ?? ''); 
+                                }
+                                ?>
                             </div>
                             
                             <form id="loginForm" class="auth-form" action="/api/auth/login" method="POST">
@@ -70,7 +76,11 @@
                             <div class="auth-header">
                                 <h1>Tạo tài khoản mới</h1>
                                 <p>Bắt đầu hành trình chinh phục TOEIC cùng PrepHub</p>
-                                <?= showError($errors['register']); ?>
+                                <?php 
+                                if (function_exists('showError')) {
+                                    echo showError($errors['register'] ?? ''); 
+                                }
+                                ?>
                             </div>
                             
                             <form id="signupForm" class="auth-form" action="/api/auth/register" method="POST">
@@ -156,3 +166,58 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const authWrapper = document.getElementById('authWrapper');
+    const toSignup = document.getElementById('toSignup');
+    const toSignin = document.getElementById('toSignin');
+    const loginModalEl = document.getElementById('loginModal');
+
+    if (loginModalEl) {
+        const initModal = () => {
+            if (typeof bootstrap === 'undefined') {
+                setTimeout(initModal, 100);
+                return;
+            }
+            const loginModal = new bootstrap.Modal(loginModalEl);
+            
+            if (toSignup && toSignin && authWrapper) {
+                toSignup.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    authWrapper.classList.add('signup-active');
+                });
+                toSignin.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    authWrapper.classList.remove('signup-active');
+                });
+            }
+
+            // Check if we need to show the modal (on error)
+            <?php 
+            $hasErrors = !empty($errors['login'] ?? '') || !empty($errors['register'] ?? '') || !empty($errors['success'] ?? '');
+            $activeForm = $activeAuthForm ?? 'login';
+            if ($hasErrors): ?>
+                <?php if ($activeForm === 'register'): ?>
+                    if (authWrapper) authWrapper.classList.add('signup-active');
+                <?php endif; ?>
+                loginModal.show();
+            <?php endif; ?>
+        };
+        initModal();
+    }
+
+    // eye toggle logic
+    document.querySelectorAll('.eye-toggle').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = this.parentElement.querySelector('input');
+            const iconImg = this.querySelector('img');
+            if (!input || !iconImg) return;
+            
+            const isPassword = input.getAttribute('type') === 'password';
+            input.setAttribute('type', isPassword ? 'text' : 'password');
+            iconImg.src = isPassword ? '../img/eye_open.png' : '../img/eye_close.png';
+        });
+    });
+});
+</script>

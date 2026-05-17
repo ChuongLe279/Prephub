@@ -1,3 +1,16 @@
+<?php
+if (!function_exists('showError')) {
+    function showError($error) {
+        return !empty($error) ? "<p class='error-message' style='color: #ef4444; font-size: 0.85rem; margin-bottom: 12px; font-weight: 500;'>$error</p>" : '';
+    }
+}
+if (!function_exists('showSuccess')) {
+    function showSuccess($msg) {
+        return !empty($msg) ? "<p class='success-message' style='color: #10b981; font-size: 0.85rem; margin-bottom: 12px; font-weight: 500;'>$msg</p>" : '';
+    }
+}
+$errors = $errors ?? [];
+?>
 <!-- metadata.php có công dụng là thay vì import các thẻ  meta, link rel, ... lặp lại ở nhiều phần html của các file
 	thì giờ mình chỉ cần import đúng cái file này thôi, code sẽ gọn hơn rất nhiều
 	nói chung là cái này có tác dụng như import đầu file html vậy
@@ -12,6 +25,7 @@
 
 <!-- bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
 
 <!-- font awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

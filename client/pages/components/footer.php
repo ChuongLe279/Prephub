@@ -62,3 +62,8 @@
 		</div>
 	</div>
 </footer>
+
+<script>
+// Bootstrap JS is now loaded globally in metadata.php
+// Additional footer scripts can be added here
+</script>
