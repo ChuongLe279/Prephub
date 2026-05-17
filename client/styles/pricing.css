@@ -346,6 +346,12 @@ body {
   border: 1px solid var(--text-main);
 }
 
+.btn-outline:hover {
+  background: #05102b !important;
+  color: #fff !important;
+  border-color: #05102b !important;
+}
+
 .btn-white {
   background-color: #05102b !important;
   color: #fafafa !important;

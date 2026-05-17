@@ -20,8 +20,8 @@ $ACCOUNT_NAME = 'PREPHUB TEAM';
 						<span class="pmo-price" id="pmPrice">63.200</span>
 						<span class="pmo-cur">₫</span>
 					</div>
+					<span class="pmo-period" id="pmPeriod">/tháng</span>
 				</div>
-				<span class="pmo-period" id="pmPeriod">/tháng</span>
 				<span class="pmo-discount-note" id="pmDiscountNote" style="display:none">Đã trừ gói Premium đã
 					mua</span>
 			</div>
