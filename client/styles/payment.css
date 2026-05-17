@@ -1,11 +1,11 @@
 /* ======================================
-   Prephub — Payment Page
+   Prephub - Payment Page
    Layout: full-page split card
    ====================================== */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Page wrapper — centers the card vertically */
+/* Page wrapper - centers the card vertically */
 .pm-page {
   font-family: 'Inter', sans-serif;
   background: #eef1f6;

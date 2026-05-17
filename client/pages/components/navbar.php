@@ -8,7 +8,8 @@ $scrollThreshold = $scrollThreshold ?? 50;
 
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg" id="mainNavbar" data-navbar-bg="<?= $navbarMode ?>" data-scroll-threshold="<?= $scrollThreshold ?>">
+<nav class="navbar navbar-expand-lg" id="mainNavbar" data-navbar-bg="<?= $navbarMode ?>"
+	data-scroll-threshold="<?= $scrollThreshold ?>">
 	<div class="container-fluid position-relative">
 		<!-- logo: locked left -->
 		<a class="navbar-brand" href="home.php">
@@ -37,7 +38,7 @@ $scrollThreshold = $scrollThreshold ?? 50;
 			<!-- login: locked right -->
 			<ul class="navbar-nav nav-right">
 				<li class="nav-item">
-                    <?php include __DIR__ . '/userDropdown.php'; ?>
+					<?php include __DIR__ . '/userDropdown.php'; ?>
 
 				</li>
 			</ul>
@@ -46,55 +47,54 @@ $scrollThreshold = $scrollThreshold ?? 50;
 </nav>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-	var navbar = document.getElementById('mainNavbar');
-	if (!navbar) return;
-	var threshold = parseInt(navbar.dataset.scrollThreshold) || 50;
+	document.addEventListener('DOMContentLoaded', function () {
+		var navbar = document.getElementById('mainNavbar');
+		if (!navbar) return;
+		var threshold = parseInt(navbar.dataset.scrollThreshold) || 50;
 
-	function updateScroll() {
-		navbar.classList.toggle('scrolled', window.scrollY > threshold);
-	}
-	window.addEventListener('scroll', updateScroll);
-	updateScroll();
-
-	var navIndicator = document.getElementById('navIndicator');
-	var navLinks = document.querySelectorAll('.nav-link');
-	var navCenter = document.querySelector('.nav-center');
-
-	if (navIndicator && navCenter) {
-		function moveIndicator(element) {
-			var rect = element.getBoundingClientRect();
-			var parentRect = navCenter.getBoundingClientRect();
-			navIndicator.style.width = (rect.width - 24) + 'px';
-			navIndicator.style.left = (rect.left - parentRect.left + 12) + 'px';
+		function updateScroll() {
+			navbar.classList.toggle('scrolled', window.scrollY > threshold);
 		}
+		window.addEventListener('scroll', updateScroll);
+		updateScroll();
 
-		function resetIndicator() {
-			var activeLink = document.querySelector('.nav-link.active');
-			if (activeLink) {
-				moveIndicator(activeLink);
-			} else {
-				navIndicator.style.width = '0';
+		var navIndicator = document.getElementById('navIndicator');
+		var navLinks = document.querySelectorAll('.nav-link');
+		var navCenter = document.querySelector('.nav-center');
+
+		if (navIndicator && navCenter) {
+			function moveIndicator(element) {
+				var rect = element.getBoundingClientRect();
+				var parentRect = navCenter.getBoundingClientRect();
+				navIndicator.style.width = (rect.width - 24) + 'px';
+				navIndicator.style.left = (rect.left - parentRect.left + 12) + 'px';
 			}
+
+			function resetIndicator() {
+				var activeLink = document.querySelector('.nav-link.active');
+				if (activeLink) {
+					moveIndicator(activeLink);
+				} else {
+					navIndicator.style.width = '0';
+				}
+			}
+
+			navLinks.forEach(function (link) {
+				link.addEventListener('mouseenter', function (e) { moveIndicator(e.target); });
+			});
+
+			navCenter.addEventListener('mouseleave', resetIndicator);
+			window.addEventListener('load', resetIndicator);
+			window.addEventListener('resize', resetIndicator);
+			resetIndicator();
 		}
-
-		navLinks.forEach(function(link) {
-			link.addEventListener('mouseenter', function(e) { moveIndicator(e.target); });
-		});
-
-		navCenter.addEventListener('mouseleave', resetIndicator);
-		window.addEventListener('load', resetIndicator);
-		window.addEventListener('resize', resetIndicator);
-		resetIndicator();
-	}
-});
+	});
 </script>
 
 <?php
-// include login modal once per page — needed by the "Đăng nhập" button in userDropdown
+// include login modal once per page - needed by the "Đăng nhập" button in userDropdown
 if (!defined('LOGIN_MODAL_INCLUDED')) {
 	define('LOGIN_MODAL_INCLUDED', true);
 	include __DIR__ . '/homepage/loginModal.php';
 }
 ?>
-

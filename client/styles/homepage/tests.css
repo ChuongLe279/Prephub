@@ -115,7 +115,7 @@
     letter-spacing: 0.01em;
 }
 
-/* "Mới" badge — nằm trong hàng tags để các tiêu đề card ngang hàng nhau */
+/* "Mới" badge - nằm trong hàng tags để các tiêu đề card ngang hàng nhau */
 .test-new-badge {
     display: inline-flex;
     align-items: center;

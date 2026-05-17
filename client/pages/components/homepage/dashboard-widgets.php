@@ -1,5 +1,5 @@
 <?php
-// pull recent attempts from session or API — for now stub with empty state
+// pull recent attempts from session or API - for now stub with empty state
 $hasPremium = !empty($_SESSION['is_premium']);
 $premiumPlanName = $_SESSION['premium_name'] ?? null;
 $premiumUntil = $_SESSION['premium_until'] ?? null;
