@@ -1,6 +1,12 @@
 <?php
-// require_once '../../server/middleware/auth.php';
-// homeRedirect();
+session_start();
+$isPremium = $_SESSION['is_premium'] ?? false;
+$isLoggedIn = isset($_SESSION['user_id']);
+$currentPlan = $_SESSION['premium_plan'] ?? 'free';
+$hasCourse = $_SESSION['has_course'] ?? (in_array($currentPlan, ['course', 'ultra', 'ultra_year']));
+// Plan tier hierarchy
+$planTier = ['free' => 0, 'pro' => 1, 'pro_year' => 1, 'course' => 1, 'ultra' => 2, 'ultra_year' => 2];
+$userTier = $planTier[$currentPlan] ?? 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,9 +17,12 @@
 	<title>Premium Plans</title>
 	<?php include './components/metadata.php'; ?>
 	<link rel="stylesheet" href="../styles/pricing.css">
+	<link rel="stylesheet" href="../styles/payment.css">
 </head>
 
 <body>
+	
+	<div class="pricing-first-screen">
 	<header class="pricing-hero">
 		<img src="../img/premium/book.png" class="hero-bg-img img-left" alt="">
 		<img src="../img/premium/headset.png" class="hero-bg-img img-right" alt="">
@@ -35,9 +44,15 @@
 			<!-- FREE -->
 			<div class="pricing-card">
 				<div class="plan-name">FREE</div>
+				<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
+					<!-- placeholder for alignment -->
+				</div>
 				<div class="plan-price-wrapper">
 					<span class="price-amount" data-monthly="0đ" data-yearly="0đ">0đ</span>
-					<span class="price-period" data-monthly-suffix="/tháng" data-yearly-suffix="/tháng">/tháng</span>
+					<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/tháng"
+						data-yearly-suffix="/tháng">/tháng</span>
+				</div>
+				<div class="price-subtext" style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;">
 				</div>
 				<div class="plan-desc">Làm quen với nền tảng, thử sức với đề mẫu</div>
 
@@ -92,10 +107,23 @@
 			<div class="pricing-card card-featured">
 				<span class="featured-tag">Lựa chọn tốt nhất</span>
 				<div class="plan-name">PREMIUM</div>
-				<div class="plan-price-wrapper">
-					<span class="price-amount" data-monthly="63.200đ" data-yearly="49.800đ">63.200đ</span>
-					<span class="price-period" data-monthly-suffix="/tháng" data-yearly-suffix="/tháng">/tháng</span>
+				<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
+					<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;" data-monthly="99.000đ"
+						data-yearly="828.000đ">99.000đ</span>
 				</div>
+				<div class="plan-price-wrapper">
+					<?php if ($isPremium): ?>
+					<span class="price-amount" data-total-monthly="69.000đ" data-total-yearly="519.000đ"
+						data-monthly="69.000đ" data-yearly="43.000đ">69.000đ</span>
+					<?php else: ?>
+					<span class="price-amount" data-total-monthly="69.000đ" data-total-yearly="588.000đ"
+						data-monthly="69.000đ" data-yearly="49.000đ">69.000đ</span>
+					<?php endif; ?>
+					<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/tháng"
+						data-yearly-suffix="/tháng">/tháng</span>
+				</div>
+				<div class="price-subtext" style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;"
+					data-monthly="" data-yearly=""></div>
 				<div class="plan-desc">Unlock toàn bộ kho đề thi, luôn cập nhật mới nhất.</div>
 
 				<ul class="features-list">
@@ -138,15 +166,54 @@
 									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
 							</svg></span> Không có khoá học video</li>
 				</ul>
-				<a href="payment.php?plan=pro" class="plan-btn btn-white">Đăng ký ngay</a>
+				<?php if (!$isLoggedIn): ?>
+					<a href="javascript:void(0)" class="plan-btn btn-white" data-bs-toggle="modal"
+						data-bs-target="#loginModal">Đăng ký ngay</a>
+				<?php else: ?>
+					<div class="monthly-action">
+						<?php if (in_array($currentPlan, ['pro', 'pro_year', 'ultra', 'ultra_year'])): ?>
+							<a href="billing.php" class="plan-btn btn-current">
+								<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+									stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+									<polyline points="20 6 9 17 4 12" />
+								</svg>
+								Gói hiện tại
+							</a>
+						<?php else: ?>
+							<a href="javascript:void(0)" class="plan-btn btn-white"
+								onclick="openPaymentModal('pro', 'Premium', this)">Đăng ký ngay</a>
+						<?php endif; ?>
+					</div>
+					<div class="yearly-action" style="display:none;">
+						<?php if (in_array($currentPlan, ['pro_year', 'ultra_year'])): ?>
+							<a href="billing.php" class="plan-btn btn-current">
+								<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+									stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+									<polyline points="20 6 9 17 4 12" />
+								</svg>
+								Gói hiện tại
+							</a>
+						<?php else: ?>
+							<a href="javascript:void(0)" class="plan-btn btn-white"
+								onclick="openPaymentModal('pro_year', 'Premium Năm', this)"><?= $isPremium ? 'Nâng cấp lên Năm' : 'Đăng ký ngay' ?></a>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
 			</div>
 
 			<!-- KHOÁ HỌC -->
 			<div class="pricing-card">
 				<div class="plan-name">KHOÁ HỌC</div>
+				<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
+					<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;" data-monthly="350.000đ"
+						data-yearly="350.000đ">350.000đ</span>
+				</div>
 				<div class="plan-price-wrapper">
-					<span class="price-amount" data-monthly="249.000đ" data-yearly="199.000đ">249.000đ</span>
-					<span class="price-period" data-monthly-suffix="/khoá" data-yearly-suffix="/khoá">/khoá</span>
+					<span class="price-amount" data-monthly="249.000đ" data-yearly="249.000đ">249.000đ</span>
+					<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/vĩnh viễn"
+						data-yearly-suffix="/vĩnh viễn">/vĩnh viễn</span>
+				</div>
+				<div class="price-subtext" style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;">
 				</div>
 				<div class="plan-desc">Mua lẻ khoá học theo mục tiêu, sở hữu vĩnh viễn.</div>
 
@@ -192,16 +259,45 @@
 									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
 							</svg></span> Phân tích điểm yếu nâng cao</li>
 				</ul>
-				<a href="#" class="plan-btn btn-outline">Xem các khoá học</a>
+				<?php if (!$isLoggedIn): ?>
+					<a href="javascript:void(0)" class="plan-btn btn-outline" data-bs-toggle="modal"
+						data-bs-target="#loginModal">Đăng ký ngay</a>
+				<?php elseif ($hasCourse): ?>
+					<a href="courses.php" class="plan-btn btn-outline">Xem các khoá học</a>
+				<?php else: ?>
+					<a href="javascript:void(0)" class="plan-btn btn-outline"
+						onclick="openPaymentModal('course', 'Khoá Học', this)">Mua khoá học</a>
+				<?php endif; ?>
 			</div>
 
 			<!-- TRỌN BỘ -->
 			<div class="pricing-card">
 				<div class="plan-name">TRỌN BỘ</div>
-				<div class="plan-price-wrapper">
-					<span class="price-amount" data-monthly="299.000đ" data-yearly="259.000đ">299.000đ</span>
-					<span class="price-period" data-monthly-suffix="/khoá" data-yearly-suffix="/khoá">/khoá</span>
+				<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
+					<?php if ($isPremium): ?>
+						<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;" data-monthly="419.000đ"
+							data-yearly="938.000đ">419.000đ</span>
+					<?php else: ?>
+						<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;" data-monthly="419.000đ"
+							data-yearly="938.000đ">419.000đ</span>
+					<?php endif; ?>
 				</div>
+				<div class="plan-price-wrapper">
+					<?php if ($currentPlan === 'ultra'): ?>
+						<span class="price-amount" data-total-monthly="289.000đ" data-total-yearly="460.000đ"
+							data-monthly="289.000đ" data-yearly="38.000đ">289.000đ</span>
+					<?php elseif ($isPremium): ?>
+						<span class="price-amount" data-total-monthly="220.000đ" data-total-yearly="680.000đ"
+							data-monthly="220.000đ" data-yearly="56.000đ">220.000đ</span>
+					<?php else: ?>
+						<span class="price-amount" data-total-monthly="289.000đ" data-total-yearly="749.000đ"
+							data-monthly="289.000đ" data-yearly="62.000đ">289.000đ</span>
+					<?php endif; ?>
+					<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/khoá"
+						data-yearly-suffix="/tháng">/khoá</span>
+				</div>
+				<div class="price-subtext" style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;"
+					data-monthly="(Gồm Khoá học + Premium 1 tháng)" data-yearly="(Gồm Khoá học + Premium 1 năm)">(Gồm Khoá học + Premium 1 tháng)</div>
 				<div class="plan-desc">Tiết kiệm nhất cho người nghiêm túc.</div>
 
 				<ul class="features-list">
@@ -210,7 +306,7 @@
 								<rect width="256" height="256" fill="none" />
 								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
 									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Tất cả tính năng Premium</li>
+							</svg></span> Gói Premium 1 tháng</li>
 					<li class="feature-item"><span class="feature-icon icon-check"><svg
 								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
 								<rect width="256" height="256" fill="none" />
@@ -242,7 +338,42 @@
 									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
 							</svg></span> Chứng chỉ hoàn thành khoá</li>
 				</ul>
-				<a href="payment.php?plan=ultra" class="plan-btn btn-outline">Đăng ký ngay</a>
+				<?php if (!$isLoggedIn): ?>
+					<a href="javascript:void(0)" class="plan-btn btn-outline" data-bs-toggle="modal"
+						data-bs-target="#loginModal">Đăng ký ngay</a>
+				<?php else: ?>
+					<div class="monthly-action">
+						<?php if (in_array($currentPlan, ['ultra', 'ultra_year']) || ($isPremium && $hasCourse)): ?>
+							<a href="billing.php" class="plan-btn btn-current">
+								<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+									stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+									<polyline points="20 6 9 17 4 12" />
+								</svg>
+								Gói hiện tại
+							</a>
+						<?php else: ?>
+							<a href="javascript:void(0)" class="plan-btn btn-outline"
+								onclick="openPaymentModal('ultra', 'Trọn Bộ', this)"><?= ($isPremium && $userTier < 2) ? 'Nâng cấp lên Trọn Bộ' : 'Đăng ký ngay' ?></a>
+						<?php endif; ?>
+					</div>
+					<div class="yearly-action" style="display:none;">
+						<?php if ($currentPlan === 'ultra_year' || ($currentPlan === 'pro_year' && $hasCourse)): ?>
+							<a href="billing.php" class="plan-btn btn-current">
+								<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+									stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+									<polyline points="20 6 9 17 4 12" />
+								</svg>
+								Gói hiện tại
+							</a>
+						<?php elseif ($currentPlan === 'ultra'): ?>
+							<a href="javascript:void(0)" class="plan-btn btn-outline"
+								onclick="openPaymentModal('ultra_year', 'Trọn Bộ Năm', this)">Nâng cấp lên Năm</a>
+						<?php else: ?>
+							<a href="javascript:void(0)" class="plan-btn btn-outline"
+								onclick="openPaymentModal('ultra_year', 'Trọn Bộ Năm', this)"><?= ($isPremium && $userTier < 2) ? 'Nâng cấp lên Trọn Bộ Năm' : 'Đăng ký ngay' ?></a>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</main>
@@ -363,7 +494,9 @@
 				</div>
 			</div>
 		</div>
+		</div>
 	</section>
+	</div>
 
 	<section class="faq-container-new">
 		<div class="faq-inner">
@@ -397,14 +530,14 @@
 
 			<!-- FAQ -->
 			<div class="faq-grid-area">
-				
+
 				<div class="ray-line-h ray-top"></div>
 				<div class="ray-line-h ray-bottom"></div>
 
-				
+
 				<div class="ray-line-v ray-center"></div>
 
-				
+
 				<div class="ray-corner top-left"></div>
 				<div class="ray-corner top-right"></div>
 				<div class="ray-corner bottom-left"></div>
@@ -412,7 +545,7 @@
 
 				<div class="faq-grid-cols">
 
-				
+
 					<div class="faq-col">
 
 						<div class="faq-item-new" onclick="toggleFaq(this)">
@@ -519,7 +652,7 @@
 
 					</div>
 
-				
+
 					<div class="faq-col">
 
 						<div class="faq-item-new" onclick="toggleFaq(this)">
@@ -608,7 +741,7 @@
 
 						<div class="faq-item-new" onclick="toggleFaq(this)">
 							<button class="faq-item-header">
-								<span class="faq-q">Có được học thử trước khi mua không?</span>
+								<span class="faq-q">Mua gói nào là lời nhất?</span>
 								<span class="faq-icon">
 									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
 										stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -620,9 +753,8 @@
 							<div class="faq-item-body">
 								<div class="faq-body-inner">
 									<div class="faq-divider"></div>
-									<div class="faq-a">Tất nhiên! Prephub cung cấp miễn phí bài test đầu vào cùng một số
-										bài học thử ở mỗi cấp độ, giúp bạn trải nghiệm trực tiếp chất lượng nền tảng
-										trước khi nâng cấp.</div>
+									<div class="faq-a">Tất nhiên là gói trọn bộ, gói trọn bộ bao gồm cả gói premium và
+										khoá học, cả 2 đều có giá tốt hơn mua lẻ tính trên mỗi gói.</div>
 								</div>
 							</div>
 						</div>
@@ -644,22 +776,50 @@
 		const yearlyBtn = document.getElementById('yearlyBtn');
 		const priceAmounts = document.querySelectorAll('.price-amount');
 		const pricePeriods = document.querySelectorAll('.price-period');
+		const priceOlds = document.querySelectorAll('.price-old');
 
 		let isYearly = false;
+
+		const priceSubtexts = document.querySelectorAll('.price-subtext');
 
 		function updatePrices() {
 			priceAmounts.forEach((el) => el.style.opacity = '0');
 			pricePeriods.forEach((el) => el.style.opacity = '0');
+			priceOlds.forEach((el) => el.style.opacity = '0');
+			priceSubtexts.forEach((el) => el.style.opacity = '0');
 
 			setTimeout(() => {
 				priceAmounts.forEach((el) => {
 					el.textContent = isYearly ? el.getAttribute('data-yearly') : el.getAttribute('data-monthly');
+					if (el.hasAttribute('data-total-monthly')) {
+						el.setAttribute('data-total', isYearly ? el.getAttribute('data-total-yearly') : el.getAttribute('data-total-monthly'));
+					}
 					el.style.opacity = '1';
 				});
 				pricePeriods.forEach((el) => {
 					el.textContent = isYearly ? el.getAttribute('data-yearly-suffix') : el.getAttribute('data-monthly-suffix');
 					el.style.opacity = '1';
 				});
+				priceOlds.forEach((el) => {
+					if (el.hasAttribute('data-yearly')) {
+						el.textContent = isYearly ? el.getAttribute('data-yearly') : el.getAttribute('data-monthly');
+						el.style.opacity = '1';
+					}
+				});
+				priceSubtexts.forEach((el) => {
+					el.textContent = isYearly ? el.getAttribute('data-yearly') : el.getAttribute('data-monthly');
+					el.style.opacity = '1';
+				});
+
+				const monthlyActions = document.querySelectorAll('.monthly-action');
+				const yearlyActions = document.querySelectorAll('.yearly-action');
+				if (isYearly) {
+					monthlyActions.forEach(el => el.style.display = 'none');
+					yearlyActions.forEach(el => el.style.display = '');
+				} else {
+					monthlyActions.forEach(el => el.style.display = '');
+					yearlyActions.forEach(el => el.style.display = 'none');
+				}
 			}, 150);
 		}
 
@@ -710,6 +870,8 @@
 			element.classList.toggle('is-open');
 		}
 	</script>
+	<?php include './components/paymentModal.php'; ?>
+	<?php include './components/homepage/loginModal.php'; ?>
 </body>
 
 </html>

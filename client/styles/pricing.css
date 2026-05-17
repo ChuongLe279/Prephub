@@ -23,6 +23,9 @@ body {
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.pricing-first-screen {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -30,7 +33,7 @@ body {
 
 .pricing-hero {
   text-align: center;
-  padding: 80px 24px 48px;
+  padding: 24px 24px 16px;
   width: 100%;
   margin: 0;
   background-color: var(--bg-color);
@@ -83,16 +86,16 @@ body {
 }
 
 .pricing-hero h1 {
-  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
   font-weight: 700;
   letter-spacing: -0.04em;
-  margin: 0 0 8px;
+  margin: 0 0 4px;
   line-height: 1.2;
   color: var(--text-main);
 }
 
 .pricing-hero p {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
   max-width: 65ch;
   margin: 0 auto;
@@ -104,7 +107,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 12px;
 }
 
 .switch-btn {
@@ -155,7 +158,7 @@ body {
 
 .pricing-section {
   background-color: var(--dark-bg);
-  padding: 24px 24px;
+  padding: 12px 24px;
   flex: 1;
   display: flex;
   align-items: center;
@@ -186,7 +189,7 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--card-radius);
-  padding: 20px 18px;
+  padding: 28px 20px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -243,11 +246,30 @@ body {
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1;
+  transition: opacity 0.15s ease;
+}
+
+.price-old {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-decoration: line-through;
+  margin-right: 4px;
+  transition: opacity 0.15s ease;
+}
+
+.card-featured .price-old {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .price-period {
   font-size: 0.8125rem;
   color: var(--text-muted);
+  transition: opacity 0.15s ease;
+}
+
+.price-subtext {
+  transition: opacity 0.15s ease;
 }
 
 .card-featured .price-period {
@@ -258,7 +280,7 @@ body {
   font-size: 0.8125rem;
   line-height: 1.4;
   color: var(--text-muted);
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   min-height: 2.8em;
 }
 
@@ -309,7 +331,7 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 10px 16px;
+  padding: 8px 16px;
   border-radius: 10px;
   font-size: 0.875rem;
   font-weight: 600;
@@ -335,13 +357,38 @@ body {
   color: #05102b !important;
 }
 
+/* user already on this plan */
+.pricing-card .btn-current {
+  background: #059669;
+  color: #fff;
+  border: none;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.pricing-card .btn-current:hover {
+  background: #047857;
+  color: #fff;
+}
+
+/* user is on a higher tier */
+.pricing-card .btn-downgrade {
+  background: #f8fafc;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+  cursor: default;
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+
 /* Footer */
 .pricing-footer {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 40px;
-  padding: 20px 24px;
+  padding: 12px 24px;
   background-color: var(--bg-color);
   flex-wrap: wrap;
   border-top: 1px solid var(--border-color);
@@ -378,10 +425,9 @@ body {
   color: var(--text-muted);
 }
 
-/* Trust Banner */
 .trust-banner {
   background-color: var(--dark-bg);
-  padding: 20px 24px;
+  padding: 12px 24px;
   width: 100%;
 }
 
