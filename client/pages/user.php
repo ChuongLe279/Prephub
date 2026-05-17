@@ -15,6 +15,7 @@ $maxScore = getMaxScore();
 $avgScore = getAvgScore();
 $totalTests = getNumTestDone();
 
+date_default_timezone_set('Asia/Ho_Chi_Minh');
 $hour = (int)date('H');
 $greet = $hour < 12 ? 'Chào buổi sáng ☀️' : ($hour < 18 ? 'Chào buổi chiều 🌤️' : 'Chào buổi tối 🌙');
 ?>
