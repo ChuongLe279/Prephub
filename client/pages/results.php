@@ -25,28 +25,28 @@ $navbarMode = 'light';
 				<div class="stat-card total premium-gradient">
 					<div class="stat-content">
 						<span class="stat-label">Tổng điểm</span>
-						<span class="stat-value" id="total-points">—</span>
+						<span class="stat-value" id="total-points">-</span>
 					</div>
 					<div class="stat-bg-icon"><i class="bx bxs-trophy"></i></div>
 				</div>
 				<div class="stat-card listening soft-green">
 					<div class="stat-content">
 						<span class="stat-label">Listening</span>
-						<span class="stat-value" id="listening-points">—<span class="stat-sub">/495</span></span>
+						<span class="stat-value" id="listening-points">-<span class="stat-sub">/495</span></span>
 					</div>
 					<div class="stat-bg-icon"><i class="bx bx-headphone"></i></div>
 				</div>
 				<div class="stat-card reading soft-blue">
 					<div class="stat-content">
 						<span class="stat-label">Reading</span>
-						<span class="stat-value" id="reading-points">—<span class="stat-sub">/495</span></span>
+						<span class="stat-value" id="reading-points">-<span class="stat-sub">/495</span></span>
 					</div>
 					<div class="stat-bg-icon"><i class="bx bxs-book-open"></i></div>
 				</div>
 				<div class="stat-card accuracy soft-orange">
 					<div class="stat-content">
 						<span class="stat-label">Độ chính xác</span>
-						<span class="stat-value" id="accuracy-rate">—</span>
+						<span class="stat-value" id="accuracy-rate">-</span>
 					</div>
 					<div class="stat-bg-icon"><i class="bx bx-target-lock"></i></div>
 				</div>
@@ -77,17 +77,19 @@ $navbarMode = 'light';
 				<!-- right: fixed answer grid -->
 				<div class="split-right">
 					<div class="content-card h-100-flex">
-						<div class="content-card-header">
-							<h6 class="content-card-title">Bảng đáp án</h6>
-							<span style="font-size:0.72rem;font-weight:600;color:#94a3b8;">1 — 200</span>
-						</div>
-						<div class="sidebar-grid-area">
-							<div id="answer-grid"></div>
+						<div class="content-card-header d-flex flex-column align-items-stretch pb-2">
+							<div class="d-flex justify-content-between align-items-center mb-2">
+								<h6 class="content-card-title mb-0">Bảng đáp án</h6>
+								<span style="font-size:0.72rem;font-weight:600;color:#94a3b8;">1 - 200</span>
+							</div>
 							<div class="legend-row">
 								<span class="legend-item"><span class="legend-dot correct"></span>Đúng</span>
 								<span class="legend-item"><span class="legend-dot wrong"></span>Sai</span>
-								<span class="legend-item"><span class="legend-dot unanswered"></span>Trống</span>
+								<span class="legend-item"><span class="legend-dot unanswered"></span>Không chọn</span>
 							</div>
+						</div>
+						<div class="sidebar-grid-area pt-2">
+							<div id="answer-grid"></div>
 						</div>
 						<div class="sidebar-footer">
 							<div class="row g-2">
