@@ -101,7 +101,12 @@ $userTier = $planTier[$currentPlan] ?? 0;
 										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
 								</svg></span> Không có lộ trình học</li>
 					</ul>
-					<a href="#" class="plan-btn btn-outline">Bắt đầu miễn phí</a>
+					<?php if (!$isLoggedIn): ?>
+						<a href="javascript:void(0)" class="plan-btn btn-outline" data-bs-toggle="modal"
+							data-bs-target="#loginModal">Bắt đầu miễn phí</a>
+					<?php else: ?>
+						<a href="home.php" class="plan-btn btn-outline">Bắt đầu miễn phí</a>
+					<?php endif; ?>
 				</div>
 
 				<!-- PREMIUM -->
