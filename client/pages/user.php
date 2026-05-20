@@ -333,9 +333,5 @@ $greet = $hour < 12 ? 'Chào buổi sáng ☀️' : ($hour < 18 ? 'Chào buổi 
 		});
 	</script>
 	
-	<!-- khối widget nâng cấp nổi ở góc màn hình -->
-	<?php include './components/pro-card.php'; ?>
-	<?php include './components/pro-card-script.php'; ?>
 </body>
-
 </html>

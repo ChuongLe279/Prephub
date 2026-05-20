@@ -581,6 +581,9 @@ function anchorId($index)
 			});
 		});
 	</script>
+	<!-- khối pop up ads nâng cấp nổi ở góc màn hình -->
+	<?php include './components/pro-card.php'; ?>
+	<?php include './components/pro-card-script.php'; ?>
 </body>
 
 </html>
