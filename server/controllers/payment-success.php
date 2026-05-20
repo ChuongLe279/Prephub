@@ -38,12 +38,8 @@ if (!$repurchase && $planId === $currentPlan) {
     exit;
 }
 
-if (!isset($_SESSION['is_premium']) || ($plan['is_premium'] ?? true)) {
-    $_SESSION['is_premium'] = $plan['is_premium'] ?? true;
-}
-if (!isset($_SESSION['has_course']) || ($plan['has_course'] ?? false)) {
-    $_SESSION['has_course'] = $plan['has_course'] ?? false;
-}
+$_SESSION['is_premium'] = (!empty($_SESSION['is_premium']) || ($plan['is_premium'] ?? true));
+$_SESSION['has_course'] = (!empty($_SESSION['has_course']) || ($plan['has_course'] ?? false));
 
 // Allow updating plan if higher tier OR longer duration (e.g. ultra to pro_year)
 $currentDays = $plans[$currentPlan]['days'] ?? 0;
@@ -76,10 +72,20 @@ $_SESSION['last_payment'] = end($_SESSION['payment_history']);
 $userId = $_SESSION['user_id'] ?? null;
 if ($userId && isset($conn)) {
     try {
+        $stmtCheck = $conn->prepare("SELECT is_premium, has_course FROM users WHERE id = :id");
+        $stmtCheck->execute(['id' => $userId]);
+        $currUser = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+        $dbHasCourse = $currUser ? (bool)$currUser['has_course'] : false;
+        $dbIsPremium = $currUser ? (bool)$currUser['is_premium'] : false;
+
+        $_SESSION['has_course'] = ($dbHasCourse || ($plan['has_course'] ?? false));
+        $_SESSION['is_premium'] = ($dbIsPremium || ($plan['is_premium'] ?? true));
+
         $stmt = $conn->prepare("UPDATE users SET is_premium = :is_premium, has_course = :has_course, premium_plan = :premium_plan, premium_until = :premium_until WHERE id = :id");
         $stmt->execute([
-            'is_premium'    => !empty($_SESSION['is_premium']) ? 1 : 0,
-            'has_course'    => !empty($_SESSION['has_course']) ? 1 : 0,
+            'is_premium'    => $_SESSION['is_premium'] ? 1 : 0,
+            'has_course'    => $_SESSION['has_course'] ? 1 : 0,
             'premium_plan'  => $_SESSION['premium_plan'] ?? null,
             'premium_until' => $_SESSION['premium_until'] ?? null,
             'id'            => $userId

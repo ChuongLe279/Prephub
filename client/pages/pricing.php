@@ -21,480 +21,485 @@ $userTier = $planTier[$currentPlan] ?? 0;
 </head>
 
 <body>
-	
+
 	<div class="pricing-first-screen">
-	<header class="pricing-hero">
-		<img src="../img/premium/book.png" class="hero-bg-img img-left" alt="">
-		<img src="../img/premium/headset.png" class="hero-bg-img img-right" alt="">
-		<h1>Chọn gói phù hợp với mục tiêu TOEIC của bạn</h1>
-		<p>Linh hoạt lựa chọn - Học hiệu quả - Tiến bộ mỗi ngày</p>
+		<header class="pricing-hero">
+			<img src="../img/premium/book.png" class="hero-bg-img img-left" alt="">
+			<img src="../img/premium/headset.png" class="hero-bg-img img-right" alt="">
+			<h1>Chọn gói phù hợp với mục tiêu TOEIC của bạn</h1>
+			<p>Linh hoạt lựa chọn - Học hiệu quả - Tiến bộ mỗi ngày</p>
 
-		<div class="pricing-switch">
-			<span class="switch-btn active" id="monthlyBtn">Theo tháng</span>
-			<div class="toggle-container" id="priceToggle">
-				<div class="toggle-circle"></div>
+			<div class="pricing-switch">
+				<span class="switch-btn active" id="monthlyBtn">Theo tháng</span>
+				<div class="toggle-container" id="priceToggle">
+					<div class="toggle-circle"></div>
+				</div>
+				<span class="switch-btn" id="yearlyBtn">Theo năm</span>
+				<span class="discount-badge">Tiết kiệm 20%</span>
 			</div>
-			<span class="switch-btn" id="yearlyBtn">Theo năm</span>
-			<span class="discount-badge">Tiết kiệm 20%</span>
-		</div>
-	</header>
+		</header>
 
-	<main class="pricing-section">
-		<div class="pricing-container">
-			<!-- FREE -->
-			<div class="pricing-card">
-				<div class="plan-name">FREE</div>
-				<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
-					<!-- placeholder for alignment -->
-				</div>
-				<div class="plan-price-wrapper">
-					<span class="price-amount" data-monthly="0đ" data-yearly="0đ">0đ</span>
-					<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/tháng"
-						data-yearly-suffix="/tháng">/tháng</span>
-				</div>
-				<div class="price-subtext" style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;">
-				</div>
-				<div class="plan-desc">Làm quen với nền tảng, thử sức với đề mẫu</div>
-
-				<ul class="features-list">
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> 5 đề thi mẫu / tháng</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Xem đáp án sau khi nộp</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Thống kê kết quả cơ bản</li>
-					<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-								<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Không có đề mới nhất</li>
-					<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-								<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Không có giải thích chi tiết</li>
-					<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-								<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Không có lộ trình học</li>
-				</ul>
-				<a href="#" class="plan-btn btn-outline">Bắt đầu miễn phí</a>
-			</div>
-
-			<!-- PREMIUM -->
-			<div class="pricing-card card-featured">
-				<span class="featured-tag">Lựa chọn tốt nhất</span>
-				<div class="plan-name">PREMIUM</div>
-				<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
-					<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;" data-monthly="99.000đ"
-						data-yearly="828.000đ">99.000đ</span>
-				</div>
-				<div class="plan-price-wrapper">
-					<?php if ($isPremium): ?>
-					<span class="price-amount" data-total-monthly="69.000đ" data-total-yearly="519.000đ"
-						data-monthly="69.000đ" data-yearly="43.000đ">69.000đ</span>
-					<?php else: ?>
-					<span class="price-amount" data-total-monthly="69.000đ" data-total-yearly="588.000đ"
-						data-monthly="69.000đ" data-yearly="49.000đ">69.000đ</span>
-					<?php endif; ?>
-					<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/tháng"
-						data-yearly-suffix="/tháng">/tháng</span>
-				</div>
-				<div class="price-subtext" style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;"
-					data-monthly="" data-yearly=""></div>
-				<div class="plan-desc">Unlock toàn bộ kho đề thi, luôn cập nhật mới nhất.</div>
-
-				<ul class="features-list">
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Toàn bộ kho đề (1.500+ đề)</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Cập nhật đề mới nhất 2026</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Giải thích đáp án chi tiết</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Phân tích điểm yếu theo Part</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Lịch sử & thống kê chi tiết</li>
-					<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-								<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Không có khoá học video</li>
-				</ul>
-				<?php if (!$isLoggedIn): ?>
-					<a href="javascript:void(0)" class="plan-btn btn-white" data-bs-toggle="modal"
-						data-bs-target="#loginModal">Đăng ký ngay</a>
-				<?php else: ?>
-					<div class="monthly-action">
-						<?php if (in_array($currentPlan, ['pro', 'pro_year', 'ultra', 'ultra_year'])): ?>
-							<a href="billing.php" class="plan-btn btn-current">
-								<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-									stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-									<polyline points="20 6 9 17 4 12" />
-								</svg>
-								Gói hiện tại
-							</a>
-						<?php else: ?>
-							<a href="javascript:void(0)" class="plan-btn btn-white"
-								onclick="openPaymentModal('pro', 'Premium', this)">Đăng ký ngay</a>
-						<?php endif; ?>
+		<main class="pricing-section">
+			<div class="pricing-container">
+				<!-- FREE -->
+				<div class="pricing-card">
+					<div class="plan-name">FREE</div>
+					<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
+						<!-- placeholder for alignment -->
 					</div>
-					<div class="yearly-action" style="display:none;">
-						<?php if (in_array($currentPlan, ['pro_year', 'ultra_year'])): ?>
-							<a href="billing.php" class="plan-btn btn-current">
-								<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-									stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-									<polyline points="20 6 9 17 4 12" />
-								</svg>
-								Gói hiện tại
-							</a>
-						<?php else: ?>
-							<a href="javascript:void(0)" class="plan-btn btn-white"
-								onclick="openPaymentModal('pro_year', 'Premium Năm', this)"><?= $isPremium ? 'Nâng cấp lên Năm' : 'Đăng ký ngay' ?></a>
-						<?php endif; ?>
+					<div class="plan-price-wrapper">
+						<span class="price-amount" data-monthly="0đ" data-yearly="0đ">0đ</span>
+						<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/tháng"
+							data-yearly-suffix="/tháng">/tháng</span>
 					</div>
-				<?php endif; ?>
-			</div>
+					<div class="price-subtext"
+						style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;">
+					</div>
+					<div class="plan-desc">Làm quen với nền tảng, thử sức với đề mẫu</div>
 
-			<!-- KHOÁ HỌC -->
-			<div class="pricing-card">
-				<div class="plan-name">KHOÁ HỌC</div>
-				<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
-					<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;" data-monthly="350.000đ"
-						data-yearly="350.000đ">350.000đ</span>
+					<ul class="features-list">
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> 5 đề thi mẫu / tháng</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Xem đáp án sau khi nộp</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Thống kê kết quả cơ bản</li>
+						<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+									<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Không có đề mới nhất</li>
+						<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+									<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Không có giải thích chi tiết</li>
+						<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+									<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Không có lộ trình học</li>
+					</ul>
+					<a href="#" class="plan-btn btn-outline">Bắt đầu miễn phí</a>
 				</div>
-				<div class="plan-price-wrapper">
-					<span class="price-amount" data-monthly="249.000đ" data-yearly="249.000đ">249.000đ</span>
-					<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/vĩnh viễn"
-						data-yearly-suffix="/vĩnh viễn">/vĩnh viễn</span>
-				</div>
-				<div class="price-subtext" style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;">
-				</div>
-				<div class="plan-desc">Mua lẻ khoá học theo mục tiêu, sở hữu vĩnh viễn.</div>
 
-				<ul class="features-list">
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Video bài giảng theo lộ trình</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Bài tập kèm theo mỗi bài học</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Sở hữu trọn đời</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Cập nhật nội dung miễn phí</li>
-					<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-								<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Không có kho đề Premium</li>
-					<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-								<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Phân tích điểm yếu nâng cao</li>
-				</ul>
-				<?php if (!$isLoggedIn): ?>
-					<a href="javascript:void(0)" class="plan-btn btn-outline" data-bs-toggle="modal"
-						data-bs-target="#loginModal">Đăng ký ngay</a>
-				<?php elseif ($hasCourse): ?>
-					<a href="courses.php" class="plan-btn btn-outline">Xem các khoá học</a>
-				<?php else: ?>
-					<a href="javascript:void(0)" class="plan-btn btn-outline"
-						onclick="openPaymentModal('course', 'Khoá Học', this)">Mua khoá học</a>
-				<?php endif; ?>
-			</div>
+				<!-- PREMIUM -->
+				<div class="pricing-card card-featured">
+					<span class="featured-tag">Lựa chọn tốt nhất</span>
+					<div class="plan-name">PREMIUM</div>
+					<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
+						<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;"
+							data-monthly="99.000đ" data-yearly="828.000đ">99.000đ</span>
+					</div>
+					<div class="plan-price-wrapper">
+						<?php if ($isPremium): ?>
+							<span class="price-amount" data-total-monthly="69.000đ" data-total-yearly="519.000đ"
+								data-monthly="69.000đ" data-yearly="43.000đ">69.000đ</span>
+						<?php else: ?>
+							<span class="price-amount" data-total-monthly="69.000đ" data-total-yearly="588.000đ"
+								data-monthly="69.000đ" data-yearly="49.000đ">69.000đ</span>
+						<?php endif; ?>
+						<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/tháng"
+							data-yearly-suffix="/tháng">/tháng</span>
+					</div>
+					<div class="price-subtext"
+						style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;" data-monthly=""
+						data-yearly=""></div>
+					<div class="plan-desc">Unlock toàn bộ kho đề thi, luôn cập nhật mới nhất.</div>
 
-			<!-- TRỌN BỘ -->
-			<div class="pricing-card">
-				<div class="plan-name">TRỌN BỘ</div>
-				<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
-					<?php if ($isPremium): ?>
-						<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;" data-monthly="419.000đ"
-							data-yearly="938.000đ">419.000đ</span>
+					<ul class="features-list">
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Toàn bộ kho đề (1.500+ đề)</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Cập nhật đề mới nhất 2026</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Giải thích đáp án chi tiết</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Phân tích điểm yếu theo Part</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Lịch sử & thống kê chi tiết</li>
+						<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+									<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Không có khoá học video</li>
+					</ul>
+					<?php if (!$isLoggedIn): ?>
+						<a href="javascript:void(0)" class="plan-btn btn-white" data-bs-toggle="modal"
+							data-bs-target="#loginModal">Đăng ký ngay</a>
 					<?php else: ?>
-						<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;" data-monthly="419.000đ"
-							data-yearly="938.000đ">419.000đ</span>
+						<div class="monthly-action">
+							<?php if (in_array($currentPlan, ['pro', 'pro_year', 'ultra', 'ultra_year'])): ?>
+								<a href="billing.php" class="plan-btn btn-current">
+									<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+									Gói hiện tại
+								</a>
+							<?php else: ?>
+								<a href="javascript:void(0)" class="plan-btn btn-white"
+									onclick="openPaymentModal('pro', 'Premium', this)">Đăng ký ngay</a>
+							<?php endif; ?>
+						</div>
+						<div class="yearly-action" style="display:none;">
+							<?php if (in_array($currentPlan, ['pro_year', 'ultra_year'])): ?>
+								<a href="billing.php" class="plan-btn btn-current">
+									<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+									Gói hiện tại
+								</a>
+							<?php else: ?>
+								<a href="javascript:void(0)" class="plan-btn btn-white"
+									onclick="openPaymentModal('pro_year', 'Premium Năm', this)"><?= $isPremium ? 'Nâng cấp lên Năm' : 'Đăng ký ngay' ?></a>
+							<?php endif; ?>
+						</div>
 					<?php endif; ?>
 				</div>
-				<div class="plan-price-wrapper">
-					<?php if ($currentPlan === 'ultra'): ?>
-						<span class="price-amount" data-total-monthly="289.000đ" data-total-yearly="460.000đ"
-							data-monthly="289.000đ" data-yearly="38.000đ">289.000đ</span>
-					<?php elseif ($isPremium): ?>
-						<span class="price-amount" data-total-monthly="220.000đ" data-total-yearly="680.000đ"
-							data-monthly="220.000đ" data-yearly="56.000đ">220.000đ</span>
+
+				<!-- KHOÁ HỌC -->
+				<div class="pricing-card">
+					<div class="plan-name">KHOÁ HỌC</div>
+					<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
+						<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;"
+							data-monthly="350.000đ" data-yearly="350.000đ">350.000đ</span>
+					</div>
+					<div class="plan-price-wrapper">
+						<span class="price-amount" data-monthly="249.000đ" data-yearly="249.000đ">249.000đ</span>
+						<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/vĩnh viễn"
+							data-yearly-suffix="/vĩnh viễn">/vĩnh viễn</span>
+					</div>
+					<div class="price-subtext"
+						style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;">
+					</div>
+					<div class="plan-desc">Mua lẻ khoá học theo mục tiêu, sở hữu vĩnh viễn.</div>
+
+					<ul class="features-list">
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Video bài giảng theo lộ trình</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Bài tập kèm theo mỗi bài học</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Sở hữu trọn đời</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Cập nhật nội dung miễn phí</li>
+						<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+									<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Không có kho đề Premium</li>
+						<li class="feature-item disabled"><span class="feature-icon icon-cross"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<line x1="200" y1="56" x2="56" y2="200" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+									<line x1="200" y1="200" x2="56" y2="56" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Phân tích điểm yếu nâng cao</li>
+					</ul>
+					<?php if (!$isLoggedIn): ?>
+						<a href="javascript:void(0)" class="plan-btn btn-outline" data-bs-toggle="modal"
+							data-bs-target="#loginModal">Đăng ký ngay</a>
+					<?php elseif ($hasCourse): ?>
+						<a href="courses.php" class="plan-btn btn-outline">Xem các khoá học</a>
 					<?php else: ?>
-						<span class="price-amount" data-total-monthly="289.000đ" data-total-yearly="749.000đ"
-							data-monthly="289.000đ" data-yearly="62.000đ">289.000đ</span>
+						<a href="javascript:void(0)" class="plan-btn btn-outline"
+							onclick="openPaymentModal('course', 'Khoá Học', this)">Mua khoá học</a>
 					<?php endif; ?>
-					<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/khoá"
-						data-yearly-suffix="/tháng">/khoá</span>
 				</div>
-				<div class="price-subtext" style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;"
-					data-monthly="(Gồm Khoá học + Premium 1 tháng)" data-yearly="(Gồm Khoá học + Premium 1 năm)">(Gồm Khoá học + Premium 1 tháng)</div>
-				<div class="plan-desc">Tiết kiệm nhất cho người nghiêm túc.</div>
 
-				<ul class="features-list">
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Gói Premium 1 tháng</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Toàn bộ khoá học hiện có</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Khoá học mới phát hành</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Lộ trình học cá nhân hoá</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Ưu tiên hỗ trợ</li>
-					<li class="feature-item"><span class="feature-icon icon-check"><svg
-								xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
-								<rect width="256" height="256" fill="none" />
-								<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
-									stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
-							</svg></span> Chứng chỉ hoàn thành khoá</li>
-				</ul>
-				<?php if (!$isLoggedIn): ?>
-					<a href="javascript:void(0)" class="plan-btn btn-outline" data-bs-toggle="modal"
-						data-bs-target="#loginModal">Đăng ký ngay</a>
-				<?php else: ?>
-					<div class="monthly-action">
-						<?php if (in_array($currentPlan, ['ultra', 'ultra_year']) || ($isPremium && $hasCourse)): ?>
-							<a href="billing.php" class="plan-btn btn-current">
-								<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-									stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-									<polyline points="20 6 9 17 4 12" />
-								</svg>
-								Gói hiện tại
-							</a>
+				<!-- TRỌN BỘ -->
+				<div class="pricing-card">
+					<div class="plan-name">TRỌN BỘ</div>
+					<div class="price-old-wrapper" style="min-height: 1.2rem; margin-bottom: 2px;">
+						<?php if ($isPremium): ?>
+							<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;"
+								data-monthly="419.000đ" data-yearly="938.000đ">419.000đ</span>
 						<?php else: ?>
-							<a href="javascript:void(0)" class="plan-btn btn-outline"
-								onclick="openPaymentModal('ultra', 'Trọn Bộ', this)"><?= ($isPremium && $userTier < 2) ? 'Nâng cấp lên Trọn Bộ' : 'Đăng ký ngay' ?></a>
+							<span class="price-old" style="text-decoration:line-through; color:#a1a1aa;"
+								data-monthly="419.000đ" data-yearly="938.000đ">419.000đ</span>
 						<?php endif; ?>
 					</div>
-					<div class="yearly-action" style="display:none;">
-						<?php if ($currentPlan === 'ultra_year' || ($currentPlan === 'pro_year' && $hasCourse)): ?>
-							<a href="billing.php" class="plan-btn btn-current">
-								<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-									stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-									<polyline points="20 6 9 17 4 12" />
-								</svg>
-								Gói hiện tại
-							</a>
-						<?php elseif ($currentPlan === 'ultra'): ?>
-							<a href="javascript:void(0)" class="plan-btn btn-outline"
-								onclick="openPaymentModal('ultra_year', 'Trọn Bộ Năm', this)">Nâng cấp lên Năm</a>
+					<div class="plan-price-wrapper">
+						<?php if ($hasCourse || $currentPlan === 'ultra'): ?>
+							<span class="price-amount" data-total-monthly="40.000đ" data-total-yearly="460.000đ"
+								data-monthly="40.000đ" data-yearly="38.000đ">40.000đ</span>
+						<?php elseif ($isPremium): ?>
+							<span class="price-amount" data-total-monthly="220.000đ" data-total-yearly="680.000đ"
+								data-monthly="220.000đ" data-yearly="56.000đ">220.000đ</span>
 						<?php else: ?>
-							<a href="javascript:void(0)" class="plan-btn btn-outline"
-								onclick="openPaymentModal('ultra_year', 'Trọn Bộ Năm', this)"><?= ($isPremium && $userTier < 2) ? 'Nâng cấp lên Trọn Bộ Năm' : 'Đăng ký ngay' ?></a>
+							<span class="price-amount" data-total-monthly="289.000đ" data-total-yearly="749.000đ"
+								data-monthly="289.000đ" data-yearly="62.000đ">289.000đ</span>
 						<?php endif; ?>
+						<span class="price-period" style="white-space: nowrap;" data-monthly-suffix="/khoá"
+							data-yearly-suffix="/tháng">/khoá</span>
 					</div>
-				<?php endif; ?>
-			</div>
-		</div>
-	</main>
+					<div class="price-subtext"
+						style="font-size:0.75rem; color:#666; margin-top:4px; min-height: 1.1rem;"
+						data-monthly="(Gồm Khoá học + Premium 1 tháng)" data-yearly="(Gồm Khoá học + Premium 1 năm)">
+						(Gồm Khoá học + Premium 1 tháng)</div>
+					<div class="plan-desc">Tiết kiệm nhất cho người nghiêm túc.</div>
 
-	<footer class="pricing-footer">
-		<div class="footer-feature">
-			<div class="footer-icon">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
-					<rect width="256" height="256" fill="none" />
-					<path
-						d="M208,40H48A16,16,0,0,0,32,56v48c0,59.39,41.4,110.42,97.74,127.18a15.89,15.89,0,0,0,8.52,0C194.6,214.42,236,163.39,236,104V56A16,16,0,0,0,208,40Zm-34.34,61.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,140.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z"
-						fill="currentColor" />
-				</svg>
+					<ul class="features-list">
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Gói Premium 1 tháng</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Toàn bộ khoá học hiện có</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Khoá học mới phát hành</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Lộ trình học cá nhân hoá</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Ưu tiên hỗ trợ</li>
+						<li class="feature-item"><span class="feature-icon icon-check"><svg
+									xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+									<rect width="256" height="256" fill="none" />
+									<polyline points="216 72.005 104 184 48 128.005" fill="none" stroke="currentColor"
+										stroke-linecap="round" stroke-linejoin="round" stroke-width="24" />
+								</svg></span> Chứng chỉ hoàn thành khoá</li>
+					</ul>
+					<?php if (!$isLoggedIn): ?>
+						<a href="javascript:void(0)" class="plan-btn btn-outline" data-bs-toggle="modal"
+							data-bs-target="#loginModal">Đăng ký ngay</a>
+					<?php else: ?>
+						<div class="monthly-action">
+							<?php if (in_array($currentPlan, ['ultra', 'ultra_year']) || ($isPremium && $hasCourse)): ?>
+								<a href="billing.php" class="plan-btn btn-current">
+									<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+									Gói hiện tại
+								</a>
+							<?php else: ?>
+								<a href="javascript:void(0)" class="plan-btn btn-outline"
+									onclick="openPaymentModal('ultra', 'Trọn Bộ', this)"><?= ($isPremium || $hasCourse) ? 'Nâng cấp lên Trọn Bộ' : 'Đăng ký ngay' ?></a>
+							<?php endif; ?>
+						</div>
+						<div class="yearly-action" style="display:none;">
+							<?php if ($currentPlan === 'ultra_year' || ($currentPlan === 'pro_year' && $hasCourse)): ?>
+								<a href="billing.php" class="plan-btn btn-current">
+									<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+										<polyline points="20 6 9 17 4 12" />
+									</svg>
+									Gói hiện tại
+								</a>
+							<?php elseif ($currentPlan === 'ultra'): ?>
+								<a href="javascript:void(0)" class="plan-btn btn-outline"
+									onclick="openPaymentModal('ultra_year', 'Trọn Bộ Năm', this)">Nâng cấp lên Năm</a>
+							<?php else: ?>
+								<a href="javascript:void(0)" class="plan-btn btn-outline"
+									onclick="openPaymentModal('ultra_year', 'Trọn Bộ Năm', this)"><?= ($isPremium || $hasCourse) ? 'Nâng cấp lên Trọn Bộ Năm' : 'Đăng ký ngay' ?></a>
+							<?php endif; ?>
+						</div>
+					<?php endif; ?>
+				</div>
 			</div>
-			<div class="footer-text">
-				<h4>Thanh toán an toàn</h4>
-				<p>Bảo mật tuyệt đối</p>
-			</div>
-		</div>
-		<div class="footer-feature">
-			<div class="footer-icon">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
-					<rect width="256" height="256" fill="none" />
-					<polyline points="176 104 216 104 216 64" fill="none" stroke="currentColor" stroke-linecap="round"
-						stroke-linejoin="round" stroke-width="16" />
-					<path d="M216,104A95.94,95.94,0,0,0,57.17,66.8" fill="none" stroke="currentColor"
-						stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
-					<polyline points="80 152 40 152 40 192" fill="none" stroke="currentColor" stroke-linecap="round"
-						stroke-linejoin="round" stroke-width="16" />
-					<path d="M40,152a95.94,95.94,0,0,0,158.83,37.2" fill="none" stroke="currentColor"
-						stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
-				</svg>
-			</div>
-			<div class="footer-text">
-				<h4>Huỷ gói bất kỳ lúc nào</h4>
-				<p>Không ràng buộc</p>
-			</div>
-		</div>
-		<div class="footer-feature">
-			<div class="footer-icon">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
-					<rect width="256" height="256" fill="none" />
-					<circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round"
-						stroke-linejoin="round" stroke-width="16" />
-					<polyline points="128 72 128 128 184 128" fill="none" stroke="currentColor" stroke-linecap="round"
-						stroke-linejoin="round" stroke-width="16" />
-				</svg>
-			</div>
-			<div class="footer-text">
-				<h4>Kích hoạt ngay lập tức</h4>
-				<p>Học ngay không chờ đợi</p>
-			</div>
-		</div>
-		<div class="footer-feature">
-			<div class="footer-icon">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
-					<rect width="256" height="256" fill="none" />
-					<path
-						d="M128,24A104,104,0,0,0,24,128v56a16,16,0,0,0,16,16H64a16,16,0,0,0,16-16V128a16,16,0,0,0-16-16H40.66a87.67,87.67,0,0,1,174.68,0H192a16,16,0,0,0-16,16v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16V128A104,104,0,0,0,128,24Z"
-						fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-						stroke-width="16" />
-				</svg>
-			</div>
-			<div class="footer-text">
-				<h4>Hỗ trợ tận tâm 24/7</h4>
-				<p>Giải đáp mọi thắc mắc</p>
-			</div>
-		</div>
-	</footer>
+		</main>
 
-	<section class="trust-banner">
-		<div class="trust-content">
-			<div class="trust-left">
-				<div class="trust-number">HƠN 15.000+</div>
-				<div class="trust-label">HỌC VIÊN ĐÃ TIN TƯỞNG</div>
+		<footer class="pricing-footer">
+			<div class="footer-feature">
+				<div class="footer-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
+						<rect width="256" height="256" fill="none" />
+						<path
+							d="M208,40H48A16,16,0,0,0,32,56v48c0,59.39,41.4,110.42,97.74,127.18a15.89,15.89,0,0,0,8.52,0C194.6,214.42,236,163.39,236,104V56A16,16,0,0,0,208,40Zm-34.34,61.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,140.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z"
+							fill="currentColor" />
+					</svg>
+				</div>
+				<div class="footer-text">
+					<h4>Thanh toán an toàn</h4>
+					<p>Bảo mật tuyệt đối</p>
+				</div>
 			</div>
+			<div class="footer-feature">
+				<div class="footer-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
+						<rect width="256" height="256" fill="none" />
+						<polyline points="176 104 216 104 216 64" fill="none" stroke="currentColor"
+							stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+						<path d="M216,104A95.94,95.94,0,0,0,57.17,66.8" fill="none" stroke="currentColor"
+							stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+						<polyline points="80 152 40 152 40 192" fill="none" stroke="currentColor" stroke-linecap="round"
+							stroke-linejoin="round" stroke-width="16" />
+						<path d="M40,152a95.94,95.94,0,0,0,158.83,37.2" fill="none" stroke="currentColor"
+							stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+					</svg>
+				</div>
+				<div class="footer-text">
+					<h4>Huỷ gói bất kỳ lúc nào</h4>
+					<p>Không ràng buộc</p>
+				</div>
+			</div>
+			<div class="footer-feature">
+				<div class="footer-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
+						<rect width="256" height="256" fill="none" />
+						<circle cx="128" cy="128" r="96" fill="none" stroke="currentColor" stroke-linecap="round"
+							stroke-linejoin="round" stroke-width="16" />
+						<polyline points="128 72 128 128 184 128" fill="none" stroke="currentColor"
+							stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+					</svg>
+				</div>
+				<div class="footer-text">
+					<h4>Kích hoạt ngay lập tức</h4>
+					<p>Học ngay không chờ đợi</p>
+				</div>
+			</div>
+			<div class="footer-feature">
+				<div class="footer-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
+						<rect width="256" height="256" fill="none" />
+						<path
+							d="M128,24A104,104,0,0,0,24,128v56a16,16,0,0,0,16,16H64a16,16,0,0,0,16-16V128a16,16,0,0,0-16-16H40.66a87.67,87.67,0,0,1,174.68,0H192a16,16,0,0,0-16,16v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16V128A104,104,0,0,0,128,24Z"
+							fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+							stroke-width="16" />
+					</svg>
+				</div>
+				<div class="footer-text">
+					<h4>Hỗ trợ tận tâm 24/7</h4>
+					<p>Giải đáp mọi thắc mắc</p>
+				</div>
+			</div>
+		</footer>
 
-			<div class="trust-divider"></div>
+		<section class="trust-banner">
+			<div class="trust-content">
+				<div class="trust-left">
+					<div class="trust-number">HƠN 15.000+</div>
+					<div class="trust-label">HỌC VIÊN ĐÃ TIN TƯỞNG</div>
+				</div>
 
-			<div class="trust-middle">
-				<div class="trust-rating">
-					<div class="rating-score">
-						<span class="score">4.9/5</span>
-						<span class="stars">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
-								<path fill="currentColor"
-									d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
-							</svg>
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
-								<path fill="currentColor"
-									d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
-							</svg>
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
-								<path fill="currentColor"
-									d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
-							</svg>
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
-								<path fill="currentColor"
-									d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
-							</svg>
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
-								<path fill="currentColor"
-									d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
-							</svg>
-						</span>
+				<div class="trust-divider"></div>
+
+				<div class="trust-middle">
+					<div class="trust-rating">
+						<div class="rating-score">
+							<span class="score">4.9/5</span>
+							<span class="stars">
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+									<path fill="currentColor"
+										d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
+								</svg>
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+									<path fill="currentColor"
+										d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
+								</svg>
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+									<path fill="currentColor"
+										d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
+								</svg>
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+									<path fill="currentColor"
+										d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
+								</svg>
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256">
+									<path fill="currentColor"
+										d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z" />
+								</svg>
+							</span>
+						</div>
+						<div class="rating-label">ĐÁNH GIÁ TRUNG BÌNH</div>
 					</div>
-					<div class="rating-label">ĐÁNH GIÁ TRUNG BÌNH</div>
+					<div class="trust-quote">
+						<p>“Prephub là nền tảng luyện thi TOEIC <br>tốt nhất mà mình từng sử dụng!”</p>
+						<p class="quote-author">- Minh Anh, 875 TOEIC</p>
+					</div>
 				</div>
-				<div class="trust-quote">
-					<p>“Prephub là nền tảng luyện thi TOEIC <br>tốt nhất mà mình từng sử dụng!”</p>
-					<p class="quote-author">- Minh Anh, 875 TOEIC</p>
-				</div>
-			</div>
 
-			<div class="trust-right">
-				<div class="laurel-badge">
-					<img src="../img/875.png" alt="875 TOEIC" class="laurel-img">
+				<div class="trust-right">
+					<div class="laurel-badge">
+						<img src="../img/875.png" alt="875 TOEIC" class="laurel-img">
+					</div>
 				</div>
 			</div>
-		</div>
-		</div>
+	</div>
 	</section>
 	</div>
 

@@ -419,9 +419,9 @@ body {
 
 .rfm-note {
   background: #f7f8fa;
-  border-top: 1px solid #eef1f5;
-  border-bottom: 1px solid #eef1f5;
-  padding: 13px 0;
+  border: 1px solid #eef1f5;
+  border-radius: 10px;
+  padding: 13px 16px;
   margin: 0 0 24px;
 }
 

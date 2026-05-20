@@ -15,11 +15,15 @@ $premiumUntil = $_SESSION['premium_until'] ?? null;
 $lastPayment = $_SESSION['last_payment'] ?? null;
 $history = array_reverse($_SESSION['payment_history'] ?? []);
 
+$allPlans = require '../../server/config/premiumPlan.php';
+if ($planId && isset($allPlans[$planId])) {
+	$planPrice = $allPlans[$planId]['price'];
+}
+
 // nâng cấp session cũ có is_premium nhưng chưa có thông tin gói
 if ($isPremium && empty($planId)) {
-	$plans = require '../../server/config/premiumPlan.php';
 	$planId = 'pro'; // mặc định gói pro cho các session cũ
-	$plan = $plans[$planId];
+	$plan = $allPlans[$planId];
 	$planName = $plan['name'];
 	$planPrice = $plan['price'];
 	$planPeriod = $plan['period'];
@@ -43,6 +47,27 @@ $showSuccess = isset($_GET['upgrade']) && $_GET['upgrade'] === 'success' && $las
 $daysLeft = 0;
 if ($premiumUntil) {
 	$daysLeft = max(0, (int) ceil((strtotime($premiumUntil) - time()) / 86400));
+}
+
+// Tính số tiền hoàn lại dự kiến (tổng tất cả các giao dịch thành công trong vòng 7 ngày chưa hoàn tiền)
+$refundAmount = 0;
+$hasCombo = false;
+$refundWindow = 7 * 86400; // 7 ngày
+foreach ($history as $tx) {
+	if ($tx['status'] === 'success' && (time() - strtotime($tx['created_at']) <= $refundWindow)) {
+		$txRefund = $tx['price'];
+		if (in_array($tx['plan_id'] ?? '', ['ultra', 'ultra_year'])) {
+			$txRefund = max(0, $txRefund - 249000);
+			$hasCombo = true;
+		}
+		$refundAmount += $txRefund;
+	}
+}
+
+// Kiểm tra xem giao dịch gần nhất có được hoàn tiền hay không
+$isLastPaymentRefundable = false;
+if ($lastPayment && $lastPayment['status'] === 'success') {
+	$isLastPaymentRefundable = (time() - strtotime($lastPayment['created_at']) <= $refundWindow);
 }
 ?>
 <!DOCTYPE html>
@@ -149,7 +174,6 @@ if ($premiumUntil) {
 					<div class="pac-right">
 						<div class="pac-progress-wrap">
 							<?php
-							$allPlans = require '../../server/config/premiumPlan.php';
 							$total = $allPlans[$planId]['days'] ?? 30;
 							$pct = ($total > 0) ? min(100, round($daysLeft / $total * 100)) : 0;
 							?>
@@ -158,7 +182,9 @@ if ($premiumUntil) {
 							</div>
 							<span class="pac-progress-label">Còn <?= $daysLeft ?> / <?= $total ?> ngày</span>
 						</div>
-						<button class="btn-refund" onclick="openRefundModal()" id="refundBtn">Hủy &amp; Hoàn tiền</button>
+						<?php if ($isLastPaymentRefundable): ?>
+							<button class="btn-refund" onclick="openRefundModal()" id="refundBtn">Hủy &amp; Hoàn tiền</button>
+						<?php endif; ?>
 					</div>
 				</div>
 			<?php else: ?>
@@ -207,7 +233,7 @@ if ($premiumUntil) {
 										<?= $tx['status'] === 'success' ? 'Thành công' : ($tx['status'] === 'refunded' ? 'Đã hoàn tiền' : 'Thất bại') ?>
 									</td>
 									<td>
-										<?php if ($tx['status'] === 'success' && $isPremium && $lastPayment && $tx['id'] === $lastPayment['id']): ?>
+										<?php if ($tx['status'] === 'success' && $isPremium && $lastPayment && $tx['id'] === $lastPayment['id'] && (time() - strtotime($tx['created_at']) <= $refundWindow)): ?>
 											<button class="bt-refund-link"
 												onclick="openRefundModal('<?= htmlspecialchars($tx['id']) ?>')">Hoàn tiền</button>
 										<?php else: ?>
@@ -228,10 +254,40 @@ if ($premiumUntil) {
 	<div class="refund-overlay" id="refundOverlay">
 		<div class="refund-modal">
 			<h3 class="rfm-title">Xác nhận hủy gói</h3>
-			<p class="rfm-desc">Bạn có chắc muốn hủy gói <strong><?= htmlspecialchars($planName) ?></strong> và yêu cầu
-				hoàn tiền? Tài khoản sẽ trở về mức Miễn phí ngay lập tức.</p>
-			<div class="rfm-note">
-				<span>Hoàn tiền thường được xử lý trong 3-5 ngày làm việc qua phương thức thanh toán ban đầu.</span>
+			<p class="rfm-desc">Bạn có chắc muốn hủy gói <strong><?= htmlspecialchars($planName) ?></strong> và nhận hoàn tiền <strong><?= number_format($refundAmount, 0, ',', '.') ?>₫</strong>? Tài khoản sẽ trở về mức Miễn phí ngay lập tức.
+				<?php if ($hasCombo): ?>
+					<br><span style="font-size: 0.85em; color: #71717a; margin-top: 4px; display: inline-block;">(Số tiền hoàn lại đã khấu trừ giá trị Khóa Học 249.000₫ không được hoàn trả)</span>
+				<?php endif; ?>
+			</p>
+			<!-- Chi tiết hoàn tiền từng giao dịch -->
+			<div class="rfm-details" style="margin-bottom: 20px; font-size: 0.82rem; color: #4b5563; background: #f8fafc; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0;">
+				<div style="font-weight: 700; color: #0f172a; margin-bottom: 8px;">Chi tiết hoàn trả:</div>
+				<div style="display: flex; flex-direction: column; gap: 6px;">
+					<?php foreach ($history as $tx): ?>
+						<?php if ($tx['status'] === 'success' && (time() - strtotime($tx['created_at']) <= $refundWindow)): ?>
+							<?php
+							$txRefund = $tx['price'];
+							$deducted = false;
+							if (in_array($tx['plan_id'] ?? '', ['ultra', 'ultra_year'])) {
+								$txRefund = max(0, $txRefund - 249000);
+								$deducted = true;
+							}
+							?>
+							<div style="display: flex; justify-content: space-between; align-items: center;">
+								<span>Gói <?= htmlspecialchars($tx['plan_name']) ?> (<?= date('d/m/Y', strtotime($tx['created_at'])) ?>)</span>
+								<span style="font-family: monospace; font-weight: 600; color: #0f172a;">
+									<?= number_format($txRefund, 0, ',', '.') ?>₫
+									<?php if ($deducted): ?>
+										<span style="color: #ef4444; font-size: 0.75rem; font-weight: 500;">(-249k khóa học)</span>
+									<?php endif; ?>
+								</span>
+							</div>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</div>
+			</div>
+			<div class="rfm-note" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; margin: 0 0 24px;">
+				<span style="font-size: 0.78rem; color: #64748b; line-height: 1.6; font-weight: 500;">Hoàn tiền thường được xử lý trong 3-5 ngày làm việc qua phương thức thanh toán ban đầu.</span>
 			</div>
 			<div class="rfm-actions">
 				<button class="rfm-cancel" onclick="closeRefundModal()">Giữ gói</button>
