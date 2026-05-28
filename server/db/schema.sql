@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `tests` (
     `title` VARCHAR(200) NOT NULL,
     `description` TEXT DEFAULT NULL,
     `duration` INT DEFAULT 7200,
+    `audio_url` VARCHAR(255) DEFAULT NULL,
     `total_questions` INT DEFAULT 200,
     `is_premium` TINYINT(1) DEFAULT 0,
     `is_active` TINYINT(1) DEFAULT 1,
@@ -50,6 +51,8 @@ CREATE TABLE IF NOT EXISTS `passages` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `test_id` INT NOT NULL,
     `content` TEXT DEFAULT NULL,
+    `translation` TEXT DEFAULT NULL,
+    `translation_en` TEXT DEFAULT NULL,
     `audio_url` VARCHAR(255) DEFAULT NULL,
     `image_url` VARCHAR(255) DEFAULT NULL,
     CONSTRAINT `fk_passage_test` FOREIGN KEY (`test_id`) REFERENCES `tests` (`id`) ON DELETE CASCADE,
@@ -78,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `options` (
     `question_id` INT NOT NULL,
     `label` CHAR(1) NOT NULL,
     `content` TEXT NOT NULL,
+    `translation` TEXT DEFAULT NULL,
     CONSTRAINT `fk_option_question` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE,
     INDEX `idx_question` (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
