@@ -25,7 +25,7 @@ $greet = $hour < 12 ? 'Chào buổi sáng ☀️' : ($hour < 18 ? 'Chào buổi 
 <head>
 	<?php include './components/metadata.php'; ?>
 	<title>Hồ sơ · Prephub</title>
-	<link rel="stylesheet" href="../styles/user.css">
+	<link rel="stylesheet" href="../styles/user.css?v=<?= time() ?>">
 </head>
 
 <body>
@@ -309,7 +309,14 @@ $greet = $hour < 12 ? 'Chào buổi sáng ☀️' : ($hour < 18 ? 'Chào buổi 
 					} else {
 						let html = '';
 						history.forEach(item => {
-							const date = new Date(item.created_at).toLocaleDateString('vi-VN');
+							const d = new Date(item.created_at);
+							const day = String(d.getDate()).padStart(2, '0');
+							const month = String(d.getMonth() + 1).padStart(2, '0');
+							const year = d.getFullYear();
+							const hours = String(d.getHours()).padStart(2, '0');
+							const minutes = String(d.getMinutes()).padStart(2, '0');
+							const seconds = String(d.getSeconds()).padStart(2, '0');
+							const date = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 							const total = (item.listening_score || 0) + (item.reading_score || 0);
 							html += `<tr style="border-bottom:1px solid #f1f5f9;">
 								<td style="padding:16px 24px; font-size:14px;">${date}</td>
