@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin controller for dashboard API endpoints
+ * Controller admin dùng cho các API endpoint của dashboard
  */
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -294,7 +294,7 @@ function getAdminTransactions() {
     }
 }
 
-// recursive file finder
+// tìm file đệ quy trong thư mục
 function findFileInDirRecursive($dir, $filename) {
     $dir = rtrim($dir, '/');
     if (!is_dir($dir)) return null;
@@ -312,7 +312,7 @@ function findFileInDirRecursive($dir, $filename) {
     return null;
 }
 
-// recursive directory removal
+// xóa thư mục đệ quy
 function helperRemoveDir($dir) {
     if (!is_dir($dir)) return;
     $files = scandir($dir);
@@ -328,7 +328,7 @@ function helperRemoveDir($dir) {
     rmdir($dir);
 }
 
-// slugify title
+// chuyển tiêu đề thành slug url
 function helperSlugify($text) {
     $unicode = array(
         'a'=>'á|à|ả|ã|ạ|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ|Á|À|Ả|Ã|Ạ|Ă|Ắ|Ằ|Ẳ|Ẵ|Ặ|Â|Ấ|Ầ|Ẩ|ẫ|ậ',
@@ -350,7 +350,7 @@ function helperSlugify($text) {
     return empty($text) ? 'n-a' : $text;
 }
 
-// get inner html of a node
+// lấy inner html của một node dom
 function getInnerHtmlNode($node) {
     $html = '';
     foreach ($node->childNodes as $child) {
@@ -359,7 +359,7 @@ function getInnerHtmlNode($node) {
     return trim($html);
 }
 
-// parse question block
+// phân tích khối câu hỏi từ html
 function helperParseQuestion($xpath, $node, $examAudioUrl, &$isFirstQuestion) {
     $q = ['correct_answer' => 'A'];
     $numNodes = $xpath->query("descendant::*[contains(concat(' ', normalize-space(@class), ' '), ' question-num ')]", $node);
@@ -442,7 +442,7 @@ function helperParseQuestion($xpath, $node, $examAudioUrl, &$isFirstQuestion) {
     return $q;
 }
 
-// parse exam html contents
+// phân tích nội dung html file đề thi
 function helperParseExamHtml($htmlContent) {
     $doc = new DOMDocument();
     libxml_use_internal_errors(true);
@@ -476,17 +476,32 @@ function helperParseExamHtml($htmlContent) {
     $titleNode = $doc->getElementsByTagName('title')->item(0);
     $title = $titleNode ? trim($titleNode->textContent) : 'TOEIC Exam';
     $parts = [];
-    $partIDs = ['part-1', 'part-2', 'part-3', 'part-4', 'part-5', 'part-6', 'part-7'];
+    $partIDs = ['part-1', 'part-2', 'part-3', 'part-4', 'part-5', 'part-6', 'part-7', 'part-8'];
     $isFirstQuestion = true;
     foreach ($partIDs as $partID) {
         $section = $xpath->query("//section[@id='{$partID}']")->item(0);
         if (!$section) continue;
         $partNum = (int)str_replace('part-', '', $partID);
+        if ($partNum === 8) {
+            $partNum = 7;
+        }
         $partData = ['part_number' => $partNum];
         if (in_array($partNum, [1, 2, 5])) {
             $questions = [];
             $mcqNodes = $xpath->query("descendant::*[contains(concat(' ', normalize-space(@class), ' '), ' mcq-wrapper ')]", $section);
             foreach ($mcqNodes as $s) {
+                $parent = $s->parentNode;
+                $closestSection = null;
+                while ($parent) {
+                    if ($parent instanceof DOMElement && $parent->tagName === 'section') {
+                        $closestSection = $parent;
+                        break;
+                    }
+                    $parent = $parent->parentNode;
+                }
+                if ($closestSection !== $section) {
+                    continue;
+                }
                 $q = helperParseQuestion($xpath, $s, null, $isFirstQuestion);
                 if (isset($q['question_number'])) {
                     $questions[] = $q;
@@ -497,10 +512,34 @@ function helperParseExamHtml($htmlContent) {
             $passages = [];
             $mcqgNodes = $xpath->query("descendant::*[contains(concat(' ', normalize-space(@class), ' '), ' mcqg-wrapper ')]", $section);
             foreach ($mcqgNodes as $s) {
+                $parent = $s->parentNode;
+                $closestSection = null;
+                while ($parent) {
+                    if ($parent instanceof DOMElement && $parent->tagName === 'section') {
+                        $closestSection = $parent;
+                        break;
+                    }
+                    $parent = $parent->parentNode;
+                }
+                if ($closestSection !== $section) {
+                    continue;
+                }
                 $passage = [];
                 $questions = [];
                 $mcqNodes = $xpath->query("descendant::*[contains(concat(' ', normalize-space(@class), ' '), ' mcq-wrapper ')]", $s);
                 foreach ($mcqNodes as $qSel) {
+                    $parent = $qSel->parentNode;
+                    $closestMCQG = null;
+                    while ($parent && $parent !== $s) {
+                        if ($parent instanceof DOMElement && str_contains($parent->getAttribute('class') ?? '', 'mcqg-wrapper')) {
+                            $closestMCQG = $parent;
+                            break;
+                        }
+                        $parent = $parent->parentNode;
+                    }
+                    if ($closestMCQG !== null) {
+                        continue;
+                    }
                     $q = helperParseQuestion($xpath, $qSel, null, $isFirstQuestion);
                     if (isset($q['question_number'])) {
                         $questions[] = $q;
@@ -516,9 +555,9 @@ function helperParseExamHtml($htmlContent) {
                     }
                 }
                 if (in_array($partNum, [6, 7])) {
-                    $pContentNodes = $xpath->query("descendant::*[contains(concat(' ', normalize-space(@class), ' '), ' passage-content ') or contains(concat(' ', normalize-space(@class), ' '), ' reading-passage ') or self::article]", $s);
+                    $pContentNodes = $xpath->query("descendant::*[contains(concat(' ', normalize-space(@class), ' '), ' paragraph-p7 ') or contains(concat(' ', normalize-space(@class), ' '), ' passage-content ') or contains(concat(' ', normalize-space(@class), ' '), ' reading-passage ') or contains(concat(' ', normalize-space(@class), ' '), ' reading-text-wrapper ') or self::article]", $s);
                     if ($pContentNodes->length > 0) {
-                        $passage['content'] = trim($pContentNodes->item(0)->textContent);
+                        $passage['content'] = getInnerHtmlNode($pContentNodes->item(0));
                     }
                 }
                 if (empty($passage['content'])) {
@@ -545,7 +584,7 @@ function helperParseExamHtml($htmlContent) {
     return $result;
 }
 
-// parse answer html contents
+// phân tích nội dung html file đáp án
 function helperParseAnswerHtml($htmlContent) {
     $doc = new DOMDocument();
     libxml_use_internal_errors(true);
@@ -673,19 +712,35 @@ function helperParseAnswerHtml($htmlContent) {
     ];
 }
 
-// upload and parse zip/html exam files
+// upload và phân tích file zip/html đề thi
 function importAdminTest() {
     checkAdminAccess();
-    if (empty($_FILES['exam_file']['tmp_name']) || empty($_FILES['answer_file']['tmp_name'])) {
-        sendError("Vui lòng tải lên cả file đề thi và file đáp án", 400);
-    }
-    $examFile = $_FILES['exam_file']['tmp_name'];
-    $answerFile = $_FILES['answer_file']['tmp_name'];
     $isPremium = isset($_POST['is_premium']) && ($_POST['is_premium'] === '1' || $_POST['is_premium'] === 'true') ? 1 : 0;
+    $isSplit = isset($_POST['import_type']) && $_POST['import_type'] === 'split';
+
+    if ($isSplit) {
+        if (empty($_FILES['listening_file']['tmp_name']) || empty($_FILES['listening_answer_file']['tmp_name']) ||
+            empty($_FILES['reading_file']['tmp_name']) || empty($_FILES['reading_answer_file']['tmp_name'])) {
+            sendError("Vui lòng tải lên đầy đủ file đề và đáp án của cả Listening và Reading", 400);
+        }
+        $listeningFile = $_FILES['listening_file']['tmp_name'];
+        $listeningAnswerFile = $_FILES['listening_answer_file']['tmp_name'];
+        $readingFile = $_FILES['reading_file']['tmp_name'];
+        $readingAnswerFile = $_FILES['reading_answer_file']['tmp_name'];
+    } else {
+        if (empty($_FILES['exam_file']['tmp_name']) || empty($_FILES['answer_file']['tmp_name'])) {
+            sendError("Vui lòng tải lên cả file đề thi và file đáp án", 400);
+        }
+        $examFile = $_FILES['exam_file']['tmp_name'];
+        $answerFile = $_FILES['answer_file']['tmp_name'];
+    }
+
     $mediaFile = $_FILES['media_file']['tmp_name'] ?? null;
+    $mediaAnswerFile = $_FILES['media_answer_file']['tmp_name'] ?? null;
     $tempDir = __DIR__ . '/../../server/uploads/temp_import_' . uniqid();
     if (!is_dir($tempDir)) {
         mkdir($tempDir, 0777, true);
+        chmod($tempDir, 0777);
     }
     if ($mediaFile && is_uploaded_file($mediaFile)) {
         $zip = new ZipArchive();
@@ -694,11 +749,81 @@ function importAdminTest() {
             $zip->close();
         }
     }
+    if ($mediaAnswerFile && is_uploaded_file($mediaAnswerFile)) {
+        $zip = new ZipArchive();
+        if ($zip->open($mediaAnswerFile) === true) {
+            $zip->extractTo($tempDir);
+            $zip->close();
+        }
+    }
     try {
-        $examHtml = file_get_contents($examFile);
-        $answerHtml = file_get_contents($answerFile);
-        $examData = helperParseExamHtml($examHtml);
-        $answerData = helperParseAnswerHtml($answerHtml);
+        if ($isSplit) {
+            $listeningHtml = file_get_contents($listeningFile);
+            $listeningAnswerHtml = file_get_contents($listeningAnswerFile);
+            $readingHtml = file_get_contents($readingFile);
+            $readingAnswerHtml = file_get_contents($readingAnswerFile);
+
+            $listeningData = helperParseExamHtml($listeningHtml);
+            $listeningAnswerData = helperParseAnswerHtml($listeningAnswerHtml);
+            $readingData = helperParseExamHtml($readingHtml);
+            $readingAnswerData = helperParseAnswerHtml($readingAnswerHtml);
+
+            // dịch chuyển số câu reading lên +100 nếu chúng bắt đầu từ <= 100
+            foreach ($readingData['parts'] as &$part) {
+                if (isset($part['questions'])) {
+                    foreach ($part['questions'] as &$q) {
+                        if ((int)$q['question_number'] <= 100) {
+                            $q['question_number'] = (int)$q['question_number'] + 100;
+                        }
+                    }
+                    unset($q);
+                }
+                if (isset($part['passages'])) {
+                    foreach ($part['passages'] as &$passage) {
+                        if (isset($passage['questions'])) {
+                            foreach ($passage['questions'] as &$q) {
+                                if ((int)$q['question_number'] <= 100) {
+                                    $q['question_number'] = (int)$q['question_number'] + 100;
+                                }
+                            }
+                            unset($q);
+                        }
+                    }
+                    unset($passage);
+                }
+            }
+            unset($part);
+
+            if (!empty($readingAnswerData['answers'])) {
+                foreach ($readingAnswerData['answers'] as &$entry) {
+                    if ((int)$entry['question_number'] <= 100) {
+                        $entry['question_number'] = (int)$entry['question_number'] + 100;
+                    }
+                }
+            }
+            unset($entry);
+
+            // gộp parts và đáp án của listening + reading lại
+            $combinedTitle = $listeningData['title'] ?? 'Đề thi gộp';
+            $combinedTitle = str_replace(['Thi thử Listening', 'Listening', 'listening'], ['Thi thử Full', 'Full', 'full'], $combinedTitle);
+            $examData = [
+                'title' => $combinedTitle,
+                'duration' => 7200,
+                'parts' => array_merge($listeningData['parts'], $readingData['parts'])
+            ];
+            if (!empty($listeningData['audio_url'])) {
+                $examData['audio_url'] = $listeningData['audio_url'];
+            }
+            $answerData = [
+                'answers' => array_merge($listeningAnswerData['answers'] ?? [], $readingAnswerData['answers'] ?? [])
+            ];
+        } else {
+            $examHtml = file_get_contents($examFile);
+            $answerHtml = file_get_contents($answerFile);
+            $examData = helperParseExamHtml($examHtml);
+            $answerData = helperParseAnswerHtml($answerHtml);
+        }
+
         if (empty($examData['parts'])) {
             throw new Exception("File đề thi không hợp lệ hoặc không có dữ liệu câu hỏi");
         }
@@ -708,6 +833,7 @@ function importAdminTest() {
         $targetImageDir = __DIR__ . '/../../server/uploads/image/' . $slug;
         if (!is_dir($targetImageDir)) {
             mkdir($targetImageDir, 0777, true);
+            chmod($targetImageDir, 0777);
         }
         $copyImage = function($imgName, $newBaseName) use ($slug, $targetImageDir, $tempDir) {
             if (empty($imgName)) return null;
@@ -729,6 +855,7 @@ function importAdminTest() {
             'is_premium' => $isPremium
         ]);
         $testId = $conn->lastInsertId();
+        $totalQuestionsCount = 0;
         foreach ($examData['parts'] as $part) {
             $partNumber = $part['part_number'] ?? 1;
             if (isset($part['questions']) && is_array($part['questions'])) {
@@ -744,6 +871,7 @@ function importAdminTest() {
                         'correct_answer' => $q['correct_answer'] ?? 'A'
                     ]);
                     $questionId = $conn->lastInsertId();
+                    $totalQuestionsCount++;
                     if (isset($q['options']) && is_array($q['options'])) {
                         $stmtOpt = $conn->prepare("INSERT INTO options (question_id, label, content) VALUES (:question_id, :label, :content)");
                         foreach ($q['options'] as $opt) {
@@ -787,6 +915,7 @@ function importAdminTest() {
                                 'correct_answer' => $q['correct_answer'] ?? 'A'
                             ]);
                             $questionId = $conn->lastInsertId();
+                            $totalQuestionsCount++;
                             if (isset($q['options']) && is_array($q['options'])) {
                                 $stmtOpt = $conn->prepare("INSERT INTO options (question_id, label, content) VALUES (:question_id, :label, :content)");
                                 foreach ($q['options'] as $opt) {
@@ -802,6 +931,8 @@ function importAdminTest() {
                 }
             }
         }
+        $stmtUpdateTotalQ = $conn->prepare("UPDATE tests SET total_questions = ? WHERE id = ?");
+        $stmtUpdateTotalQ->execute([$totalQuestionsCount, $testId]);
         if (!empty($answerData['answers'])) {
             $stmtUpdate = $conn->prepare("UPDATE questions SET correct_answer = ? WHERE test_id = ? AND question_number = ?");
             $stmtCheck = $conn->prepare("SELECT id FROM questions WHERE test_id = ? AND question_number = ? LIMIT 1");
@@ -869,7 +1000,7 @@ function importAdminTest() {
     }
 }
 
-// approve/activate draft test
+// duyệt và kích hoạt đề thi nháp
 function activateAdminTest($uuid) {
     global $conn;
     checkAdminAccess();
