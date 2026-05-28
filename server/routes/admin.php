@@ -1,6 +1,6 @@
 <?php
 /**
- * Router for admin API endpoints
+ * Router cho admin API endpoints
  */
 
 require_once __DIR__ . '/../controllers/admin-controller.php';

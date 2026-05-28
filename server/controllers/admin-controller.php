@@ -51,6 +51,8 @@ function getAdminUsers() {
     $limit = isset($_GET['limit']) ? max(1, (int)$_GET['limit']) : 10;
     $offset = ($page - 1) * $limit;
     $q = isset($_GET['q']) ? trim($_GET['q']) : '';
+    $role_filter = isset($_GET['role']) ? trim($_GET['role']) : '';
+    $status_filter = isset($_GET['status']) ? trim($_GET['status']) : '';
 
     try {
         // tính toán thống kê nhỏ cho tab user
@@ -58,12 +60,31 @@ function getAdminUsers() {
         $new_users = (int)$conn->query("SELECT COUNT(*) FROM users WHERE created_at >= DATE_FORMAT(NOW(), '%Y-%m-01')")->fetchColumn();
         $inactive_users = (int)$conn->query("SELECT COUNT(*) FROM users WHERE id NOT IN (SELECT DISTINCT user_id FROM attempts WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY))")->fetchColumn();
 
-        // chuẩn bị truy vấn tìm kiếm
-        $where_clause = "";
+        // chuẩn bị truy vấn tìm kiếm và lọc
+        $where_clauses = [];
         $params = [];
+        
         if ($q !== '') {
-            $where_clause = " WHERE email LIKE :q OR first_name LIKE :q OR last_name LIKE :q";
+            $where_clauses[] = "(email LIKE :q OR first_name LIKE :q OR last_name LIKE :q)";
             $params['q'] = '%' . $q . '%';
+        }
+        
+        if ($role_filter !== '') {
+            $where_clauses[] = "role = :role";
+            $params['role'] = $role_filter;
+        }
+        
+        if ($status_filter !== '') {
+            if ($status_filter === 'banned') {
+                $where_clauses[] = "is_banned = 1";
+            } elseif ($status_filter === 'active') {
+                $where_clauses[] = "is_banned = 0";
+            }
+        }
+        
+        $where_clause = "";
+        if (count($where_clauses) > 0) {
+            $where_clause = " WHERE " . implode(" AND ", $where_clauses);
         }
 
         // lấy tổng số lượng người dùng khớp tìm kiếm
@@ -72,7 +93,9 @@ function getAdminUsers() {
         $total_filtered = (int)$count_stmt->fetchColumn();
 
         // lấy danh sách người dùng
-        $sql = "SELECT id, uuid, first_name, last_name, email, role, is_banned, is_premium, has_course, premium_plan, premium_until, created_at 
+        $sql = "SELECT id, uuid, first_name, last_name, email, role, is_banned, is_premium, has_course, premium_plan, premium_until, created_at,
+                       (SELECT COUNT(DISTINCT a2.test_id) FROM attempts a2 WHERE a2.user_id = users.id) AS user_tests_attempted,
+                       (SELECT COUNT(*) FROM tests WHERE is_active = 1) AS total_active_tests
                 FROM users" . $where_clause . " ORDER BY id DESC LIMIT :limit OFFSET :offset";
         
         $stmt = $conn->prepare($sql);
