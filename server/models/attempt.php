@@ -94,16 +94,27 @@ function submitAndGrade($conn, $user_id, $test_uuid, $user_answers, $time_spent)
 			return false;
 		$test_id = $test['id'];
 
-		// 2. Lấy đáp án chuẩn
+		// lấy đáp án chuẩn từ database
 		$stmt = $conn->prepare("SELECT id, correct_answer, part FROM questions WHERE test_id = ?");
 		$stmt->execute([$test_id]);
 		$correct_answers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		// đếm tổng số câu listening và reading trong đề thi
+		$total_l = 0;
+		$total_r = 0;
+		foreach ($correct_answers as $row) {
+			if ((int)$row['part'] <= 4) {
+				$total_l++;
+			} else {
+				$total_r++;
+			}
+		}
 
 		$l_correct = 0;
 		$r_correct = 0;
 		$details_data = [];
 
-		// 3. Chấm điểm dựa trên Question ID (Không dùng số thứ tự câu)
+		// chấm điểm dựa trên question id (không dùng số thứ tự câu)
 		foreach ($correct_answers as $row) {
 			$qId = $row['id'];
 			$correct = $row['correct_answer'];
@@ -126,9 +137,21 @@ function submitAndGrade($conn, $user_id, $test_uuid, $user_answers, $time_spent)
 			];
 		}
 
-		// 4. Quy đổi điểm
-		$l_score = calculateToeicScore($l_correct);
-		$r_score = calculateToeicScore($r_correct);
+		// quy đổi điểm
+		if ($total_l > 0) {
+			$scaled_l = (int)round(($l_correct / $total_l) * 100);
+			$l_score = calculateToeicScore($scaled_l);
+		} else {
+			$l_score = 0;
+		}
+
+		if ($total_r > 0) {
+			$scaled_r = (int)round(($r_correct / $total_r) * 100);
+			$r_score = calculateToeicScore($scaled_r);
+		} else {
+			$r_score = 0;
+		}
+
 		$total_score = $l_score + $r_score;
 
 		// 5. Lưu vào attempts
