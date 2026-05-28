@@ -215,9 +215,14 @@ $test_id = $_GET['test_id'] ?? '';
                         </div>
                         <h1 class="page-title">Danh Sách Đề Thi</h1>
                     </div>
-                    <a href="admin.php?section=tests&action=create" class="btn-primary">
-                        <i class="bx bx-plus"></i> Tạo Bài Thi Mới
-                    </a>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-primary" style="background-color: var(--accent-orange); cursor: pointer;" id="openImportModalBtn">
+                            <i class="bx bx-upload"></i> Import Đề từ HTML
+                        </button>
+                        <a href="admin.php?section=tests&action=create" class="btn-primary">
+                            <i class="bx bx-plus"></i> Tạo Bài Thi Mới
+                        </a>
+                    </div>
                 </div>
 
                 <div class="filter-toolbar">
@@ -280,6 +285,49 @@ $test_id = $_GET['test_id'] ?? '';
                                 <button type="button" class="btn-danger" id="btnDelete" style="margin-right: auto;">Xóa</button>
                                 <button type="button" class="btn-primary" style="background-color: var(--text-secondary);" id="cancelModalBtn">Hủy</button>
                                 <button type="submit" class="btn-primary">Lưu lại</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- modal import đề thi từ html -->
+                <div class="modal-overlay" id="importModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Import Đề Thi từ HTML</h3>
+                            <button class="close-btn" id="closeImportModalBtn">&times;</button>
+                        </div>
+                        <form id="importForm" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>File HTML đề thi <span style="color: var(--accent-red);">*</span></label>
+                                    <input type="file" id="import_exam_file" name="exam_file" accept=".html" required>
+                                    <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp đề thi lưu dạng "Web Page, Complete" (.html)</small>
+                                </div>
+                                <div class="form-group" style="margin-top: 12px;">
+                                    <label>File HTML đáp án <span style="color: var(--accent-red);">*</span></label>
+                                    <input type="file" id="import_answer_file" name="answer_file" accept=".html" required>
+                                    <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp đáp án tương ứng lưu dạng .html</small>
+                                </div>
+                                <div class="form-group" style="margin-top: 12px;">
+                                    <label>File ZIP hình ảnh / âm thanh (không bắt buộc)</label>
+                                    <input type="file" id="import_media_file" name="media_file" accept=".zip">
+                                    <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp nén .zip chứa thư mục `_files` của trang web đề thi</small>
+                                </div>
+                                <div class="checkbox-group-wrapper" style="margin-top: 16px;">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="import_premium" name="is_premium" value="1">
+                                        <label for="import_premium">Đặt là đề thi Premium</label>
+                                    </div>
+                                </div>
+                                <div id="importLoading" style="display: none; text-align: center; margin-top: 15px; color: var(--accent-blue); font-weight: 600;">
+                                    <i class="bx bx-loader-alt bx-spin" style="margin-right: 5px;"></i> Đang giải nén & import đề thi, vui lòng đợi...
+                                </div>
+                                <div id="importMessage" style="display: none; margin-top: 15px; padding: 10px; border-radius: 6px; font-size: 13px;"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn-primary" style="background-color: var(--text-secondary);" id="cancelImportModalBtn">Hủy</button>
+                                <button type="submit" class="btn-primary" id="btnSubmitImport">Xử lý & Import</button>
                             </div>
                         </form>
                     </div>

@@ -448,6 +448,11 @@ tr:hover td {
     color: var(--accent-blue);
 }
 
+.badge.warning, .badge.draft {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--accent-orange);
+}
+
 /* nút hành động dạng gọn */
 .btn-primary {
     background-color: var(--accent-blue);
@@ -742,4 +747,34 @@ tr:hover td {
     .logout-link {
         justify-content: center;
     }
+}
+
+/* spinning animation for import loader */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.bx-spin {
+    animation: spin 2s linear infinite;
+}
+
+/* import message styles */
+.import-message-box {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.import-message-box.success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--accent-green);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.import-message-box.error {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--accent-red);
+    border: 1px solid rgba(239, 68, 68, 0.2);
 }
