@@ -1,5 +1,5 @@
 /* ================= CƠ BẢN ================= */
-body {
+.container-wrapper {
     font-family: Arial, sans-serif;
     padding: 20px;
     background: #f4f7f6;
@@ -22,7 +22,7 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.btn {
+.container-wrapper .btn {
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
@@ -33,11 +33,11 @@ body {
     transition: 0.2s;
 }
 
-.btn:hover {
+.container-wrapper .btn:hover {
     opacity: 0.8;
 }
 
-.btn-add {
+.container-wrapper .btn-add {
     background: #4CAF50;
 }
 
@@ -84,7 +84,7 @@ body {
     background-color: #f0f7ff;
 }
 
-.badge {
+.container-wrapper .badge {
     display: inline-block;
     padding: 5px 10px;
     border-radius: 12px;
@@ -93,12 +93,12 @@ body {
     margin-bottom: 15px;
 }
 
-.badge.single {
+.container-wrapper .badge.single {
     background: #e8f5e9;
     color: #2e7d32;
 }
 
-.badge.group {
+.container-wrapper .badge.group {
     background: #e3f2fd;
     color: #1565c0;
 }
@@ -377,11 +377,11 @@ textarea.form-control {
     padding: 20px;
 }
 
-.bx {
+.container-wrapper .bx {
     font-size: 1.5rem;
 }
 
-:root {
+.container-wrapper {
 	--primary-color: #4f46e5;
 	--primary-hover: #4338ca;
 	--card-bg: #fff;
@@ -390,8 +390,8 @@ textarea.form-control {
 	--danger-color: #ef4444;
 }
 
-/* Form Section Styling */
-.form-section {
+/* form section styling */
+.container-wrapper .form-section {
 	background-color: var(--card-bg);
 	padding: 20px 25px;
 	border-radius: 8px;
@@ -400,19 +400,19 @@ textarea.form-control {
 	border-left: 5px solid #4caf50;
 }
 
-.form-section h3 {
+.container-wrapper .form-section h3 {
 	border-bottom: 1px solid var(--border-color);
 	padding-bottom: 10px;
 	margin-bottom: 20px;
 }
 
-.form-grid {
+.container-wrapper .form-grid {
 	display: grid;
 	grid-template-columns: 2fr 1fr;
 	gap: 15px;
 }
 
-.form-group {
+.container-wrapper .form-group {
 	display: flex;
 	flex-direction: column;
 	margin-bottom: 15px;
@@ -468,12 +468,12 @@ textarea.form-control {
 	gap: 20px;
 }
 
-.checkbox-group {
+.container-wrapper .checkbox-group {
 	display: flex;
 	align-items: center;
 }
 
-.checkbox-group input[type="checkbox"] {
+.container-wrapper .checkbox-group input[type="checkbox"] {
 	width: 16px;
 	height: 16px;
 	margin-right: 8px;
@@ -481,7 +481,7 @@ textarea.form-control {
 	accent-color: var(--primary-color);
 }
 
-.checkbox-group label {
+.container-wrapper .checkbox-group label {
 	cursor: pointer;
 	font-weight: normal;
 	margin-bottom: 0;
