@@ -299,20 +299,64 @@ $test_id = $_GET['test_id'] ?? '';
                         </div>
                         <form id="importForm" enctype="multipart/form-data">
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label>File HTML đề thi <span style="color: var(--accent-red);">*</span></label>
-                                    <input type="file" id="import_exam_file" name="exam_file" accept=".html" required>
-                                    <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp đề thi lưu dạng "Web Page, Complete" (.html)</small>
+                                <div class="form-group" style="margin-bottom: 16px;">
+                                    <label style="font-weight: 600; display: block; margin-bottom: 8px;">Loại hình đề thi</label>
+                                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                                        <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; margin-bottom: 0;">
+                                            <input type="radio" name="import_type" value="single" checked style="width: auto; height: auto; margin: 0;">
+                                            <span>Đề Đơn (Nghe, Đọc hoặc đề gộp sẵn)</span>
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; margin-bottom: 0;">
+                                            <input type="radio" name="import_type" value="split" style="width: auto; height: auto; margin: 0;">
+                                            <span>Đề Ghép (Listening + Reading tách rời)</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div id="single-files-group">
+                                    <div class="form-group">
+                                        <label>File HTML đề thi <span style="color: var(--accent-red);">*</span></label>
+                                        <input type="file" id="import_exam_file" name="exam_file" accept=".html" required>
+                                        <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp đề thi lưu dạng "Web Page, Complete" (.html)</small>
+                                    </div>
+                                    <div class="form-group" style="margin-top: 12px;">
+                                        <label>File HTML đáp án <span style="color: var(--accent-red);">*</span></label>
+                                        <input type="file" id="import_answer_file" name="answer_file" accept=".html" required>
+                                        <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp đáp án tương ứng lưu dạng .html</small>
+                                    </div>
+                                </div>
+
+                                <div id="split-files-group" style="display: none;">
+                                    <div class="form-group">
+                                        <label>File HTML Listening đề thi <span style="color: var(--accent-red);">*</span></label>
+                                        <input type="file" id="import_listening_file" name="listening_file" accept=".html">
+                                        <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp đề thi Listening lưu dạng .html</small>
+                                    </div>
+                                    <div class="form-group" style="margin-top: 12px;">
+                                        <label>File HTML Listening đáp án <span style="color: var(--accent-red);">*</span></label>
+                                        <input type="file" id="import_listening_answer_file" name="listening_answer_file" accept=".html">
+                                        <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp đáp án Listening lưu dạng .html</small>
+                                    </div>
+                                    <div class="form-group" style="margin-top: 12px;">
+                                        <label>File HTML Reading đề thi <span style="color: var(--accent-red);">*</span></label>
+                                        <input type="file" id="import_reading_file" name="reading_file" accept=".html">
+                                        <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp đề thi Reading lưu dạng .html</small>
+                                    </div>
+                                    <div class="form-group" style="margin-top: 12px;">
+                                        <label>File HTML Reading đáp án <span style="color: var(--accent-red);">*</span></label>
+                                        <input type="file" id="import_reading_answer_file" name="reading_answer_file" accept=".html">
+                                        <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp đáp án Reading lưu dạng .html</small>
+                                    </div>
                                 </div>
                                 <div class="form-group" style="margin-top: 12px;">
-                                    <label>File HTML đáp án <span style="color: var(--accent-red);">*</span></label>
-                                    <input type="file" id="import_answer_file" name="answer_file" accept=".html" required>
-                                    <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp đáp án tương ứng lưu dạng .html</small>
-                                </div>
-                                <div class="form-group" style="margin-top: 12px;">
-                                    <label>File ZIP hình ảnh / âm thanh (không bắt buộc)</label>
+                                    <label>File ZIP hình ảnh / âm thanh đề thi (không bắt buộc)</label>
                                     <input type="file" id="import_media_file" name="media_file" accept=".zip">
-                                    <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp nén .zip chứa thư mục `_files` của trang web đề thi</small>
+                                    <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp nén .zip chứa thư mục media của trang đề thi</small>
+                                </div>
+                                <div class="form-group" style="margin-top: 12px;">
+                                    <label>File ZIP hình ảnh / âm thanh đáp án (không bắt buộc)</label>
+                                    <input type="file" id="import_media_answer_file" name="media_answer_file" accept=".zip">
+                                    <small style="color: var(--text-secondary); margin-top: 4px; font-size: 11px;">Tệp nén .zip chứa thư mục media của trang đáp án</small>
                                 </div>
                                 <div class="checkbox-group-wrapper" style="margin-top: 16px;">
                                     <div class="checkbox-group">

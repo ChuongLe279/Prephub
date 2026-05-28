@@ -819,10 +819,46 @@ document.addEventListener("DOMContentLoaded", () => {
     const importLoading = document.getElementById('importLoading');
     const importMessage = document.getElementById('importMessage');
 
+    const importRadios = document.querySelectorAll('input[name="import_type"]');
+    const singleFilesGroup = document.getElementById('single-files-group');
+    const splitFilesGroup = document.getElementById('split-files-group');
+    const importExamFile = document.getElementById('import_exam_file');
+    const importAnswerFile = document.getElementById('import_answer_file');
+    const importListeningFile = document.getElementById('import_listening_file');
+    const importListeningAnswerFile = document.getElementById('import_listening_answer_file');
+    const importReadingFile = document.getElementById('import_reading_file');
+    const importReadingAnswerFile = document.getElementById('import_reading_answer_file');
+
+    const handleImportTypeChange = () => {
+        const selectedType = document.querySelector('input[name="import_type"]:checked')?.value || 'single';
+        if (selectedType === 'single') {
+            if (singleFilesGroup) singleFilesGroup.style.display = 'block';
+            if (splitFilesGroup) splitFilesGroup.style.display = 'none';
+            if (importExamFile) importExamFile.required = true;
+            if (importAnswerFile) importAnswerFile.required = true;
+            if (importListeningFile) importListeningFile.required = false;
+            if (importListeningAnswerFile) importListeningAnswerFile.required = false;
+            if (importReadingFile) importReadingFile.required = false;
+            if (importReadingAnswerFile) importReadingAnswerFile.required = false;
+        } else {
+            if (singleFilesGroup) singleFilesGroup.style.display = 'none';
+            if (splitFilesGroup) splitFilesGroup.style.display = 'block';
+            if (importExamFile) importExamFile.required = false;
+            if (importAnswerFile) importAnswerFile.required = false;
+            if (importListeningFile) importListeningFile.required = true;
+            if (importListeningAnswerFile) importListeningAnswerFile.required = true;
+            if (importReadingFile) importReadingFile.required = true;
+            if (importReadingAnswerFile) importReadingAnswerFile.required = true;
+        }
+    };
+
+    importRadios.forEach(radio => radio.addEventListener('change', handleImportTypeChange));
+
     const openImportModal = () => {
         if (importModal) {
             importModal.classList.add('show');
             if (importForm) importForm.reset();
+            handleImportTypeChange();
             if (importMessage) {
                 importMessage.style.display = 'none';
                 importMessage.className = 'import-message-box';
