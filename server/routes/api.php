@@ -13,6 +13,10 @@ switch ($resource) {
 		require_once __DIR__ . '/auth.php';
 		break;
 
+	case 'admin':
+		require_once __DIR__ . '/admin.php';
+		break;
+
 	case 'tests':
 		require_once __DIR__ . '/tests.php';
 		break;
