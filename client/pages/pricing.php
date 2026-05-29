@@ -530,11 +530,6 @@ $userTier = $planTier[$currentPlan] ?? 0;
 						<p class="faq-subtitle">Tìm câu trả lời cho các câu hỏi thường gặp về Prephub, bao gồm tính
 							năng, gói học và các hình thức thanh toán.</p>
 					</div>
-
-					<div class="faq-actions">
-						<a href="#" class="faq-btn faq-btn-primary">Xem tất cả</a>
-						<a href="#" class="faq-btn faq-btn-outline">Liên hệ với chúng tôi</a>
-					</div>
 				</div>
 			</div>
 
