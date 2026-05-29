@@ -303,3 +303,7 @@
 @media (max-width: 600px) {
     .grid-free, .grid-premium { grid-template-columns: 1fr; }
 }
+.page .container-fluid {
+    padding-left: 55px;  
+    padding-right: 55px; 
+}
