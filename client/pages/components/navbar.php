@@ -37,7 +37,7 @@ $isPricing = ($currentPage === 'pricing.php' || $currentPage === 'billing.php');
 			<!-- links: centered -->
 			<ul class="navbar-nav nav-center">
 				<li class="nav-item"><a class="nav-link<?= $isHome ? ' active' : '' ?>" href="home.php">Trang chủ</a></li>
-				<li class="nav-item"><a class="nav-link<?= $isExam ? ' active' : '' ?>" href="exam.php">Đề thi</a></li>
+				<li class="nav-item"><a class="nav-link<?= $isExam ? ' active' : '' ?>" href="tests.php">Đề thi</a></li>
 				<li class="nav-item"><a class="nav-link<?= $isIntro ? ' active' : '' ?>" href="tos.php?tab=gioi-thieu">Giới thiệu</a></li>
 				<li class="nav-item"><a class="nav-link<?= $isPricing ? ' active' : '' ?>" href="pricing.php">Nâng cấp</a></li>
 				<div class="nav-indicator" id="navIndicator" style="opacity: 0;"></div>
