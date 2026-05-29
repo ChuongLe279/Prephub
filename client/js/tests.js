@@ -24,10 +24,10 @@ async function load_tests() {
         allTests = activeTests.map((test, index) => {
             if (test.is_premium == false) {
                 // Đề Free: Đánh số thứ tự
-                test.displayTitle = `Đề thi kiểm tra năng lực số ${index + 1}`;
+                test.displayTitle = `Đề thi TOEIC số ${index + 1}`;
             } else {
                 // Đề Premium: Cố định 1 tên duy nhất theo yêu cầu
-                test.displayTitle = `Đề thi ôn cấp tốc TOEIC 2026`;
+                test.displayTitle = `Đề thi độc quyền TOEIC 2026 số ${index + 1}`;
             }
             // Sinh số ngẫu nhiên nếu database chưa có
             test.attempt_count = test.attempt_count || Math.floor(Math.random() * 5000) + 1000;
