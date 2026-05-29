@@ -27,7 +27,7 @@ async function load_tests() {
                 test.displayTitle = `Đề thi kiểm tra năng lực số ${index + 1}`;
             } else {
                 // Đề Premium: Cố định 1 tên duy nhất theo yêu cầu
-                test.displayTitle = `Đề thi ôn cấp tốc TOEIC số ${index + 1}`;
+                test.displayTitle = `Đề thi ôn cấp tốc TOEIC số 2026`;
             }
             // Sinh số ngẫu nhiên nếu database chưa có
             test.attempt_count = test.attempt_count || Math.floor(Math.random() * 5000) + 1000;
