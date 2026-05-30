@@ -64,6 +64,23 @@ require_once '../../server/middleware/auth.php';
                 <!-- Ô đề thi PREMIUM------------------------------------------------------>
 
             </div>
+            <div class="modal fade" id="confirmExamModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" style="border: none; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <div class="modal-header" style="border-bottom: 0.5px solid #eaeaea; padding: 1.25rem 1.5rem;">
+                            <h5 class="modal-title" style="font-weight: 700; color: #05102B; font-size: 18px;">Xác nhận làm bài</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" style="padding: 1.5rem; color: #555; font-size: 15px;">
+                            Bạn đã sẵn sàng bắt đầu làm bài thi chưa? Thời gian đếm ngược sẽ được tính ngay khi bạn vào trang.
+                        </div>
+                        <div class="modal-footer" style="border-top: none; padding: 1rem 1.5rem 1.5rem;">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: #f0f2f5; color: #444; border: none; font-weight: 600; padding: 8px 16px;">Hủy</button>
+                            <a href="#" id="btnConfirmStartExam" class="btn btn-primary" style="background: #05102B; color: #fff; border: none; font-weight: 600; padding: 8px 16px;">Bắt đầu ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
