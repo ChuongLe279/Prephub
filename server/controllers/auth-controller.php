@@ -54,6 +54,11 @@ function handleRegister() {
         return;
     }
 
+    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        authResponse(false, "Email không hợp lệ. Vui lòng nhập đúng định dạng email.", "/client/pages/home.php", "register_error");
+        return;
+    }
+
     if (strlen($data["password"]) < 8) {
         authResponse(false, "Mật khẩu phải có ít nhất 8 ký tự.", "/client/pages/home.php", "register_error");
         return;
