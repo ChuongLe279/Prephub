@@ -81,6 +81,15 @@ function handleRegister() {
     $password_hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
     try {
+        // Xóa tài khoản chưa kích hoạt quá 15 phút của chính email đang đăng ký lại
+        $deleteExpired = $conn->prepare(" DELETE FROM users
+                                        WHERE email = :email
+                                        AND account_activation_hash IS NOT NULL
+                                        AND created_at < DATE_SUB(NOW(), INTERVAL 15 MINUTE)");
+        $deleteExpired->execute([
+            'email' => $data['email']
+        ]);
+
         // kiểm tra email đã tồn tại chưa
         $stmt = $conn->prepare("SELECT email FROM users WHERE email = :email");
         $stmt->execute(['email' => $data['email']]);
