@@ -70,6 +70,7 @@
   justify-content: center;
   z-index: 2;
   background: #fafafa;
+  overflow-y: auto;
 }
 
 .sign-up-side {
@@ -223,6 +224,26 @@
   width: 100%;
   max-width: 400px;
   align-self: center;
+}
+
+.sign-up-side .auth-container {
+  align-self: flex-start;
+}
+
+.sign-up-side .auth-header h1 {
+  margin-bottom: 28px;
+}
+
+.sign-up-side .auth-header p {
+  margin-bottom: 32px;
+}
+
+.sign-up-side .input-group-glass {
+  margin-bottom: 14px;
+}
+
+.sign-up-side .btn-auth-submit {
+  margin-bottom: 14px;
 }
 
 .auth-header h1 {

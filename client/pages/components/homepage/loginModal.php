@@ -118,7 +118,7 @@
                                 <div class="input-group-glass">
                                     <label>Mật khẩu</label>
                                     <div class="input-wrapper relative">
-                                        <input type="password" name="password" id="password" placeholder="••••••••" required>
+                                        <input type="password" name="password" id="password" placeholder="••••••••" minlength="8" required>
                                         <button type="button" class="eye-toggle">
                                             <img src="../img/eye_close.png" alt="view" class="eye-icon">
                                         </button>
@@ -128,8 +128,10 @@
                                 <div class="input-group-glass">
                                     <label>Nhập lại mật khẩu</label>
                                     <div class="input-wrapper relative">
-                                        <input type="password" name="reenter_password" id="signupRePass" placeholder="••••••••" required>
-                                        <button type="button" class="eye-toggle"><i class='bx bx-hide'></i></button>
+                                        <input type="password" name="reenter_password" id="signupRePass" placeholder="••••••••" minlength="8" required>
+                                        <button type="button" class="eye-toggle">
+                                            <img src="../img/eye_close.png" alt="view" class="eye-icon">
+                                        </button>
                                     </div>
                                 </div>
 
@@ -387,41 +389,83 @@ document.addEventListener('DOMContentLoaded', () => {
             signupStatus.style.display = message ? 'block' : 'none';
         };
 
-        const clearPasswordMismatch = () => {
+        const validateSignupPassword = () => {
+            if (!signupPassword) return '';
+
+            const password = signupPassword.value;
+            if (password.length < 8) {
+                return 'Mật khẩu phải có ít nhất 8 ký tự.';
+            }
+
+            if (!/[a-z]/i.test(password)) {
+                return 'Mật khẩu phải có ít nhất 1 chữ cái.';
+            }
+
+            if (!/[0-9]/.test(password)) {
+                return 'Mật khẩu phải có ít nhất 1 số.';
+            }
+
+            return '';
+        };
+
+        const clearSignupValidation = () => {
             if (signupPassword) signupPassword.removeAttribute('aria-invalid');
             if (signupRePass) signupRePass.removeAttribute('aria-invalid');
             setSignupStatus('');
         };
 
+        const updateSignupPasswordStatus = () => {
+            if (!signupPassword || !signupRePass) return true;
+
+            signupPassword.removeAttribute('aria-invalid');
+            signupRePass.removeAttribute('aria-invalid');
+
+            if (!signupPassword.value && !signupRePass.value) {
+                setSignupStatus('');
+                return true;
+            }
+
+            const passwordError = validateSignupPassword();
+            if (passwordError) {
+                signupPassword.setAttribute('aria-invalid', 'true');
+                setSignupStatus(passwordError);
+                return false;
+            }
+
+            if (signupRePass.value && signupPassword.value !== signupRePass.value) {
+                signupPassword.setAttribute('aria-invalid', 'true');
+                signupRePass.setAttribute('aria-invalid', 'true');
+                setSignupStatus('Mật khẩu nhập lại không khớp!');
+                return false;
+            }
+
+            setSignupStatus('Mật khẩu hợp lệ.', 'success');
+            return true;
+        };
+
         [signupPassword, signupRePass].forEach((input) => {
             if (!input) return;
-            input.addEventListener('input', () => {
-                if (!signupPassword || !signupRePass) return;
-                if (!signupPassword.value || !signupRePass.value || signupPassword.value === signupRePass.value) {
-                    clearPasswordMismatch();
-                }
-            });
+            input.addEventListener('input', updateSignupPasswordStatus);
         });
 
         signupForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            if (signupPassword && signupRePass && signupPassword.value !== signupRePass.value) {
-                signupPassword.setAttribute('aria-invalid', 'true');
-                signupRePass.setAttribute('aria-invalid', 'true');
-                setSignupStatus('Mật khẩu nhập lại không khớp. Vui lòng kiểm tra lại.');
-                signupRePass.focus();
+            if (!updateSignupPasswordStatus()) {
+                if (signupPassword && signupPassword.hasAttribute('aria-invalid')) {
+                    signupPassword.focus();
+                } else if (signupRePass) {
+                    signupRePass.focus();
+                }
                 return;
             }
 
-            clearPasswordMismatch();
+            clearSignupValidation();
 
             const submitButton = signupForm.querySelector('button[type="submit"]');
             const formData = new FormData(signupForm);
             if (submitButton) submitButton.disabled = true;
-            registerSuccessNotice.style.display = 'block';
-            signupForm.reset();
-            signupForm.style.display = 'none';
+            registerSuccessNotice.style.display = 'none';
 
             try {
                 const response = await fetch(signupForm.action, {
@@ -434,11 +478,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json().catch(() => ({}));
 
                 if (!response.ok || result.success === false) {
-                    console.error(result.message || 'Dang ky khong thanh cong.');
+                    setSignupStatus(result.message || 'Đăng ký không thành công. Vui lòng thử lại.');
                     return;
                 }
+
+                registerSuccessNotice.style.display = 'block';
+                signupForm.reset();
+                signupForm.style.display = 'none';
             } catch (error) {
                 console.error('Register request failed.', error);
+                setSignupStatus('Không gửi được email xác thực. Vui lòng thử lại sau.');
             } finally {
                 if (submitButton) submitButton.disabled = false;
             }

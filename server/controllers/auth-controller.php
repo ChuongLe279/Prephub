@@ -55,7 +55,7 @@ function handleRegister() {
     }
 
     if (strlen($data["password"]) < 8) {
-        authResponse(false, "Mật khẩu phải dài hơn 8 ký tự.", "/client/pages/home.php", "register_error");
+        authResponse(false, "Mật khẩu phải có ít nhất 8 ký tự.", "/client/pages/home.php", "register_error");
         return;
     }
 
@@ -65,7 +65,7 @@ function handleRegister() {
     }
 
     if (!preg_match("/[0-9]/", $data["password"])) {
-        authResponse(false, "Mật khẩu phải trùng nhau", "/client/pages/home.php", "register_error");
+        authResponse(false, "Mật khẩu phải có ít nhất 1 số.", "/client/pages/home.php", "register_error");
         return;
     }
 
@@ -123,8 +123,12 @@ function handleRegister() {
                 try{
                     $mail->send();
                 }catch (Exception $exception){
-                    echo "Không gửi được. Mail error: {$mail->ErrorInfo}";
-                    exit;
+                    error_log("Register verification email failed: {$mail->ErrorInfo}");
+                    $cleanup = $conn->prepare("DELETE FROM users WHERE account_activation_hash = :account_activation_hash");
+                    $cleanup->execute([
+                        'account_activation_hash' => $token_hash
+                    ]);
+                    sendError("Không gửi được email xác thực. Vui lòng thử lại sau.", 500);
                 }
             }
             $_SESSION['active_form'] = 'login';
