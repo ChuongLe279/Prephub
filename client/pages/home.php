@@ -25,7 +25,8 @@ unset($_SESSION['login_error'], $_SESSION['register_error'], $_SESSION['register
 
 <body>
 
-	<?php $navbarMode = 'dark'; include './components/navbar.php'; ?>
+	<?php $navbarMode = 'dark';
+	include './components/navbar.php'; ?>
 
 	<?php include './components/homepage/hero.php'; ?>
 
@@ -46,7 +47,7 @@ unset($_SESSION['login_error'], $_SESSION['register_error'], $_SESSION['register
 			const toggleContainer = document.getElementById('priceToggle');
 			const monthlyBtn = document.getElementById('monthlyBtn');
 			const yearlyBtn = document.getElementById('yearlyBtn');
-			
+
 			if (toggleContainer && monthlyBtn && yearlyBtn) {
 				const priceAmounts = document.querySelectorAll('#pricing .price-amount');
 				const pricePeriods = document.querySelectorAll('#pricing .price-period');
@@ -129,7 +130,9 @@ unset($_SESSION['login_error'], $_SESSION['register_error'], $_SESSION['register
 			}
 		});
 	</script>
-
+	<script>
+		window.isUserLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+	</script>
 </body>
 
 </html>

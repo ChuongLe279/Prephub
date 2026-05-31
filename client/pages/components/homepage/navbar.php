@@ -20,7 +20,7 @@
 			<!-- links: centered -->
 			<ul class="navbar-nav nav-center">
 				<li class="nav-item"><a class="nav-link active" href="home.php">Trang chủ</a></li>
-				<li class="nav-item"><a class="nav-link" href="exam.php">Đề thi</a></li>
+				<li class="nav-item"><a class="nav-link" href="#tests">Đề thi</a></li>
 				<li class="nav-item"><a class="nav-link" href="#about">Giới thiệu</a></li>
 				<li class="nav-item"><a class="nav-link" href="#pricing">Nâng cấp</a></li>
 				<div class="nav-indicator" id="navIndicator"></div>

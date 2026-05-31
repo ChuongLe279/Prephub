@@ -52,24 +52,6 @@ function getTestList() {
         $stmt->execute();
         $tests = $stmt->fetchAll();
 
-        // lấy danh sách ID các bài test đã mua
-        $paid_map = [];
-		// vì admin đã auto unlock hết nên không cần check cho admin nữa
-        if ($user_id && $role !== 'admin') {
-            $stmt_pay = $conn->prepare("SELECT test_id FROM payments WHERE user_id = :uid");
-            $stmt_pay->execute(['uid' => $user_id]);
-            $paid_map = $stmt_pay->fetchAll(PDO::FETCH_COLUMN);
-			// array trong php nó có dạng là key => value
-			// lật ngược lại sẽ là value => key
-			// nếu mình giữ nguyên như ban đầu mà không lật thì chỉ có thể check theo key, 
-			// mà key thì không phải giá trị cần tìm
-			// Ví dụ như: trong mảng ta có 101, nếu ta tìm paid_map[101] thì nó sẽ trả về false
-			// vì nó tìm tới index thứ 101 chứ không phải giá trị 101 đã có
-			// khi ta lật lại, value thành key, check key tìm paid_map[101] -> tồn tại
-			// khi đó mình sẽ dùng isset($paid_map[$test_id]), nó như hash map vậy
-            $paid_map = array_flip($paid_map);
-        }
-
         // gói subscription (pro, ultra...) unlock hết đề premium
         // course-only không được, chỉ dùng cho khoá học
         $sub_plans    = ['pro', 'pro_year', 'ultra', 'ultra_year'];
@@ -81,8 +63,8 @@ function getTestList() {
             $test_id    = (int)$test['id'];
             $is_premium = (bool)$test['is_premium'];
 
-            // unlock nếu: admin | đề free | có gói sub | đã mua lẻ
-            $is_unlocked = ($role === 'admin') || !$is_premium || $has_sub_plan || isset($paid_map[$test_id]);
+            // unlock nếu: admin | đề free | có gói sub
+            $is_unlocked = ($role === 'admin') || !$is_premium || $has_sub_plan;
 
             $formatted_tests[] = [
                 //Sửa id thành uuid

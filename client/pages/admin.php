@@ -219,9 +219,6 @@ $test_id = $_GET['test_id'] ?? '';
                         <button class="btn-primary" style="background-color: var(--accent-orange); cursor: pointer;" id="openImportModalBtn">
                             <i class="bx bx-upload"></i> Import Đề từ HTML
                         </button>
-                        <a href="admin.php?section=tests&action=create" class="btn-primary">
-                            <i class="bx bx-plus"></i> Tạo Bài Thi Mới
-                        </a>
                     </div>
                 </div>
 

@@ -4,14 +4,14 @@
 	padding: 0;
 }
 .page {
-	background: #f5f6f8;
+	background: #fafafa; /* Đổi thành nền trắng hơi xám theo yêu cầu */
 	min-height: 100vh;
 	width: 100%;
 }
 /* Tiêu đề */
 .hero {
-	background: linear-gradient(135deg, #1a3a5c 0%, #0d2740 55%, #0a2035 100%);
-	padding: 2.5rem 3rem;
+	background: #05102B; /* Màu xanh đen chủ đạo */
+	padding: 110px 3rem 2.5rem 3rem;
 	width: 100%;
 }
 .hero h1 {
@@ -21,7 +21,7 @@
 	margin-bottom: 6px;
 }
 .hero p {
-	color: rgba(255, 255, 255, 0.55);
+	color: rgba(255, 255, 255, 0.7);
 	font-size: 14px;
 }
 /* Thanh định hướng */
@@ -42,9 +42,9 @@
 	transition: all 0.15s;
 }
 .filter-tab.active {
-	background: #1a3a5c;
+	background: #05102B; /* Màu xanh đen */
 	color: #fff;
-	border-color: #1a3a5c;
+	border-color: #05102B;
 }
 .filter-tab:hover {
 	background: #f0f0f0;
@@ -53,6 +53,9 @@
 .content {
 	padding: 2rem 3rem;
 	width: 100%;
+	padding-left: 100px; 
+    padding-right: 100px;
+	box-sizing: border-box;
 }
 .toolbar {
 	display: flex;
@@ -66,33 +69,28 @@
 	gap: 12px;
 	align-items: center;
 }
-/* Ô tìm kiếm */
-.search-input {
-	width: 300px;
+/* Ô tìm kiếm & Ô sắp xếp */
+.search-input, .sort-select {
 	padding: 12px 18px;
 	border-radius: 13px;
 	border: 1px solid #ccc;
 	background: #fff;
 	color: #333;
 	font-size: 15px;
+}
+.search-input {
+	width: 300px;
+}
+.sort-select {
+	width: 190px;
+	cursor: pointer;
 }
 .search-input::placeholder {
 	color: #aaa;
 }
-.search-input:focus {
+.search-input:focus, .sort-select:focus {
 	outline: none;
-	border-color: #1a3a5c;
-}
-/* Ô sắp xếp */
-.sort-select {
-	width: 190px;
-	padding: 12px 18px;
-	border-radius: 13px;
-	border: 1px solid #ccc;
-	background: #fff;
-	color: #333;
-	font-size: 15px;
-	cursor: pointer;
+	border-color: #05102B; /* Xanh đen */
 }
 /* Thanh tìm kiếm có icon */
 .search-box {
@@ -111,13 +109,8 @@
 .search-box .search-input {
 	width: 100%;
 	padding: 12px 18px 12px 45px;
-	border-radius: 13px;
-	border: 1px solid #ccc;
-	background: #fff;
-	color: #333;
-	font-size: 15px;
 }
-/* Nhãn phân loại (VD: MIỄN PHÍ, PREMIUM) */
+/* Nhãn phân loại */
 .section-label {
 	font-size: 13px;
 	font-weight: 700;
@@ -154,7 +147,6 @@
 	gap: 10px;
 	box-shadow: none;
 	transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
-	cursor: pointer;
 }
 .test-card:hover {
 	border-color: #b0b8c4;
@@ -170,11 +162,10 @@
 .card-title {
 	font-size: 14px;
 	font-weight: 700;
-	color: #1a2d4a;
+	color: #05102B; /* Đổi theo màu xanh đen */
 	line-height: 1.4;
 	margin: 0;
 }
-/* Dành cho đề thi miễn phí */
 .badge-free {
 	font-size: 11px;
 	font-weight: 600;
@@ -186,7 +177,6 @@
 	white-space: nowrap;
 	flex-shrink: 0;
 }
-/* Thông tin thời gian và số câu */
 .card-meta {
 	display: flex;
 	align-items: center;
@@ -203,14 +193,12 @@
 	font-size: 13px;
 	color: #b6bbc2;
 }
-/* Mô tả ngắn của đề thi */
 .card-desc {
 	font-size: 12.5px;
 	color: #666;
 	line-height: 1.6;
 	margin: 0;
 }
-/* Thẻ tag phân loại */
 .card-tags {
 	display: flex;
 	gap: 6px;
@@ -223,7 +211,6 @@
 	background: #f0f2f5;
 	color: #777;
 }
-/* Footer: lượt làm, điểm TB, nút bắt đầu */
 .card-footer {
 	display: flex;
 	align-items: center;
@@ -255,7 +242,6 @@
 	height: 12px;
 	background: #e0e0e0;
 }
-/* Điểm trung bình */
 .score {
 	color: #1a6e3c;
 	font-weight: 600;
@@ -265,11 +251,11 @@
 }
 /* Nút làm bài */
 .btn-start {
-	padding: 3px 8px !important;
+	padding: 5px 12px !important;
 	border-radius: 8px;
-	border: 1px solid #1a3a5c;
+	border: 1px solid #05102B; /* Màu xanh đen */
 	background: transparent;
-	color: #1a3a5c;
+	color: #05102B; /* Màu xanh đen */
 	font-size: 12.5px;
 	font-weight: 600;
 	text-decoration: none;
@@ -278,7 +264,7 @@
 	white-space: nowrap;
 }
 .btn-start:hover {
-	background: #1a3a5c;
+	background: #05102B; /* Màu xanh đen */
 	color: #fff;
 }
 /* Premium card */
@@ -286,13 +272,10 @@
     border-color: rgba(232, 137, 26, 0.3);
     background: #fffdf8;
 }
-
 .test-card.premium:hover {
     border-color: rgba(232, 137, 26, 0.65);
     box-shadow: 0 2px 12px rgba(232, 137, 26, 0.12);
 }
-
-/* Premium badge */
 .badge-premium {
     font-size: 11px;
     font-weight: 600;
@@ -304,36 +287,26 @@
     white-space: nowrap;
     flex-shrink: 0;
 }
-
-/* Nút Premium làm bài */
+/* Nút Premium */
 .btn-start.gold {
     border-color: #e07a10;
     color: #e07a10;
 }
-
 .btn-start.gold:hover {
     background: #e07a10;
     color: #fff;
 }
-/*Hiển thị danh sách đề thi*/
+/* Responsive */
 @media (max-width: 1200px) {
-    .grid-free,
-    .grid-premium {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    .grid-free, .grid-premium { grid-template-columns: repeat(3, 1fr); }
 }
-
 @media (max-width: 900px) {
-    .grid-free,
-    .grid-premium {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .grid-free, .grid-premium { grid-template-columns: repeat(2, 1fr); }
 }
-
 @media (max-width: 600px) {
-    .grid-free,
-    .grid-premium {
-        grid-template-columns: 1fr;
-    }
+    .grid-free, .grid-premium { grid-template-columns: 1fr; }
 }
-
+.page .container-fluid {
+    padding-left: 55px;  
+    padding-right: 55px; 
+}

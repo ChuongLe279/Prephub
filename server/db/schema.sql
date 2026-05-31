@@ -116,17 +116,6 @@ CREATE TABLE IF NOT EXISTS `attempt_answers` (
     INDEX `idx_attempt` (`attempt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `payments` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `user_id` INT NOT NULL,
-    `test_id` INT NOT NULL,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT `fk_payment_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_payment_test` FOREIGN KEY (`test_id`) REFERENCES `tests` (`id`) ON DELETE CASCADE,
-    UNIQUE KEY `uq_user_test` (`user_id`, `test_id`),
-	INDEX `idx_test` (`test_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 CREATE TABLE IF NOT EXISTS `transaction_history` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `tx_id` VARCHAR(20) UNIQUE NOT NULL,
