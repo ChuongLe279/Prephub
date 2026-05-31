@@ -1,4 +1,4 @@
-.PHONY: all up down app db logs clean build query
+.PHONY: all up down app db logs clean build query composer-install install
 
 # lệnh chạy toàn bộ khi chỉ gõ `make`
 all: up
@@ -21,6 +21,13 @@ app:
 
 db:
 	docker compose up -d db
+
+# cài đặt thư viện PHP từ composer.json bằng Docker
+composer-install:
+	docker run --rm -v "$(CURDIR):/app" -w /app composer install
+
+# alias ngắn gọn để setup dependencies
+install: composer-install
 
 # chạy thẳng vào prephub + đổi tên [mysql] trong terminal thành [prephub luôn]
 query:
