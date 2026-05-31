@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../config/env.php';
+
 // DB: MySQL - v8.0
 $servername = getenv('DB_HOST') ?: "db";
 $username = getenv('MYSQL_USER') ?: "root";

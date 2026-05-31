@@ -54,7 +54,7 @@
   position: relative;
   overflow: hidden;
   width: 100%;
-  background: white;
+  background: #fafafa;
 }
 
 .auth-side {
@@ -66,15 +66,34 @@
 .auth-form-side {
   padding: 40px;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   z-index: 2;
   background: #fafafa;
+  overflow-y: auto;
 }
 
 .sign-up-side {
   position: absolute;
   left: 100%;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.forgot-side {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.reset-side {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  height: 100%;
   opacity: 0;
   visibility: hidden;
 }
@@ -130,6 +149,42 @@
   transform: translateX(-100%);
 }
 
+.auth-wrapper.forgot-active .sign-in-side {
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in;
+}
+
+.auth-wrapper.forgot-active .forgot-side {
+  transform: translateX(-100%);
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-wrapper.forgot-active .auth-visual-side {
+  transform: translateX(-100%);
+}
+
+.auth-wrapper.reset-active .sign-in-side {
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in;
+}
+
+.auth-wrapper.reset-active .reset-side {
+  transform: translateX(-100%);
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-wrapper.reset-active .auth-visual-side {
+  transform: translateX(-100%);
+}
+
 .sign-up-side {
   position: absolute;
   left: 100%;
@@ -145,9 +200,50 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.forgot-side {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in;
+}
+
+.reset-side {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in;
+}
+
 .auth-container {
   width: 100%;
   max-width: 400px;
+  align-self: center;
+}
+
+.sign-up-side .auth-container {
+  align-self: flex-start;
+}
+
+.sign-up-side .auth-header h1 {
+  margin-bottom: 28px;
+}
+
+.sign-up-side .auth-header p {
+  margin-bottom: 32px;
+}
+
+.sign-up-side .input-group-glass {
+  margin-bottom: 14px;
+}
+
+.sign-up-side .btn-auth-submit {
+  margin-bottom: 14px;
 }
 
 .auth-header h1 {
@@ -168,6 +264,41 @@
 
 .input-group-glass {
   margin-bottom: 18px;
+}
+
+.forgot-status {
+  display: none;
+  margin: 0 0 14px;
+  padding: 12px 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: white;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.register-success-notice {
+  display: none;
+  margin: 0 0 18px;
+  padding: 16px 20px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: white;
+  color: #05102b;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.register-success-notice strong {
+  display: block;
+  font-weight: 700;
+}
+
+.register-success-notice span {
+  display: block;
+  margin-top: 6px;
 }
 
 .input-group-glass label {
@@ -193,6 +324,11 @@
   border-color: var(--primary);
   background: white;
   border-width: 1.5px;
+}
+
+.input-wrapper:has(input[aria-invalid="true"]) {
+  border-color: #ef4444;
+  background: #fff7f7;
 }
 
 .input-wrapper input {
@@ -313,6 +449,7 @@
   border-radius: 8px;
   background: white;
   color: #0f172a;
+  text-decoration: none;
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
@@ -323,6 +460,8 @@
 .btn-google-auth:hover {
   background: #f8fafccc;
   border-color: #cbd5e1;
+  color: #0f172a;
+  text-decoration: none;
 }
 
 .auth-switch-text {
@@ -340,6 +479,42 @@
 
 .auth-switch-text a:hover {
   opacity: 0.7;
+}
+
+.password-hint {
+  color: #64748b;
+  font-size: 0.82rem;
+  margin: -4px 0 10px;
+}
+
+.auth-inline-message {
+  display: none;
+  margin: -6px 0 14px;
+  padding: 11px 13px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.auth-inline-message.is-error {
+  border: 1px solid #fecaca;
+  background: #fff7f7;
+  color: #b91c1c;
+}
+
+.auth-inline-message.is-success {
+  border: 1px solid #bbf7d0;
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.reset-match-error {
+  color: #ef4444;
+  display: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin: -2px 0 12px;
 }
 
 .testimonial-stack {

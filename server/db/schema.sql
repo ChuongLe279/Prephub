@@ -10,6 +10,9 @@ CREATE TABLE IF NOT EXISTS `users` (
     `first_name` VARCHAR(50) NOT NULL,
     `email` VARCHAR(100) UNIQUE NOT NULL,
     `password` VARCHAR(255) DEFAULT NULL,
+    `reset_token_hash` VARCHAR(64) DEFAULT NULL,
+    `reset_token_expires_at` DATETIME DEFAULT NULL,
+    `account_activation_hash` VARCHAR(64) DEFAULT NULL,
     `avatar` VARCHAR(255) DEFAULT NULL,
     `role` ENUM('user', 'admin') DEFAULT 'user',
     `is_banned` TINYINT(1) DEFAULT 0,
@@ -20,7 +23,9 @@ CREATE TABLE IF NOT EXISTS `users` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX `idx_uuid` (`uuid`),
-    INDEX `idx_email` (`email`)
+    INDEX `idx_email` (`email`),
+    UNIQUE KEY `users_reset_token_hash_unique` (`reset_token_hash`),
+    UNIQUE KEY `users_account_activation_hash_unique` (`account_activation_hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `oauth_accounts` (

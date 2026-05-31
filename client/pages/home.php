@@ -8,6 +8,7 @@ $errors = [
 	'success'  => $_SESSION['register_success'] ?? '',
 ];
 $activeAuthForm = $_SESSION['active_form'] ?? 'login';
+$resetToken = $_GET['token'] ?? $_GET['reset_token'] ?? '';
 
 // xóa chỉ các flash keys, giữ nguyên user session
 unset($_SESSION['login_error'], $_SESSION['register_error'], $_SESSION['register_success'], $_SESSION['active_form']);

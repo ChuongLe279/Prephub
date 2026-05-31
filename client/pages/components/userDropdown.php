@@ -2,7 +2,7 @@
 $userDropdownData = [
     'name' => trim(($_SESSION['first_name'] ?? 'User') . ' ' . ($_SESSION['last_name'] ?? '')),
     'email' => $_SESSION['email'] ?? 'user@example.com',
-    'avatarUrl' => 'https://ui-avatars.com/api/?name=' . urlencode(trim(($_SESSION['first_name'] ?? 'User') . ' ' . ($_SESSION['last_name'] ?? ''))) . '&background=05102b&color=fff',
+    'avatarUrl' => (!empty($_SESSION['avatar'])) ? $_SESSION['avatar'] : 'https://ui-avatars.com/api/?name=' . urlencode(trim(($_SESSION['first_name'] ?? 'User') . ' ' . ($_SESSION['last_name'] ?? ''))) . '&background=05102b&color=fff',
 ];
 
 $menuItems = [

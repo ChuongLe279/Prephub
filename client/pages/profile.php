@@ -259,22 +259,6 @@ $total_number_of_tests = getNumTestDone();
                     </div>
                 </form>
 
-                <!-- khối tài khoản liên kết mạng xã hội -->
-                <div class="profile-card connected-card">
-                    <div class="connected-left">
-                        <div class="connected-icon google-icon">
-                            <i class="fab fa-google"></i>
-                        </div>
-                        <div class="connected-text">
-                            <h2>Tài khoản liên kết</h2>
-                            <p>Đăng nhập nhanh chóng và bảo mật thông qua tài khoản Google</p>
-                        </div>
-                    </div>
-                    <a href="#" class="connect-google-btn">
-                        Liên kết ngay
-                    </a>
-                </div>
-
                 <!-- khối khu vực nguy hiểm quản lý tài khoản -->
                 <div class="profile-card danger-card">
                     <div class="danger-left">
