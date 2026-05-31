@@ -417,13 +417,16 @@ document.addEventListener('DOMContentLoaded', () => {
             clearPasswordMismatch();
 
             const submitButton = signupForm.querySelector('button[type="submit"]');
+            const formData = new FormData(signupForm);
             if (submitButton) submitButton.disabled = true;
-            registerSuccessNotice.style.display = 'none';
+            registerSuccessNotice.style.display = 'block';
+            signupForm.reset();
+            signupForm.style.display = 'none';
 
             try {
                 const response = await fetch(signupForm.action, {
                     method: 'POST',
-                    body: new FormData(signupForm),
+                    body: formData,
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
@@ -431,16 +434,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json().catch(() => ({}));
 
                 if (!response.ok || result.success === false) {
-                    setSignupStatus(result.message || 'Dang ky khong thanh cong. Vui long thu lai.');
+                    console.error(result.message || 'Dang ky khong thanh cong.');
                     return;
                 }
-
-                registerSuccessNotice.style.display = 'block';
-                signupForm.reset();
-                signupForm.style.display = 'none';
             } catch (error) {
                 console.error('Register request failed.', error);
-                setSignupStatus('Khong gui duoc yeu cau dang ky. Vui long thu lai.');
             } finally {
                 if (submitButton) submitButton.disabled = false;
             }
