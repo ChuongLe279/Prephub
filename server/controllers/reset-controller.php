@@ -36,19 +36,19 @@ if ($token === '') {
 }
 
 if (strlen($_POST["password"]) < 8) {
-    die("Password must be at least 8 characters");
+    die("Mật khẩu phải dài hơn 8 ký tự.");
 }
 
 if ( ! preg_match("/[a-z]/i", $_POST["password"])) {
-    die("Password must contain at least one letter");
+    die("Mật khẩu phải có ít nhất 1 chữ cái.");
 }
 
 if ( ! preg_match("/[0-9]/", $_POST["password"])) {
-    die("Password must contain at least one number");
+    die("Mật khẩu phải trùng nhau");
 }
 
 if ($_POST["password"] !== $_POST["password_confirmation"]) {
-    die("Passwords must match");
+    die("Pass");
 }
 
 $password_hash = password_hash($_POST["password"], PASSWORD_DEFAULT);
@@ -56,7 +56,8 @@ $password_hash = password_hash($_POST["password"], PASSWORD_DEFAULT);
 $sql = "UPDATE users
         SET password = :password_hash,
             reset_token_hash = NULL,
-            reset_token_expires_at = NULL
+            reset_token_expires_at = NULL,
+            account_activation_hash = NULL
         WHERE id = :id";
 
 $stmt = $conn->prepare($sql);

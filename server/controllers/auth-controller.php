@@ -53,6 +53,21 @@ function handleRegister() {
         return;
     }
 
+    if (strlen($data["password"]) < 8) {
+        authResponse(false, "Mật khẩu phải dài hơn 8 ký tự.", "/client/pages/home.php", "register_error");
+        return;
+    }
+
+    if (!preg_match("/[a-z]/i", $data["password"])) {
+        authResponse(false, "Mật khẩu phải có ít nhất 1 chữ cái.", "/client/pages/home.php", "register_error");
+        return;
+    }
+
+    if (!preg_match("/[0-9]/", $data["password"])) {
+        authResponse(false, "Mật khẩu phải trùng nhau", "/client/pages/home.php", "register_error");
+        return;
+    }
+
     $uuid = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
         mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff),
         mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000,
@@ -85,7 +100,6 @@ function handleRegister() {
 
             if ($inserted){
                 $mail = require_once __DIR__ . '/../services/mailer.php';
-                $mail->setFrom("noreply@prephub.com"); //Cái này vẫn hiển thị là prephub207@gmail.com do mình không setup workspace được. Mà để vậy cx không sao đâu.
                 $mail->addAddress($data['email']);
                 $mail->Subject = "Xác thực tài khoản email Prephub";
                 
@@ -192,7 +206,6 @@ function handleReset(){
         //Phần gửi mail. 
         if ($stmt->rowCount() > 0){
             $mail = require_once __DIR__ . '/../services/mailer.php';
-            $mail->setFrom("noreply@prephub.com"); //Cái này vẫn hiển thị là prephub207@gmail.com do mình không setup workspace được. Mà để vậy cx không sao đâu.
             $mail->addAddress($data['email']);
             $mail->Subject = "Đặt lại mật khẩu Prephub";
 
@@ -204,11 +217,15 @@ function handleReset(){
             try{
                 $mail->send();
             }catch (Exception $exception){
-                echo "Không gửi được. Mail error: {$mail->ErrorInfo}";
-                exit;
+                error_log("Forgot password email failed: {$mail->ErrorInfo}");
+                sendError("Không gửi được email đặt lại mật khẩu. Vui lòng thử lại sau.", 500);
             }
             
         }
+        sendJson([
+            "success" => true,
+            "message" => "Nếu email tồn tại, hướng dẫn đặt lại mật khẩu đã được gửi."
+        ]);
     }catch (PDOException $e) {
         sendError("Lỗi database: " . $e->getMessage(), 500);
     }
