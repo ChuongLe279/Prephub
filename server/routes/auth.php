@@ -18,6 +18,11 @@ switch ($action) {
         else sendError("Method not allowed", 405);
         break;
 
+    case 'reset':
+        if ($method === 'POST') handleReset();
+        else sendError("Method not allowed", 405);
+        break;
+
     case 'logout':
         handleLogout();
         break;

@@ -79,6 +79,24 @@
   visibility: hidden;
 }
 
+.forgot-side {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.reset-side {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+}
+
 .sign-in-side {
   position: relative;
   left: 0;
@@ -130,6 +148,42 @@
   transform: translateX(-100%);
 }
 
+.auth-wrapper.forgot-active .sign-in-side {
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in;
+}
+
+.auth-wrapper.forgot-active .forgot-side {
+  transform: translateX(-100%);
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-wrapper.forgot-active .auth-visual-side {
+  transform: translateX(-100%);
+}
+
+.auth-wrapper.reset-active .sign-in-side {
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in;
+}
+
+.auth-wrapper.reset-active .reset-side {
+  transform: translateX(-100%);
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-wrapper.reset-active .auth-visual-side {
+  transform: translateX(-100%);
+}
+
 .sign-up-side {
   position: absolute;
   left: 100%;
@@ -143,6 +197,26 @@
   left: 0;
   opacity: 1;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.forgot-side {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in;
+}
+
+.reset-side {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in;
 }
 
 .auth-container {
@@ -168,6 +242,19 @@
 
 .input-group-glass {
   margin-bottom: 18px;
+}
+
+.forgot-status {
+  display: none;
+  margin: 0 0 14px;
+  padding: 12px 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: white;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
 .input-group-glass label {
@@ -340,6 +427,20 @@
 
 .auth-switch-text a:hover {
   opacity: 0.7;
+}
+
+.password-hint {
+  color: #64748b;
+  font-size: 0.82rem;
+  margin: -4px 0 10px;
+}
+
+.reset-match-error {
+  color: #ef4444;
+  display: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin: -2px 0 12px;
 }
 
 .testimonial-stack {

@@ -132,5 +132,59 @@ function handleLogin() {
     }
 }
 
+//Xử lý reset password
+//Note cho phần security: Luôn luôn hiện "Hãy kiểm tra email của bạn" sau khi gửi cho dù email có tồn tại trong db hay không.
+//Tránh việc người dùng dò ra email nào hợp lệ trong db
+function handleReset(){
+    global $conn;
+    $data = getAuthInput();
+    $token = bin2hex(random_bytes(16));
+    $token_hash = hash("sha256", $token);
+    //token trong 15' thôi
+    $expir = date("Y-m-d H:i:s", time()+ 60 * 15); 
+
+    
+    $resetLink = 'http://localhost:3000/client/pages/reset.php?token=' . urlencode($token);
+    //Tránh việc điều chỉnh token thẳng trên URL
+    $resetLink = htmlspecialchars($resetLink, ENT_QUOTES, 'UTF-8');
+    
+    try{
+        $sql = "UPDATE users
+                SET reset_token_hash = :reset_token_hash,
+                    reset_token_expires_at = :reset_token_expires_at
+                WHERE email = :email";
+
+        $stmt = $conn->prepare($sql);
+        
+        $stmt->execute([
+            'reset_token_hash' => $token_hash,
+            'reset_token_expires_at' => $expir,
+            'email' => $data['email']
+        ]);
+        
+        //Phần gửi mail. 
+        if ($stmt->rowCount() > 0){
+            $mail = require_once __DIR__ . '/../services/mailer.php';
+            $mail->setFrom("noreply@prephub.com"); //Cái này vẫn hiển thị là prephub207@gmail.com do mình không setup workspace được. Mà để vậy cx không sao đâu.
+            $mail->addAddress($data['email']);
+            $mail->Subject = "Đặt lại mật khẩu Prephub";
+
+            //Phần css/html của email gửi cho người dùng.
+            ob_start();
+            require __DIR__ . '/../../client/pages/components/reset-mail.php';
+            $mail->Body = ob_get_clean();
+
+            try{
+                $mail->send();
+            }catch (Exception $exception){
+                echo "Không gửi được. Mail error: {$mail->ErrorInfo}";
+            }
+            
+        }
+    }catch (PDOException $e) {
+        sendError("Lỗi database: " . $e->getMessage(), 500);
+    }
+}
+
 // Xử lý đăng xuất
 // Hàm xử lý đăng xuất t dời r. StackOverflow bảo là làm nó thành file riêng để tránh việc thực thi nhầm (accidentally executed)

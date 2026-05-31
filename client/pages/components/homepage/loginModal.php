@@ -44,7 +44,7 @@
                                         <span class="checkmark"></span>
                                         <span class="label-text">Ghi nhớ đăng nhập</span>
                                     </label>
-                                    <a href="#" class="forgot-link">Quên mật khẩu?</a>
+                                    <a href="#" class="forgot-link" id="toForgot">Quên mật khẩu?</a>
                                 </div>
 
                                 <button type="submit" name="login" class="btn-auth-submit">Đăng nhập</button>
@@ -65,6 +65,7 @@
                             </button>
 
                             <p class="auth-switch-text">
+                            <!--NÚT ĐĂNG KÝ-->
                                 Chưa có tài khoản? <a href="#" id="toSignup">Đăng ký ngay</a>
                             </p>
                         </div>
@@ -137,6 +138,74 @@
                         </div>
                     </div>
 
+                    <!-- Forgot Password Form -->
+                    <div class="auth-side auth-form-side forgot-side">
+                        <div class="auth-container">
+                            <div class="auth-header">
+                                <h1>Quên mật khẩu</h1>
+                                <p>Nhập email đăng ký để nhận hướng dẫn đặt lại mật khẩu</p>
+                            </div>
+
+                            <form id="forgotForm" class="auth-form" action="/api/auth/reset" method="POST">
+                                <div class="input-group-glass">
+                                    <label>Email</label>
+                                    <div class="input-wrapper">
+                                        <input type="email" name="email" placeholder="name@example.com" required>
+                                    </div>
+                                </div>
+
+                                <p class="forgot-status" id="forgotStatus" role="status" aria-live="polite"></p>
+
+                                <button type="submit" name="forgot_password" class="btn-auth-submit">Gửi</button>
+                            </form>
+
+                            <p class="auth-switch-text">
+                                Nhớ mật khẩu? <a href="#" id="forgotToSignin">Đăng nhập</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Reset Password Form -->
+                    <div class="auth-side auth-form-side reset-side">
+                        <div class="auth-container">
+                            <div class="auth-header">
+                                <h1>Đặt lại mật khẩu</h1>
+                                <p>Tạo mật khẩu mới cho tài khoản của bạn để tiếp tục học trên PrepHub</p>
+                            </div>
+
+                            <form id="resetPasswordForm" class="auth-form" action="#" method="POST">
+                                <input type="hidden" name="token" value="<?= htmlspecialchars($resetToken ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                                <div class="input-group-glass">
+                                    <label>Mật khẩu mới</label>
+                                    <div class="input-wrapper relative">
+                                        <input type="password" name="password" id="resetPassword" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" minlength="8" required>
+                                        <button type="button" class="eye-toggle">
+                                            <img src="../img/eye_close.png" alt="view" class="eye-icon">
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="input-group-glass">
+                                    <label>Nhập lại mật khẩu</label>
+                                    <div class="input-wrapper relative">
+                                        <input type="password" name="confirm_password" id="resetConfirmPassword" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" minlength="8" required>
+                                        <button type="button" class="eye-toggle">
+                                            <img src="../img/eye_close.png" alt="view" class="eye-icon">
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <p class="password-hint">Mật khẩu nên có ít nhất 8 ký tự.</p>
+                                <p class="error-message reset-match-error" id="resetMatchError"></p>
+
+                                <button type="submit" name="reset_password" class="btn-auth-submit">Cập nhật mật khẩu</button>
+                            </form>
+
+                            <p class="auth-switch-text">
+                                Quay lại <a href="#" id="resetToSignin">đăng nhập</a>
+                            </p>
+                        </div>
+                    </div>
                     <!-- Visual Side -->
                     <div class="auth-side auth-visual-side">
                         <div class="visual-overlay"></div>
@@ -172,7 +241,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const authWrapper = document.getElementById('authWrapper');
     const toSignup = document.getElementById('toSignup');
     const toSignin = document.getElementById('toSignin');
+    const toForgot = document.getElementById('toForgot');
+    const forgotToSignin = document.getElementById('forgotToSignin');
+    const resetToSignin = document.getElementById('resetToSignin');
     const loginModalEl = document.getElementById('loginModal');
+    const resetPasswordForm = document.getElementById('resetPasswordForm');
+    const resetPassword = document.getElementById('resetPassword');
+    const resetConfirmPassword = document.getElementById('resetConfirmPassword');
+    const resetMatchError = document.getElementById('resetMatchError');
+    const forgotForm = document.getElementById('forgotForm');
+    const forgotStatus = document.getElementById('forgotStatus');
 
     if (loginModalEl) {
         const initModal = () => {
@@ -185,10 +263,41 @@ document.addEventListener('DOMContentLoaded', () => {
             if (toSignup && toSignin && authWrapper) {
                 toSignup.addEventListener('click', (e) => {
                     e.preventDefault();
+                    authWrapper.classList.remove('forgot-active');
+                    authWrapper.classList.remove('reset-active');
                     authWrapper.classList.add('signup-active');
                 });
                 toSignin.addEventListener('click', (e) => {
                     e.preventDefault();
+                    authWrapper.classList.remove('signup-active');
+                    authWrapper.classList.remove('forgot-active');
+                    authWrapper.classList.remove('reset-active');
+                });
+            }
+
+            if (toForgot && authWrapper) {
+                toForgot.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    authWrapper.classList.remove('signup-active');
+                    authWrapper.classList.remove('reset-active');
+                    authWrapper.classList.add('forgot-active');
+                });
+            }
+
+            if (forgotToSignin && authWrapper) {
+                forgotToSignin.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    authWrapper.classList.remove('forgot-active');
+                    authWrapper.classList.remove('signup-active');
+                    authWrapper.classList.remove('reset-active');
+                });
+            }
+
+            if (resetToSignin && authWrapper) {
+                resetToSignin.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    authWrapper.classList.remove('reset-active');
+                    authWrapper.classList.remove('forgot-active');
                     authWrapper.classList.remove('signup-active');
                 });
             }
@@ -197,9 +306,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <?php 
             $hasErrors = !empty($errors['login'] ?? '') || !empty($errors['register'] ?? '') || !empty($errors['success'] ?? '');
             $activeForm = $activeAuthForm ?? 'login';
-            if ($hasErrors): ?>
+            $hasResetToken = !empty($resetToken ?? '');
+            if ($hasErrors || $hasResetToken): ?>
                 <?php if ($activeForm === 'register'): ?>
                     if (authWrapper) authWrapper.classList.add('signup-active');
+                <?php elseif ($activeForm === 'reset' || $hasResetToken): ?>
+                    if (authWrapper) authWrapper.classList.add('reset-active');
                 <?php endif; ?>
                 loginModal.show();
             <?php endif; ?>
@@ -219,5 +331,40 @@ document.addEventListener('DOMContentLoaded', () => {
             iconImg.src = isPassword ? '../img/eye_open.png' : '../img/eye_close.png';
         });
     });
+
+    if (resetPasswordForm && resetPassword && resetConfirmPassword && resetMatchError) {
+        resetPasswordForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            if (resetPassword.value !== resetConfirmPassword.value) {
+                resetMatchError.textContent = 'Mat khau nhap lai khong khop.';
+                resetMatchError.style.display = 'block';
+                return;
+            }
+
+            resetMatchError.textContent = '';
+            resetMatchError.style.display = 'none';
+        });
+    }
+
+    if (forgotForm && forgotStatus) {
+        forgotForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            forgotStatus.textContent = 'Hãy kiểm tra email của bạn.';
+            forgotStatus.style.display = 'block';
+
+            try {
+                await fetch(forgotForm.action, {
+                    method: 'POST',
+                    body: new FormData(forgotForm),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+            } catch (error) {
+                console.error('Forgot password request failed.', error);
+            }
+        });
+    }
 });
 </script>
