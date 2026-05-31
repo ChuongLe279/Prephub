@@ -3,6 +3,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 // cái này để auto complete cho code editor thôi
 // tức là cho editor biết $conn có kiểu PDO để gợi ý method nhanh hơn
@@ -229,6 +230,24 @@ function handleReset(){
     }catch (PDOException $e) {
         sendError("Lỗi database: " . $e->getMessage(), 500);
     }
+}
+
+//Login w gg
+function handleGoogleLogin(){
+    $googleConfig = require __DIR__ . '/../config/google.php';
+
+    $client = new Google\Client;
+    $client->setClientId($googleConfig['client_id']);
+    $client->setClientSecret($googleConfig['client_secret']);
+    $client->setRedirectUri($googleConfig['redirect_uri']);
+
+    $client->addScope("openid");
+    $client->addScope("email");
+    $client->addScope("profile");
+
+    $url = $client->createAuthUrl();
+    header("Location: " . $url);
+    exit();
 }
 
 // Xử lý đăng xuất

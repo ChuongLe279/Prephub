@@ -8,6 +8,8 @@ use PHPMailer\PHPMailer\Exception;
 
 require __DIR__ . "/../../vendor/autoload.php";
 
+$mailConfig = require __DIR__ . "/../config/mail.php";
+
 $mail = new PHPMailer(true);
 
 $mail->CharSet = PHPMailer::CHARSET_UTF8;
@@ -16,13 +18,13 @@ $mail->Encoding = 'base64';
 $mail->isSMTP();
 $mail->SMTPAuth = true;
 
-$mail->Host = "smtp.gmail.com";
-$mail->Username = getenv('MAIL_USERNAME') ?: "prephub207@gmail.com";
-$mail->Password = getenv('MAIL_PASSWORD') ?: "xvlv ynod uola detq";
+$mail->Host = $mailConfig['host'];
+$mail->Username = $mailConfig['username'];
+$mail->Password = $mailConfig['password'];
 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-$mail->Port = 587;
+$mail->Port = $mailConfig['port'];
 
-$mail->setFrom($mail->Username, "PrepHub");
+$mail->setFrom($mail->Username, $mailConfig['from_name']);
 
 $mail->isHtml(true);
 

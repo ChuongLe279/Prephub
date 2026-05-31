@@ -4,7 +4,7 @@
 // login, register, logout, oauth (tương lai)
 
 require_once __DIR__ . '/../controllers/auth-controller.php';
-
+/** @var string $method */
 $action = $parts[1] ?? '';
 
 switch ($action) {
@@ -20,6 +20,11 @@ switch ($action) {
 
     case 'reset':
         if ($method === 'POST') handleReset();
+        else sendError("Method not allowed", 405);
+        break;
+    
+    case 'google':
+        if ($method === 'GET') handleGoogleLogin();
         else sendError("Method not allowed", 405);
         break;
 

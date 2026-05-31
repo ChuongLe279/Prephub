@@ -423,6 +423,7 @@
   border-radius: 8px;
   background: white;
   color: #0f172a;
+  text-decoration: none;
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
@@ -433,6 +434,8 @@
 .btn-google-auth:hover {
   background: #f8fafccc;
   border-color: #cbd5e1;
+  color: #0f172a;
+  text-decoration: none;
 }
 
 .auth-switch-text {

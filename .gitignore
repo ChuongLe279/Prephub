@@ -3,3 +3,5 @@ tests
 answer
 server/uploads
 /vendor/
+server/config/google.php
+server/config/mail.php
