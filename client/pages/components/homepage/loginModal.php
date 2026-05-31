@@ -133,6 +133,8 @@
                                     </div>
                                 </div>
 
+                                <p class="auth-inline-message" id="signupStatus" role="alert" aria-live="polite"></p>
+
                                 <button type="submit" name="register" class="btn-auth-submit">Đăng ký tài khoản</button>
                             </form>
 
@@ -259,6 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const registerSuccessNotice = document.getElementById('registerSuccessNotice');
     const signupPassword = document.getElementById('password');
     const signupRePass = document.getElementById('signupRePass');
+    const signupStatus = document.getElementById('signupStatus');
 
     if (loginModalEl) {
         const initModal = () => {
@@ -376,18 +379,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (signupForm && registerSuccessNotice) {
+        const setSignupStatus = (message, type = 'error') => {
+            if (!signupStatus) return;
+            signupStatus.textContent = message;
+            signupStatus.classList.toggle('is-error', type === 'error');
+            signupStatus.classList.toggle('is-success', type === 'success');
+            signupStatus.style.display = message ? 'block' : 'none';
+        };
+
+        const clearPasswordMismatch = () => {
+            if (signupPassword) signupPassword.removeAttribute('aria-invalid');
+            if (signupRePass) signupRePass.removeAttribute('aria-invalid');
+            setSignupStatus('');
+        };
+
+        [signupPassword, signupRePass].forEach((input) => {
+            if (!input) return;
+            input.addEventListener('input', () => {
+                if (!signupPassword || !signupRePass) return;
+                if (!signupPassword.value || !signupRePass.value || signupPassword.value === signupRePass.value) {
+                    clearPasswordMismatch();
+                }
+            });
+        });
+
         signupForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
             if (signupPassword && signupRePass && signupPassword.value !== signupRePass.value) {
-                signupRePass.setCustomValidity('Mat khau nhap lai khong khop.');
-                signupRePass.reportValidity();
+                signupPassword.setAttribute('aria-invalid', 'true');
+                signupRePass.setAttribute('aria-invalid', 'true');
+                setSignupStatus('Mật khẩu nhập lại không khớp. Vui lòng kiểm tra lại.');
+                signupRePass.focus();
                 return;
             }
 
-            if (signupRePass) {
-                signupRePass.setCustomValidity('');
-            }
+            clearPasswordMismatch();
 
             const submitButton = signupForm.querySelector('button[type="submit"]');
             if (submitButton) submitButton.disabled = true;
@@ -404,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json().catch(() => ({}));
 
                 if (!response.ok || result.success === false) {
-                    alert(result.message || 'Dang ky khong thanh cong.');
+                    setSignupStatus(result.message || 'Dang ky khong thanh cong. Vui long thu lai.');
                     return;
                 }
 
@@ -413,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 signupForm.style.display = 'none';
             } catch (error) {
                 console.error('Register request failed.', error);
-                alert('Khong gui duoc yeu cau dang ky.');
+                setSignupStatus('Khong gui duoc yeu cau dang ky. Vui long thu lai.');
             } finally {
                 if (submitButton) submitButton.disabled = false;
             }
