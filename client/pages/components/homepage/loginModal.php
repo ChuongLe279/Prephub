@@ -82,6 +82,10 @@
                                     echo showError($errors['register'] ?? ''); 
                                 }
                                 ?>
+                                <div class="register-success-notice" id="registerSuccessNotice" role="status" aria-live="polite">
+                                    <strong>Đăng ký thành công!</strong>
+                                    <span>Hãy xác thực tại email của bạn.</span>
+                                </div>
                             </div>
                             
                             <form id="signupForm" class="auth-form" action="/api/auth/register" method="POST">
@@ -251,6 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetMatchError = document.getElementById('resetMatchError');
     const forgotForm = document.getElementById('forgotForm');
     const forgotStatus = document.getElementById('forgotStatus');
+    const signupForm = document.getElementById('signupForm');
+    const registerSuccessNotice = document.getElementById('registerSuccessNotice');
+    const signupPassword = document.getElementById('password');
+    const signupRePass = document.getElementById('signupRePass');
 
     if (loginModalEl) {
         const initModal = () => {
@@ -363,6 +371,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } catch (error) {
                 console.error('Forgot password request failed.', error);
+            }
+        });
+    }
+
+    if (signupForm && registerSuccessNotice) {
+        signupForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            if (signupPassword && signupRePass && signupPassword.value !== signupRePass.value) {
+                signupRePass.setCustomValidity('Mat khau nhap lai khong khop.');
+                signupRePass.reportValidity();
+                return;
+            }
+
+            if (signupRePass) {
+                signupRePass.setCustomValidity('');
+            }
+
+            const submitButton = signupForm.querySelector('button[type="submit"]');
+            if (submitButton) submitButton.disabled = true;
+            registerSuccessNotice.style.display = 'none';
+
+            try {
+                const response = await fetch(signupForm.action, {
+                    method: 'POST',
+                    body: new FormData(signupForm),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                const result = await response.json().catch(() => ({}));
+
+                if (!response.ok || result.success === false) {
+                    alert(result.message || 'Dang ky khong thanh cong.');
+                    return;
+                }
+
+                registerSuccessNotice.style.display = 'block';
+                signupForm.reset();
+                signupForm.style.display = 'none';
+            } catch (error) {
+                console.error('Register request failed.', error);
+                alert('Khong gui duoc yeu cau dang ky.');
+            } finally {
+                if (submitButton) submitButton.disabled = false;
             }
         });
     }

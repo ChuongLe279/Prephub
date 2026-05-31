@@ -59,6 +59,9 @@ function handleRegister() {
         mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
     );
 
+    //Để email verify thì ng dùng mới được đky
+    $token = bin2hex(random_bytes(16));
+    $token_hash = hash("sha256", $token);
     $password_hash = password_hash($data['password'], PASSWORD_DEFAULT);
 
     try {
@@ -69,14 +72,37 @@ function handleRegister() {
         if ($stmt->fetch()) {
             authResponse(false, "Email này đã được đăng ký!", "/client/pages/home.php", "register_error");
         } else {
-            $insert = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, email, password) VALUES (:uuid, :first_name, :last_name, :email, :password)");
-            $insert->execute([
+            $insert = $conn->prepare("INSERT INTO users (uuid, first_name, last_name, email, password, account_activation_hash) 
+                                        VALUES (:uuid, :first_name, :last_name, :email, :password, :account_activation_hash)");
+            $inserted = $insert->execute([
                 'uuid'       => $uuid,
                 'first_name' => $data['first_name'],
                 'last_name'  => $data['last_name'],
                 'email'      => $data['email'],
-                'password'   => $password_hash
+                'password'   => $password_hash,
+                'account_activation_hash' => $token_hash
             ]);
+
+            if ($inserted){
+                $mail = require_once __DIR__ . '/../services/mailer.php';
+                $mail->setFrom("noreply@prephub.com"); //Cái này vẫn hiển thị là prephub207@gmail.com do mình không setup workspace được. Mà để vậy cx không sao đâu.
+                $mail->addAddress($data['email']);
+                $mail->Subject = "Xác thực tài khoản email Prephub";
+                
+                $verificationLink = 'http://localhost:3000/client/pages/verify.php?token=' . urlencode($token);
+                $verificationLink = htmlspecialchars($verificationLink, ENT_QUOTES, 'UTF-8');
+                ob_start();
+                //CSS html của email được gửi cho người dùng
+                require __DIR__ . '/../../client/pages/components/verification-mail.php';
+                $mail->Body = ob_get_clean();
+                //Gửi mail. Chúng ta sẽ chặn người dùng không đăng nhập nếu token khác NULL.
+                try{
+                    $mail->send();
+                }catch (Exception $exception){
+                    echo "Không gửi được. Mail error: {$mail->ErrorInfo}";
+                    exit;
+                }
+            }
             $_SESSION['active_form'] = 'login';
             authResponse(true, "Đăng ký thành công!", "/client/pages/home.php");
         }
@@ -94,8 +120,9 @@ function handleLogin() {
         $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->execute(['email' => $data['email']]);
         $user = $stmt->fetch();
-
-        if ($user && password_verify($data['password'], $user['password'])) {
+        
+        //Thêm phần kiểm tra xem account token có NULL hay không. Nếu null mới được đăng nhập.
+        if ($user && password_verify($data['password'], $user['password']) && $user['account_activation_hash'] === null) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['first_name'] = $user['first_name'];
@@ -178,6 +205,7 @@ function handleReset(){
                 $mail->send();
             }catch (Exception $exception){
                 echo "Không gửi được. Mail error: {$mail->ErrorInfo}";
+                exit;
             }
             
         }

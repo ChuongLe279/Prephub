@@ -54,7 +54,7 @@
   position: relative;
   overflow: hidden;
   width: 100%;
-  background: white;
+  background: #fafafa;
 }
 
 .auth-side {
@@ -66,7 +66,7 @@
 .auth-form-side {
   padding: 40px;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   z-index: 2;
   background: #fafafa;
@@ -222,6 +222,7 @@
 .auth-container {
   width: 100%;
   max-width: 400px;
+  align-self: center;
 }
 
 .auth-header h1 {
@@ -255,6 +256,28 @@
   font-size: 0.85rem;
   font-weight: 600;
   line-height: 1.35;
+}
+
+.register-success-notice {
+  display: none;
+  margin: 0 0 18px;
+  padding: 16px 20px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: white;
+  color: #05102b;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.register-success-notice strong {
+  display: block;
+  font-weight: 700;
+}
+
+.register-success-notice span {
+  display: block;
+  margin-top: 6px;
 }
 
 .input-group-glass label {
