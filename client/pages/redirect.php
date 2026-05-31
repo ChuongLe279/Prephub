@@ -141,6 +141,7 @@ $_SESSION['last_name'] = $user['last_name'];
 $_SESSION['email'] = $user['email'];
 $_SESSION['is_premium'] = !empty($user['is_premium']);
 $_SESSION['has_course'] = !empty($user['has_course']);
+$_SESSION['avatar'] = $user['avatar'] ?? null;
 
 if (!empty($user['premium_plan'])) {
     $_SESSION['premium_plan'] = $user['premium_plan'];

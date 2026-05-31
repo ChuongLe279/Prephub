@@ -143,6 +143,8 @@ function handleLogin() {
             $_SESSION['first_name'] = $user['first_name'];
             $_SESSION['last_name'] = $user['last_name'];
             $_SESSION['email'] = $user['email'];
+            $_SESSION['avatar'] = $user['avatar'] ?? null;
+
             
             $_SESSION['is_premium'] = !empty($user['is_premium']);
             $_SESSION['has_course'] = !empty($user['has_course']);
