@@ -194,6 +194,23 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // xử lí upload avatar
+    const avatarContainer = document.querySelector(".profile-avatar-container");
+    const avatarInput = document.getElementById("avatar-file-input");
+    const avatarForm = document.getElementById("avatar-upload-form");
+
+    if (avatarContainer && avatarInput && avatarForm) {
+        avatarContainer.addEventListener("click", function () {
+            avatarInput.click();
+        });
+
+        avatarInput.addEventListener("change", function () {
+            if (avatarInput.files && avatarInput.files.length > 0) {
+                avatarForm.submit();
+            }
+        });
+    }
+
     document.addEventListener("keydown", function (event) {
         if (event.key === "Escape" && popup.classList.contains("show")) {
             closePopup();

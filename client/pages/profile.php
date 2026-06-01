@@ -21,6 +21,10 @@ $premiumName = $_SESSION['premium_name'] ?? 'Premium';
 $changeNameResult = $_SESSION['changeNameResult'] ?? null;
 unset($_SESSION['changeNameResult']);
 
+// thông báo đổi ảnh đại diện thành công
+$changeAvatarResult = $_SESSION['changeAvatarResult'] ?? null;
+unset($_SESSION['changeAvatarResult']);
+
 // thông báo đổi mật khẩu thành công
 $changePassResult = $_SESSION['changePassResult'] ?? null;
 $changePassType = $_SESSION['changePassType'] ?? 'success';
@@ -53,7 +57,7 @@ if ($userId) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hồ sơ cá nhân - Prephub</title>
     <?php include './components/metadata.php'; ?>
-    <link rel="stylesheet" href="../styles/profile.css?v=7">
+    <link rel="stylesheet" href="../styles/profile.css?v=9">
 </head>
 
 <body class="profile-page-body">
@@ -72,11 +76,30 @@ if ($userId) {
             <!-- cột trái: tóm tắt thông tin -->
             <aside class="profile-sidebar">
                 <div class="profile-overview-card">
-                    <div class="profile-avatar-container">
+                    <div class="profile-avatar-container" title="Nhấp để thay đổi ảnh đại diện">
                         <img class="profile-avatar" src="<?= htmlspecialchars($avatarUrl) ?>" alt="avatar">
+                        <div class="avatar-hover-overlay">
+                            <i class="fas fa-camera"></i>
+                            <span>Thay đổi</span>
+                        </div>
                     </div>
+
+                    <!-- form tải ảnh đại diện -->
+                    <form id="avatar-upload-form" method="POST" action="../../server/controllers/profile-controller.php" enctype="multipart/form-data" style="display: none;">
+                        <input type="file" id="avatar-file-input" name="avatar_file" accept="image/*">
+                        <input type="hidden" name="changeAvatar" value="1">
+                    </form>
+
                     <h2 class="user-fullname"><?= htmlspecialchars($fullName) ?></h2>
                     <p class="user-email-text"><?= htmlspecialchars($email) ?></p>
+
+                    <?php if ($changeAvatarResult): ?>
+                        <?php if (strpos($changeAvatarResult, 'thành công') !== false): ?>
+                            <div class="form-success-inline" style="margin-top: 0; margin-bottom: 12px; font-size: 0.72rem; padding: 6px 10px; text-align: center;"><?= htmlspecialchars($changeAvatarResult) ?></div>
+                        <?php else: ?>
+                            <div class="form-error-inline" style="margin-top: 0; margin-bottom: 12px; font-size: 0.72rem; padding: 6px 10px; text-align: center;"><?= htmlspecialchars($changeAvatarResult) ?></div>
+                        <?php endif; ?>
+                    <?php endif; ?>
 
                     <div class="user-badge-wrap">
                         <?php if ($isPremium): ?>
@@ -267,7 +290,7 @@ if ($userId) {
 
     <?php include './components/footer.php'; ?>
 
-    <script src="../js/profile.js?v=5"></script>
+    <script src="../js/profile.js?v=6"></script>
 </body>
 
 </html>
