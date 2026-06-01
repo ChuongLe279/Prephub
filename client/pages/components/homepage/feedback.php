@@ -18,7 +18,6 @@ $thirdColumn = array_slice($testimonials, 6, 3);
 function renderTestimonialColumn($items, $duration, $extraClass = "") {
     echo "<div class='testimonials-wrapper $extraClass' style='--duration: {$duration}s;'>";
     echo "<div class='testimonials-column'>";
-    // Duplicate for infinite loop
     for ($i = 0; $i < 2; $i++) {
         foreach ($items as $t) {
             echo "<div class='feedback-card'>";

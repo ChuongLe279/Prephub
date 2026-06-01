@@ -50,9 +50,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // validate password form fields and display inline error alerts
+	// xác thực form đổi mật khẩu
     const passwordForm = document.getElementById("passwordForm");
     const currentPassword = document.getElementById("current-password");
+	// hiển thị lỗi khi gõ sai định dạng mật khẩu
     const newPassword = document.getElementById("new-password");
     const confirmPassword = document.getElementById("confirm-password");
 
