@@ -21,6 +21,7 @@ unset($_SESSION['login_error'], $_SESSION['register_error'], $_SESSION['register
 	<?php include './components/metadata.php'; ?>
 	<title>Prephub - Luyện thi TOEIC online</title>
 	<link rel="stylesheet" href="../styles/pricing.css">
+	<link rel="stylesheet" href="../styles/homepage/feedback.css?v=2">
 </head>
 
 <body>
