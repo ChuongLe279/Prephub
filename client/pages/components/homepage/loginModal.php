@@ -38,12 +38,7 @@
                                     </div>
                                 </div>
 
-                                <div class="auth-options">
-                                    <label class="checkbox-custom">
-                                        <input type="checkbox" name="remember">
-                                        <span class="checkmark"></span>
-                                        <span class="label-text">Ghi nhớ đăng nhập</span>
-                                    </label>
+                                <div class="auth-options justify-content-end">
                                     <a href="#" class="forgot-link" id="toForgot">Quên mật khẩu?</a>
                                 </div>
 
