@@ -50,6 +50,150 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // validate password form fields and display inline error alerts
+    const passwordForm = document.getElementById("passwordForm");
+    const currentPassword = document.getElementById("current-password");
+    const newPassword = document.getElementById("new-password");
+    const confirmPassword = document.getElementById("confirm-password");
+
+    function isFieldInvalid(inputEl) {
+        const group = inputEl.closest(".settings-form-group");
+        return !!group.querySelector(".form-error-inline")
+    }
+
+    function validateCurrentPassword(showError = false) {
+        if (!currentPassword) return true
+        if (!currentPassword.value) {
+            if (showError) {
+                showInlineError(currentPassword, "Mật khẩu hiện tại không được để trống");
+            }
+            return false
+        }
+        clearInlineError(currentPassword);
+        return true
+    }
+
+    function validateNewPassword(showError = false) {
+        if (!newPassword) return true
+        const val = newPassword.value;
+        if (!val) {
+            if (showError) {
+                showInlineError(newPassword, "Mật khẩu mới không được để trống");
+            }
+            return false
+        }
+        if (val.length < 8) {
+            if (showError) {
+                showInlineError(newPassword, "Mật khẩu mới phải có ít nhất 8 ký tự");
+            }
+            return false
+        }
+        if (!/[a-zA-Z]/.test(val)) {
+            if (showError) {
+                showInlineError(newPassword, "Mật khẩu mới phải có ít nhất 1 chữ cái");
+            }
+            return false
+        }
+        if (!/[0-9]/.test(val)) {
+            if (showError) {
+                showInlineError(newPassword, "Mật khẩu mới phải có ít nhất 1 số");
+            }
+            return false
+        }
+        clearInlineError(newPassword);
+        return true
+    }
+
+    function validateConfirmPassword(showError = false) {
+        if (!confirmPassword || !newPassword) return true
+        const val = confirmPassword.value;
+        if (!val) {
+            if (showError) {
+                showInlineError(confirmPassword, "Xác nhận mật khẩu không được để trống");
+            }
+            return false
+        }
+        if (val !== newPassword.value) {
+            if (showError) {
+                showInlineError(confirmPassword, "Mật khẩu xác nhận không trùng khớp");
+            }
+            return false
+        }
+        clearInlineError(confirmPassword);
+        return true
+    }
+
+    if (currentPassword) {
+        currentPassword.addEventListener("blur", function () {
+            validateCurrentPassword(true);
+        });
+        currentPassword.addEventListener("input", function () {
+            validateCurrentPassword(isFieldInvalid(currentPassword));
+        });
+    }
+
+    if (newPassword) {
+        newPassword.addEventListener("blur", function () {
+            validateNewPassword(true);
+            if (confirmPassword && confirmPassword.value) {
+                validateConfirmPassword(true);
+            }
+        });
+        newPassword.addEventListener("input", function () {
+            validateNewPassword(isFieldInvalid(newPassword));
+            if (confirmPassword && confirmPassword.value) {
+                validateConfirmPassword(isFieldInvalid(confirmPassword));
+            }
+        });
+    }
+
+    if (confirmPassword) {
+        confirmPassword.addEventListener("blur", function () {
+            validateConfirmPassword(true);
+        });
+        confirmPassword.addEventListener("input", function () {
+            validateConfirmPassword(isFieldInvalid(confirmPassword));
+        });
+    }
+
+    if (passwordForm) {
+        passwordForm.addEventListener("submit", function (e) {
+            const isCurrentValid = validateCurrentPassword(true);
+            const isNewValid = validateNewPassword(true);
+            const isConfirmValid = validateConfirmPassword(true);
+
+            if (!isCurrentValid || !isNewValid || !isConfirmValid) {
+                e.preventDefault();
+                if (!isCurrentValid) {
+                    currentPassword.focus();
+                } else if (!isNewValid) {
+                    newPassword.focus();
+                } else if (!isConfirmValid) {
+                    confirmPassword.focus();
+                }
+            }
+        });
+    }
+
+    function showInlineError(inputEl, message) {
+        const group = inputEl.closest(".settings-form-group");
+        let errorSpan = group.querySelector(".form-error-inline");
+        if (!errorSpan) {
+            errorSpan = document.createElement("div");
+            errorSpan.className = "form-error-inline";
+            group.appendChild(errorSpan);
+        }
+        errorSpan.innerText = message;
+    }
+
+    function clearInlineError(inputEl) {
+        const group = inputEl.closest(".settings-form-group");
+        const errorSpan = group.querySelector(".form-error-inline");
+        if (errorSpan) {
+            errorSpan.remove();
+        }
+    }
+
     document.addEventListener("keydown", function (event) {
         if (event.key === "Escape" && popup.classList.contains("show")) {
             closePopup();
