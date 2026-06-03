@@ -92,18 +92,18 @@ if ($token === '') {
                     <div class="visual-content">
                         <div class="testimonial-stack">
                             <div class="testimonial-card animate-1">
-                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Tran+Hai+Yen" alt="">
+                                <img src="https://randomuser.me/api/portraits/women/57.jpg" alt="">
                                 <div class="testi-info">
-                                    <p class="testi-name">Trần Hải Yến <i class='bx bxs-badge-check'></i></p>
-                                    <p class="testi-handle">@haiyen_digital</p>
+                                    <p class="testi-name">Sarah Chen <i class='bx bxs-badge-check'></i></p>
+                                    <p class="testi-handle">@sarahdigital</p>
                                     <p class="testi-text">Một không gian gọn gàng, tập trung để bạn quay lại luyện TOEIC thật nhẹ nhàng.</p>
                                 </div>
                             </div>
                             <div class="testimonial-card animate-2">
-                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nguyen+Hoang+Nam" alt="">
+                                <img src="https://randomuser.me/api/portraits/men/64.jpg" alt="">
                                 <div class="testi-info">
-                                    <p class="testi-name">Nguyễn Hoàng Nam <i class='bx bxs-badge-check'></i></p>
-                                    <p class="testi-handle">@nam_tech</p>
+                                    <p class="testi-name">Marcus Johnson <i class='bx bxs-badge-check'></i></p>
+                                    <p class="testi-handle">@marcustech</p>
                                     <p class="testi-text">PrepHub giúp mỗi buổi học rõ ràng, có tổ chức và dễ tiếp tục.</p>
                                 </div>
                             </div>

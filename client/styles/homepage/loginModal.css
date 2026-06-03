@@ -517,13 +517,13 @@
   margin: -2px 0 12px;
 }
 
-.auth-visual-side .testimonial-stack {
+.testimonial-stack {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.auth-visual-side .testimonial-card {
+.testimonial-card {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -537,7 +537,7 @@
   box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
 
-.auth-visual-side .testimonial-card img {
+.testimonial-card img {
   width: 48px;
   height: 48px;
   border-radius: 14px;

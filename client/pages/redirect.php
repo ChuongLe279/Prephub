@@ -78,55 +78,6 @@ if ($firstName === '' && $lastName === '') {
 try {
     $conn->beginTransaction();
 
-    // liên kết tài khoản google với tài khoản đang đăng nhập
-    if (isset($_SESSION['user_id'])) {
-        $currentUserId = $_SESSION['user_id'];
-        
-        $checkGoogle = $conn->prepare('SELECT user_id FROM oauth_accounts WHERE google_id = :google_id LIMIT 1');
-        $checkGoogle->execute(['google_id' => $googleId]);
-        $existingLink = $checkGoogle->fetch();
-        
-        if ($existingLink && $existingLink['user_id'] != $currentUserId) {
-            $conn->rollBack();
-            $_SESSION['changeNameResult'] = 'Tài khoản Google này đã liên kết với tài khoản khác';
-            header('Location: /client/pages/profile.php');
-            exit();
-        }
-        
-        $linkOauth = $conn->prepare(
-            'INSERT IGNORE INTO oauth_accounts (user_id, google_id)
-             VALUES (:user_id, :google_id)'
-        );
-        $linkOauth->execute([
-            'user_id' => $currentUserId,
-            'google_id' => $googleId
-        ]);
-        
-        $stmt = $conn->prepare('SELECT * FROM users WHERE id = :id LIMIT 1');
-        $stmt->execute(['id' => $currentUserId]);
-        $user = $stmt->fetch();
-        
-        if (empty($user['avatar']) && $avatar) {
-            $updateAvatar = $conn->prepare('UPDATE users SET avatar = :avatar WHERE id = :id');
-            $updateAvatar->execute([
-                'avatar' => $avatar,
-                'id' => $currentUserId
-            ]);
-            $user['avatar'] = $avatar;
-        }
-        
-        $conn->commit();
-        
-        $_SESSION['avatar'] = $user['avatar'] ?? null;
-        $_SESSION['first_name'] = $user['first_name'];
-        $_SESSION['last_name'] = $user['last_name'];
-        $_SESSION['email'] = $user['email'];
-        
-        $_SESSION['changeNameResult'] = 'Liên kết tài khoản Google thành công';
-        header('Location: /client/pages/profile.php');
-        exit();
-    }
-
     $stmt = $conn->prepare(
         'SELECT u.*
          FROM users u

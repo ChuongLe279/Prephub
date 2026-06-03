@@ -38,7 +38,12 @@
                                     </div>
                                 </div>
 
-                                <div class="auth-options justify-content-end">
+                                <div class="auth-options">
+                                    <label class="checkbox-custom">
+                                        <input type="checkbox" name="remember">
+                                        <span class="checkmark"></span>
+                                        <span class="label-text">Ghi nhớ đăng nhập</span>
+                                    </label>
                                     <a href="#" class="forgot-link" id="toForgot">Quên mật khẩu?</a>
                                 </div>
 
@@ -215,18 +220,18 @@
                         <div class="visual-content">
                             <div class="testimonial-stack">
                                 <div class="testimonial-card animate-1">
-                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Tran+Hai+Yen" alt="user">
+                                    <img src="https://randomuser.me/api/portraits/women/57.jpg" alt="user">
                                     <div class="testi-info">
-                                        <p class="testi-name">Trần Hải Yến <i class='bx bxs-badge-check'></i></p>
-                                        <p class="testi-handle">@haiyen_digital</p>
+                                        <p class="testi-name">Sarah Chen <i class='bx bxs-badge-check'></i></p>
+                                        <p class="testi-handle">@sarahdigital</p>
                                         <p class="testi-text">Nền tảng tuyệt vời! Trải nghiệm người dùng mượt mà và các tính năng rất hữu ích cho việc ôn tập.</p>
                                     </div>
                                 </div>
                                 <div class="testimonial-card animate-2">
-                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nguyen+Hoang+Nam" alt="user">
+                                    <img src="https://randomuser.me/api/portraits/men/64.jpg" alt="user">
                                     <div class="testi-info">
-                                        <p class="testi-name">Nguyễn Hoàng Nam <i class='bx bxs-badge-check'></i></p>
-                                        <p class="testi-handle">@nam_tech</p>
+                                        <p class="testi-name">Marcus Johnson <i class='bx bxs-badge-check'></i></p>
+                                        <p class="testi-handle">@marcustech</p>
                                         <p class="testi-text">PrepHub đã thay đổi hoàn toàn cách tôi học TOEIC. Giao diện sạch sẽ và lộ trình cực kỳ rõ ràng.</p>
                                     </div>
                                 </div>
