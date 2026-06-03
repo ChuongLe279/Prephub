@@ -40,11 +40,7 @@ $client->setClientId($googleConfig['client_id']);
 $client->setClientSecret($googleConfig['client_secret']);
 $client->setRedirectUri($googleConfig['redirect_uri']);
 
-try {
-    $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-} catch (Throwable $e) {
-    redirectGoogleLoginFailed('Google login failed.');
-}
+$token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
 
 if (isset($token['error'])) {
     redirectGoogleLoginFailed($token['error_description'] ?? $token['error']);
@@ -54,12 +50,7 @@ if (empty($token['id_token'])) {
     redirectGoogleLoginFailed('Google did not return an ID token.');
 }
 
-try {
-    $payload = $client->verifyIdToken($token['id_token']);
-} catch (Throwable $e) {
-    error_log('Google ID token verification failed: ' . $e->getMessage());
-    redirectGoogleLoginFailed('Cannot verify Google account.');
-}
+$payload = $client->verifyIdToken($token['id_token']);
 
 if (!$payload) {
     redirectGoogleLoginFailed('Cannot verify Google account.');
