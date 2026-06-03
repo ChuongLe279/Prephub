@@ -1,20 +1,33 @@
 // Nút toggle con mắt trong password (nó giống như ở login ấy)
 function togglePassword(eye) {
-    let input = eye.previousElementSibling;
-    let icon = eye.querySelector("img");
+    const passwordBox = eye.closest(".password-box");
+    const input = passwordBox ? passwordBox.querySelector("input") : eye.previousElementSibling;
+    const icon = eye.querySelector("img");
+
+    if (!input || !icon) {
+        return;
+    }
 
     if (input.type === "password") {
         icon.src = "../img/eye_open.png";
         input.type = "text";
+        eye.setAttribute("aria-label", "Ẩn mật khẩu");
     } else {
         icon.src = "../img/eye_close.png";
         input.type = "password";
+        eye.setAttribute("aria-label", "Hiển thị mật khẩu");
     }
 }
 
 
 //Hiển thị cửa sổ xác nhận khi bấm nút xóa tài khoản (UI)
 document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".password-box .eye-toggle").forEach(function (button) {
+        button.addEventListener("click", function () {
+            togglePassword(button);
+        });
+    });
+
     const popup = document.getElementById("delete-popup");
     const openBtn = document.getElementById("open-delete-popup");
     const closeBtn = document.getElementById("close-delete-popup");

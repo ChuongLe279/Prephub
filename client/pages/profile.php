@@ -224,7 +224,7 @@ $total_number_of_tests = getNumTestDone();
                             <label for="current-password">Mật khẩu hiện tại</label>
                             <div class="password-box">
                                 <input id="current-password" name="current_password" type="password" placeholder="Nhập mật khẩu hiện tại">
-                                <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu" onclick="togglePassword(this)">
+                                <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu">
                                     <img src="../img/eye_close.png" alt="" class="eye-icon">
                                 </button>
                             </div>
@@ -234,7 +234,7 @@ $total_number_of_tests = getNumTestDone();
                             <label for="new-password">Mật khẩu mới</label>
                             <div class="password-box">
                                 <input id="new-password" name="new_password" type="password" placeholder="Nhập mật khẩu mới">
-                                <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu" onclick="togglePassword(this)">
+                                <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu">
                                     <img src="../img/eye_close.png" alt="" class="eye-icon">
                                 </button>
                             </div>
@@ -244,7 +244,7 @@ $total_number_of_tests = getNumTestDone();
                             <label for="confirm-password">Xác nhận mật khẩu</label>
                             <div class="password-box">
                                 <input id="confirm-password" name="confirm_password" type="password" placeholder="Xác nhận lại mật khẩu">
-                                <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu" onclick="togglePassword(this)">
+                                <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu">
                                     <img src="../img/eye_close.png" alt="" class="eye-icon">
                                 </button>
                             </div>
@@ -297,7 +297,7 @@ $total_number_of_tests = getNumTestDone();
                     <label for="delete-account-password">Nhập mật khẩu của bạn để xác nhận</label>
                     <div class="password-box">
                         <input id="delete-account-password" name="password_confirmation_delete" type="password" placeholder="Mật khẩu tài khoản">
-                        <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu" onclick="togglePassword(this)">
+                        <button type="button" class="eye-toggle" aria-label="Hiển thị mật khẩu">
                             <img src="../img/eye_close.png" alt="" class="eye-icon">
                         </button>
                     </div>
