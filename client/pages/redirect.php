@@ -6,6 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 require_once dirname(__DIR__, 2) . '/server/db/config.php';
 
+Firebase\JWT\JWT::$leeway = 60;
+
 $googleConfig = require dirname(__DIR__, 2) . '/server/config/google.php';
 
 function redirectGoogleLoginFailed($message) {
@@ -38,7 +40,11 @@ $client->setClientId($googleConfig['client_id']);
 $client->setClientSecret($googleConfig['client_secret']);
 $client->setRedirectUri($googleConfig['redirect_uri']);
 
-$token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+try {
+    $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+} catch (Throwable $e) {
+    redirectGoogleLoginFailed('Google login failed.');
+}
 
 if (isset($token['error'])) {
     redirectGoogleLoginFailed($token['error_description'] ?? $token['error']);
@@ -48,7 +54,12 @@ if (empty($token['id_token'])) {
     redirectGoogleLoginFailed('Google did not return an ID token.');
 }
 
-$payload = $client->verifyIdToken($token['id_token']);
+try {
+    $payload = $client->verifyIdToken($token['id_token']);
+} catch (Throwable $e) {
+    error_log('Google ID token verification failed: ' . $e->getMessage());
+    redirectGoogleLoginFailed('Cannot verify Google account.');
+}
 
 if (!$payload) {
     redirectGoogleLoginFailed('Cannot verify Google account.');
