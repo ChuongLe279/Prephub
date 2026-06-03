@@ -8,12 +8,10 @@ homeRedirect();
 $firstName = $_SESSION['first_name'] ?? 'Người';
 $lastName = $_SESSION['last_name'] ?? 'dùng';
 $email = $_SESSION['email'] ?? 'user@email.com';
-
 $fullName = trim($lastName . ' ' . $firstName);
-$getInitial = function ($value) {
-    return preg_match('/./u', trim($value), $match) ? $match[0] : '';
-};
-$initials = strtoupper($getInitial($firstName) . $getInitial($lastName));
+
+// ảnh đại diện đồng bộ
+$avatarUrl = (!empty($_SESSION['avatar'])) ? $_SESSION['avatar'] : 'https://ui-avatars.com/api/?name=' . urlencode($fullName) . '&background=05102b&color=fff';
 
 // kiểm tra trạng thái thành viên premium
 $isPremium = $_SESSION['is_premium'] ?? false;
@@ -22,6 +20,10 @@ $premiumName = $_SESSION['premium_name'] ?? 'Premium';
 // thông báo đổi tên thành công
 $changeNameResult = $_SESSION['changeNameResult'] ?? null;
 unset($_SESSION['changeNameResult']);
+
+// thông báo đổi ảnh đại diện thành công
+$changeAvatarResult = $_SESSION['changeAvatarResult'] ?? null;
+unset($_SESSION['changeAvatarResult']);
 
 // thông báo đổi mật khẩu thành công
 $changePassResult = $_SESSION['changePassResult'] ?? null;
@@ -34,10 +36,18 @@ unset($_SESSION['changePassType']);
 $deletePasswordResult = $_SESSION['password_confirmation_result'] ?? null;
 unset($_SESSION['password_confirmation_result']);
 
-// lấy điểm cao nhất, điểm trung bình và số đề đã làm
-$maxScore = getMaxScore();
-$avgScore = getAvgScore();
-$total_number_of_tests = getNumTestDone();
+// kiểm tra liên kết tài khoản google
+$userId = $_SESSION['user_id'] ?? null;
+$isGoogleLinked = false;
+if ($userId) {
+    try {
+        $stmt = $conn->prepare('SELECT 1 FROM oauth_accounts WHERE user_id = :user_id LIMIT 1');
+        $stmt->execute(['user_id' => $userId]);
+        $isGoogleLinked = (bool) $stmt->fetchColumn();
+    } catch (PDOException $e) {
+        
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -47,176 +57,108 @@ $total_number_of_tests = getNumTestDone();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hồ sơ cá nhân - Prephub</title>
     <?php include './components/metadata.php'; ?>
-    <link rel="stylesheet" href="../styles/profile.css">
+    <link rel="stylesheet" href="../styles/profile.css?v=9">
 </head>
 
-<body>
+<body class="profile-page-body">
 	<?php $navbarMode = 'light'; include './components/navbar.php'; ?>
 
-    <div class="page">
-        <!-- thông báo flash từ hệ thống -->
-        <?php if ($changeNameResult): ?>
-            <div class="success-message">
-                <?= htmlspecialchars($changeNameResult) ?>
-            </div>
-        <?php endif; ?>
-        <?php if ($changePassResult): ?>
-            <div class="success-message <?= $isChangePassError ? 'error-message' : '' ?>">
-                <?= htmlspecialchars($changePassResult) ?>
-            </div>
-        <?php endif; ?>
-        <?php if ($deletePasswordResult): ?>
-            <div class="success-message error-message">
-                <?= htmlspecialchars($deletePasswordResult) ?>
-            </div>
-        <?php endif; ?>
+    <main class="profile-layout-container">
 
-        <!-- phần tiêu đề hero trang hồ sơ -->
-        <div class="profile-hero">
-            <div class="hero-left">
-                <div class="hero-eyebrow">Tài khoản cá nhân</div>
-                <h1>Hồ sơ của tôi</h1>
-                <p>Quản lý thông tin tài khoản cá nhân, cài đặt bảo mật và cập nhật trạng thái thành viên của bạn</p>
+        <!-- tiêu đề trang tối giản -->
+        <header class="profile-page-header">
+            <h1 class="profile-title">Thiết lập tài khoản</h1>
+            <p class="profile-subtitle">Cập nhật thông tin cá nhân và quản lý các thiết lập bảo mật</p>
+        </header>
 
-                <div class="hero-actions">
-                    <a href="tests.php" class="hero-btn primary-btn">
-                        <i class="fas fa-play"></i>
-                        Làm bài ngay
-                    </a>
-                    <?php if ($isPremium): ?>
-                        <a href="billing.php" class="hero-btn secondary-btn">
-                            <i class="fas fa-receipt"></i>
-                            Quản lý hóa đơn
-                        </a>
-                    <?php else: ?>
-                        <a href="pricing.php" class="hero-btn secondary-btn">
-                            <i class="fas fa-crown"></i>
-                            Nâng cấp Premium
-                        </a>
-                    <?php endif; ?>
-                </div>
-            </div>
-
-            <div class="hero-right">
-                <div class="hero-stat">
-                    <div class="hero-stat-val"><?= $total_number_of_tests ?></div>
-                    <div class="hero-stat-label">Bài đã làm</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-val"><?= $maxScore ?></div>
-                    <div class="hero-stat-label">Điểm cao nhất</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- bố cục hai cột hồ sơ -->
-        <div class="profile-layout">
-            <!-- cột trái hiển thị thông tin tóm tắt -->
-            <aside class="left-col">
-                <div class="profile-card user-card">
-                    <div class="avatar-wrap">
-                        <div class="avatar-circle">
-                            <?= htmlspecialchars($initials) ?>
+        <!-- bảng điều khiển hồ sơ -->
+        <div class="profile-card-panel">
+            <!-- cột trái: tóm tắt thông tin -->
+            <aside class="profile-sidebar">
+                <div class="profile-overview-card">
+                    <div class="profile-avatar-container" title="Nhấp để thay đổi ảnh đại diện">
+                        <img class="profile-avatar" src="<?= htmlspecialchars($avatarUrl) ?>" alt="avatar">
+                        <div class="avatar-hover-overlay">
+                            <i class="fas fa-camera"></i>
+                            <span>Thay đổi</span>
                         </div>
-                        <button class="avatar-edit" type="button" aria-label="Chỉnh sửa ảnh đại diện">
-                            <i class="fas fa-pen"></i>
-                        </button>
                     </div>
 
-                    <div class="user-name"><?= htmlspecialchars($fullName) ?></div>
-                    <div class="user-email"><?= htmlspecialchars($email) ?></div>
+                    <!-- form tải ảnh đại diện -->
+                    <form id="avatar-upload-form" method="POST" action="../../server/controllers/profile-controller.php" enctype="multipart/form-data" style="display: none;">
+                        <input type="file" id="avatar-file-input" name="avatar_file" accept="image/*">
+                        <input type="hidden" name="changeAvatar" value="1">
+                    </form>
 
-                    <?php if ($isPremium): ?>
-                        <div class="plan-pill" style="background:#e1f5ee; border-color:#d3f9d8; color:#1d9e75;">
-                            <i class="fas fa-crown"></i>
-                            <?= htmlspecialchars($premiumName) ?>
-                        </div>
-                    <?php else: ?>
-                        <div class="plan-pill">
-                            <i class="fas fa-bolt"></i>
-                            Tài khoản miễn phí
-                        </div>
+                    <h2 class="user-fullname"><?= htmlspecialchars($fullName) ?></h2>
+                    <p class="user-email-text"><?= htmlspecialchars($email) ?></p>
+
+                    <?php if ($changeAvatarResult): ?>
+                        <?php if (strpos($changeAvatarResult, 'thành công') !== false): ?>
+                            <div class="form-success-inline" style="margin-top: 0; margin-bottom: 12px; font-size: 0.72rem; padding: 6px 10px; text-align: center;"><?= htmlspecialchars($changeAvatarResult) ?></div>
+                        <?php else: ?>
+                            <div class="form-error-inline" style="margin-top: 0; margin-bottom: 12px; font-size: 0.72rem; padding: 6px 10px; text-align: center;"><?= htmlspecialchars($changeAvatarResult) ?></div>
+                        <?php endif; ?>
                     <?php endif; ?>
 
-                    <div class="user-divider"></div>
-
-                    <div class="quick-stats">
-                        <div class="quick-stat">
-                            <div class="quick-icon blue">
-                                <i class="fas fa-file-alt"></i>
-                            </div>
-                            <div>
-                                <div class="quick-val"><?= $total_number_of_tests ?></div>
-                                <div class="quick-label">Bài đã làm</div>
-                            </div>
-                        </div>
-
-                        <div class="quick-stat">
-                            <div class="quick-icon green">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <div>
-                                <div class="quick-val"><?= $avgScore ?></div>
-                                <div class="quick-label">Điểm trung bình</div>
-                            </div>
-                        </div>
+                    <div class="user-badge-wrap">
+                        <?php if ($isPremium): ?>
+                            <span class="premium-badge-pill">
+                                <i class="fas fa-crown"></i>
+                                <?= htmlspecialchars($premiumName) ?>
+                            </span>
+                        <?php else: ?>
+                            <span class="free-badge-pill">
+                                <i class="fas fa-bolt"></i>
+                                Tài khoản miễn phí
+                            </span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </aside>
 
-            <!-- cột phải hiển thị các form cài đặt chính -->
-            <section class="right-col">
-                <!-- form chỉnh sửa thông tin cá nhân -->
-                <form class="profile-card section-card" method="POST" action="../../server/controllers/profile-controller.php">
-                    <div class="section-head">
-                        <div class="section-title-wrap">
-                            <div class="section-icon">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div>
-                                <h2>Thông tin cá nhân</h2>
-                                <p>Cập nhật thông tin cơ bản được hiển thị trên tài khoản của bạn</p>
-                            </div>
-                        </div>
-                    </div>
+            <!-- cột phải: biểu mẫu thiết lập và phân khu xóa tài khoản -->
+            <section class="profile-main-content">
+                <!-- lưới chứa hai biểu mẫu chính side-by-side -->
+                <div class="settings-forms-grid">
+                    <!-- phần: thông tin cá nhân -->
+                    <div class="settings-group">
+                        <h3 class="settings-group-title">Thông tin cá nhân</h3>
+                        <p class="settings-group-desc">Cập nhật họ tên hiển thị của bạn</p>
+                        <?php if ($changeNameResult): ?>
+                            <?php if (strpos($changeNameResult, 'thành công') !== false): ?>
+                                <div class="form-success-inline"><?= htmlspecialchars($changeNameResult) ?></div>
+                            <?php else: ?>
+                                <div class="form-error-inline"><?= htmlspecialchars($changeNameResult) ?></div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        
+                        <form class="settings-form" method="POST" action="../../server/controllers/profile-controller.php">
+                            <div class="settings-form-row">
+                                <div class="settings-form-group">
+                                    <label for="i-lname">Họ</label>
+                                    <input id="i-lname" name="last_name" type="text" value="<?= htmlspecialchars($lastName) ?>" required>
+                                </div>
 
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="i-lname">Họ</label>
-                            <input id="i-lname" name="last_name" type="text" value="<?= htmlspecialchars($lastName) ?>">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="i-fname">Tên</label>
-                            <input id="i-fname" name="first_name" type="text" value="<?= htmlspecialchars($firstName) ?>">
-                        </div>
-
-                        <div class="form-group full">
-                            <label for="i-email">Email đăng ký</label>
-                            <input id="i-email" type="email" value="<?= htmlspecialchars($email) ?>" readonly>
-                        </div>
-                    </div>
-                    <input type="hidden" name="changeName" value="changeUsername"> 
-                    <div class="card-actions">
-                        <button class="save-btn" type="submit">
-                            <i class="fas fa-floppy-disk"></i>
-                            Cập nhật thông tin
-                        </button>
-                    </div>
-                </form>
-
-                <!-- form đổi mật khẩu bảo mật -->
-                <form class="profile-card section-card" method="POST" action="../../server/controllers/profile-controller.php">
-                    <div class="section-head">
-                        <div class="section-title-wrap">
-                            <div class="section-icon">
-                                <i class="fas fa-lock"></i>
+                                <div class="settings-form-group">
+                                    <label for="i-fname">Tên</label>
+                                    <input id="i-fname" name="first_name" type="text" value="<?= htmlspecialchars($firstName) ?>" required>
+                                </div>
                             </div>
-                            <div>
-                                <h2>Cài đặt bảo mật</h2>
-                                <p>Đổi mật khẩu định kỳ để nâng cao tính an toàn cho tài khoản</p>
+
+                            <div class="settings-form-group full-width">
+                                <label for="i-email">Địa chỉ email</label>
+                                <input id="i-email" type="email" value="<?= htmlspecialchars($email) ?>" readonly>
+                                <span class="input-helper-text">Địa chỉ email dùng để đăng nhập</span>
                             </div>
-                        </div>
+
+                            <input type="hidden" name="changeName" value="changeUsername">
+                            <div class="settings-form-actions">
+                                <button class="minimal-btn-primary" type="submit">
+                                    Lưu thay đổi
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
                     <div class="form-grid">
@@ -265,32 +207,50 @@ $total_number_of_tests = getNumTestDone();
                         <div class="danger-icon">
                             <i class="fas fa-triangle-exclamation"></i>
                         </div>
-                        <div>
-                            <h2>Xóa tài khoản vĩnh viễn</h2>
-                            <p>Hành động này sẽ xóa toàn bộ dữ liệu luyện thi và kết quả làm bài của bạn</p>
-                        </div>
+                        <?php if ($isGoogleLinked): ?>
+                            <div class="google-connected-status">
+                                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+                                <span>Đã liên kết</span>
+                            </div>
+                        <?php else: ?>
+                            <a class="minimal-btn-google" href="/api/auth/google">
+                                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+                                <span>Kết nối Google</span>
+                            </a>
+                        <?php endif; ?>
                     </div>
-                    <button class="danger-btn" id="open-delete-popup" type="button">
-                        <i class="fas fa-trash-can"></i>
-                        Xóa tài khoản
-                    </button>
+                </div>
+
+                <hr class="settings-divider">
+
+                <!-- phân khu nguy hiểm: xóa tài khoản -->
+                <div class="settings-group danger-zone-group">
+                    <div class="danger-zone-header">
+                        <div class="danger-zone-info">
+                            <h3 class="danger-zone-title">Xóa tài khoản</h3>
+                            <p class="danger-zone-desc">Xóa vĩnh viễn tài khoản của bạn và toàn bộ kết quả luyện thi liên quan, hành động này không thể khôi phục</p>
+                        </div>
+                        <button class="minimal-btn-danger" id="open-delete-popup" type="button">
+                            Xóa tài khoản
+                        </button>
+                    </div>
                 </div>
             </section>
         </div>
-    </div>
+    </main>
 
-    <!-- modal popup xác nhận xóa tài khoản -->
+    <!-- modal xác nhận xóa tài khoản -->
     <div class="delete-popup-overlay" id="delete-popup">
-        <div class="delete-popup" role="dialog" aria-modal="true" aria-labelledby="delete-popup-title">
-            <button class="delete-popup-close" id="close-delete-popup" type="button" aria-label="Đóng">
+        <div class="delete-popup-card" role="dialog" aria-modal="true" aria-labelledby="delete-popup-title">
+            <button class="delete-popup-close-btn" id="close-delete-popup" type="button" aria-label="Đóng">
                 <i class="fas fa-xmark"></i>
             </button>
 
-            <div class="delete-popup-icon">
-                <i class="fas fa-triangle-exclamation"></i>
-            </div>
-            <h2 id="delete-popup-title">Bạn chắc chắn muốn xóa?</h2>
-            <p>Hành động này không thể hoàn tác. Toàn bộ lịch sử làm bài và điểm số sẽ biến mất vĩnh viễn</p>
+            <h2 id="delete-popup-title" class="delete-title">Xác nhận xóa tài khoản</h2>
+            <p class="delete-desc">Hành động này sẽ xóa vĩnh viễn toàn bộ lịch sử làm bài, kết quả chấm thi và quyền Premium của bạn trên hệ thống</p>
+            <?php if ($deletePasswordResult): ?>
+                <div class="form-error-inline" style="text-align: center;"><?= htmlspecialchars($deletePasswordResult) ?></div>
+            <?php endif; ?>
 
             <form method="POST" action="../../server/controllers/profile-controller.php">
                 <div class="delete-password-field">
@@ -303,10 +263,10 @@ $total_number_of_tests = getNumTestDone();
                     </div>
                 </div>
 
-                <div class="delete-popup-actions">
-                    <button class="delete-cancel-btn" id="cancel-delete-popup" type="button">Hủy bỏ</button>
+                <div class="delete-popup-button-group">
+                    <button class="minimal-btn-secondary" id="cancel-delete-popup" type="button">Hủy bỏ</button>
                     <input type="hidden" name="deleteAccount" value="deleteAccount">
-                    <button class="delete-confirm-btn" type="submit">Xác nhận xóa</button>
+                    <button class="delete-popup-confirm-btn" type="submit">Xác nhận xóa</button>
                 </div>
             </form>
         </div>
@@ -314,7 +274,7 @@ $total_number_of_tests = getNumTestDone();
 
     <?php include './components/footer.php'; ?>
 
-    <script src="../js/profile.js"></script>
+    <script src="../js/profile.js?v=6"></script>
 </body>
 
 </html>

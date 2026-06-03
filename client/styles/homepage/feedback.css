@@ -50,7 +50,7 @@
   }
 }
 
-.testimonial-card {
+.feedback-card {
   background: white;
   padding: 32px;
   border-radius: 24px;
@@ -60,7 +60,7 @@
   width: 100%;
 }
 
-.testimonial-text {
+.feedback-text {
   font-size: 1rem;
   line-height: 1.6;
   color: #1a1a1a;
@@ -68,13 +68,13 @@
   font-weight: 400;
 }
 
-.testimonial-author {
+.feedback-author {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.testimonial-author img {
+.feedback-author img {
   width: 40px !important;
   height: 40px !important;
   border-radius: 50%;
@@ -82,7 +82,7 @@
   flex-shrink: 0;
 }
 
-.testimonial-name {
+.feedback-name {
   font-weight: 600;
   font-size: 0.95rem;
   margin: 0;
@@ -90,7 +90,7 @@
   line-height: 1.2;
 }
 
-.testimonial-role {
+.feedback-role {
   font-size: 0.85rem;
   opacity: 0.6;
   margin: 0;
