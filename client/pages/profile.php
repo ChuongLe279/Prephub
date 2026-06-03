@@ -118,9 +118,6 @@ $total_number_of_tests = getNumTestDone();
                         <div class="avatar-circle">
                             <?= htmlspecialchars($initials) ?>
                         </div>
-                        <button class="avatar-edit" type="button" aria-label="Chỉnh sửa ảnh đại diện">
-                            <i class="fas fa-pen"></i>
-                        </button>
                     </div>
 
                     <div class="user-name"><?= htmlspecialchars($fullName) ?></div>
